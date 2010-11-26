@@ -2,9 +2,9 @@
 
 pkgname=openfire
 pkgver=3.6.4
-pkgrel=3
+pkgrel=4
 pkgdesc="A high performance XMPP (Jabber) server"
-arch=('i686' 'x86_64')
+arch=('any')
 url='http://www.igniterealtime.org/projects/openfire/'
 license=('GPL')
 depends=('openjdk6' 'bash')
