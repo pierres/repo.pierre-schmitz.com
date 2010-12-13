@@ -1,7 +1,7 @@
-# Maintainer: Chris Brannon <cmbrannon79@gmail.com>
+# Maintainer: Chris Brannon <chris@the-brannons.com>
 # Contributor: Dag Odenhall <dag.odenhall@gmail.com>
 pkgname=rss2email
-pkgver=2.68
+pkgver=2.69
 pkgrel=1
 pkgdesc="A tool for delivering news from RSS feeds to your email program"
 arch=('any')
@@ -10,7 +10,7 @@ license=('GPL')
 depends=('python2' 'python-html2text' 'python-feedparser')
 source=("http://www.allthingsrss.com/$pkgname/$pkgname-$pkgver.tar.gz"
         r2e.sh)
-md5sums=('21a8a6ade80f9b494c91b97b60228fb9'
+md5sums=('313545f4bf317195bce4b7a5559065a9'
          '75c2df5185c7bb09adfb293338cd33cc')
 
 build() {
@@ -20,7 +20,7 @@ build() {
 package() {
   cd "$srcdir/$pkgname-$pkgver"
   install -D $pkgname.py "$pkgdir/usr/share/$pkgname/bin/$pkgname.py"
-  install -D config.py "$pkgdir/usr/share/$pkgname/config.py"
+  install -D config.py.example "$pkgdir/usr/share/$pkgname/config.py.example"
   install -Dm644 readme.html "$pkgdir/usr/share/doc/$pkgname/readme.html"
   install -m755 -D "$srcdir/r2e.sh" "$pkgdir/usr/bin/r2e"
   find "$pkgdir" -name '*.py' -print0 |xargs -0 \
