@@ -1,7 +1,7 @@
 # Maintainer: Pierre Schmitz <pierre@archlinux.de>
 
 pkgname=compat-wireless-brcm80211
-_pkgdate='2010-12-26'
+_pkgdate='2010-12-11'
 _kernver='2.6.36-ARCH'
 pkgver="${_pkgdate//-/.}"
 pkgrel=1
@@ -12,8 +12,9 @@ license=('GPL2')
 depends=('kernel26' 'linux-firmware')
 makedepends=('kernel26-headers')
 install="${pkgname}.install"
+options=('force')
 source=("http://wireless.kernel.org/download/compat-wireless-2.6/compat-wireless-${_pkgdate}.tar.bz2")
-sha1sums=('18b360ff3cbb6288f663bf4aff7d20c461d5a97b')
+sha1sums=('dd0f95084909cec4030629730b28d81c81ab8a10')
 
 build() {
 	cd "${srcdir}/compat-wireless-${_pkgdate}"
