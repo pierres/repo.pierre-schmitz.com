@@ -1,7 +1,7 @@
 # Contributor: Max Resch <resch.max@gmail.com>
 
 pkgname=polkit-kde-kcmodules
-pkgver=20101128
+pkgver=20101227
 pkgrel=1
 pkgdesc="Configuration for Policy Kit"
 arch=('i686' 'x86_64')
