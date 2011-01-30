@@ -3,7 +3,7 @@
 _appname=uswsusp
 _suffix=-git
 pkgname=${_appname}${_suffix}
-pkgver=20101217
+pkgver=20110130
 pkgrel=1
 pkgdesc="Userspace software suspend - latest code from git."
 arch=('i686' 'x86_64')
