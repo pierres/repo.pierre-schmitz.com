@@ -1,0 +1,30 @@
+# Maintainer: Jan "heftig" Steffens <jan.steffens@gmail.com>
+
+_pkgbasename=libtxc_dxtn
+pkgname=lib32-$_pkgbasename
+pkgver=1.0.0
+pkgrel=1
+arch=(x86_64)
+pkgdesc="Texture compression library for Mesa (32-bit)"
+url="http://dri.freedesktop.org/wiki/S3TC"
+license=(custom:BSD)
+depends=(lib32-mesa)
+makedepends=(gcc-multilib)
+source=(http://cgit.freedesktop.org/~mareko/$_pkgbasename/snapshot/$_pkgbasename-$pkgver.tar.bz2)
+md5sums=('ebee75ed669f6011e3998ba0c358d778')
+
+build() {
+  cd "$srcdir/$_pkgbasename-$pkgver"
+  sed -i 's:usr/lib:usr/lib32:g' Makefile
+  make CC="gcc -m32"
+}
+
+package() {
+  cd "$srcdir/$_pkgbasename-$pkgver"
+  make DESTDIR="$pkgdir" install
+
+  # License
+  mkdir -p "$pkgdir/usr/share/licenses/$pkgname"
+  sed -n '5,22{s|^ \* \?||;p}' txc_dxtn.h \
+    > "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
