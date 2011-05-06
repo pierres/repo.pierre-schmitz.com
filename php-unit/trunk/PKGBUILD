@@ -1,7 +1,7 @@
 # Maintainer: Pierre Schmitz <pierre@archlinux.de>
 
 pkgname=php-unit
-pkgver=3.5.5
+pkgver=3.5.13
 pkgrel=1
 arch=('any')
 pkgdesc='Regression testing framework for unit tests.'
@@ -9,7 +9,7 @@ url='http://www.phpunit.de/'
 license='BSD'
 source=("http://pear.phpunit.de/get/PHPUnit-${pkgver}.tgz")
 depends=('php')
-md5sums=('a66b1b02911e24c49c98ff0a8cdf148c')
+md5sums=('698e97db8c8147398e2db030a3b370e0')
 
 build() {
 	cd ${srcdir}/PHPUnit-${pkgver}
