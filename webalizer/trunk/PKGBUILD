@@ -1,30 +1,30 @@
 # Maintainer: Jamie Nguyen <jamie AT tomoyolinux.co.uk>
 
 pkgname=webalizer
-pkgver=2.23
-_pkgver=2.23-03
-pkgrel=2
+_geodbver=20110601
+pkgver=2.23.05.${_geodbver}
+_pkgver=2.23-05
+pkgrel=1
 pkgdesc="A web server log file analysis program producing HTML reports"
 arch=('i686' 'x86_64')
 url="http://www.webalizer.com/"
 license=('GPL')
 depends=('db' 'gd' 'geoip')
-install=webalizer.install
-# webalizer-geodb-latest.tgz = webalizer-geodb-20110201.tgz
+install="${pkgname}.install"
 source=("ftp://ftp.mrunix.net/pub/webalizer/webalizer-${_pkgver}-src.tgz"
-        "ftp://ftp.mrunix.net/pub/webalizer/webalizer-geodb-latest.tgz"
+        "ftp://ftp.mrunix.net/pub/webalizer/geodb/webalizer-geodb-${_geodbver}.tgz"
         "ftp://ftp.mrunix.net/pub/webalizer/webalizer-flags.tgz")
         
 build() {
   cd "${srcdir}/webalizer-${_pkgver}"
 
   ./configure \
-	  --prefix=/usr \
-	  --sysconfdir=/etc \
-	  --datarootdir=/usr/share \
-	  --enable-bz2 \
-	  --enable-geoip \
-	  || return 1
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --datarootdir=/usr/share \
+    --enable-bz2 \
+    --enable-geoip \
+    || return 1
 
   make || return 1
 }
@@ -43,10 +43,12 @@ package() {
   cd "${srcdir}/flags"
   install -m755 -d "${pkgdir}/usr/share/webalizer/flags"
   for i in *.png; do
-	  install -m644 ${i} "${pkgdir}/usr/share/webalizer/flags/${i}"
+    install -m644 ${i} "${pkgdir}/usr/share/webalizer/flags/${i}"
   done
 }
 
-sha256sums=('91aa9c4ca817afbe535219cbb107a349eb5d1596ed763614fb01be7f9d655286'
-            'cef1202ff1a9a26adb4f82e358cc58b4b560f04c0703f7617022eece603abeea'
+sha256sums=('420cbb515df87a39d17d6810bdf4968d82b4ba6d90c2e0a9ce23d864c2896f6f'
+            '1d5a02a23b86974b8ea6cebd2157774430c81fe20e42a5fea50e600b735d162f'
             'df9961fec7da2c16ed3faefb763f912c2db5ddce6a24e4f46647d7e64b8ab29a')
+
+# vim: set ts=2 sw=2 et:
