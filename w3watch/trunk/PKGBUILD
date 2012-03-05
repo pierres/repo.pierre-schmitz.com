@@ -2,7 +2,7 @@
 
 pkgname=w3watch
 pkgver=1.0.2
-pkgrel=1
+pkgrel=1.1
 pkgdesc='Watch the web and get notified on updates'
 arch=('any')
 url='https://git.archlinux.de/w3watch.git/'
