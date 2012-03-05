@@ -3,7 +3,7 @@
 _pkgbasename=libtxc_dxtn
 pkgname=lib32-$_pkgbasename
 pkgver=1.0.1
-pkgrel=2
+pkgrel=2.1
 arch=(x86_64)
 pkgdesc="Texture compression library for Mesa (32-bit)"
 url="http://dri.freedesktop.org/wiki/S3TC"
