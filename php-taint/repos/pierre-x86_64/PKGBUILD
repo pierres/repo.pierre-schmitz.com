@@ -3,7 +3,7 @@
 
 pkgname=php-taint
 pkgver=0.4.1
-pkgrel=1
+pkgrel=1.1
 arch=('i686' 'x86_64')
 pkgdesc='extension used for detecting XSS codes(tainted string)'
 url='http://pecl.php.net/package/taint'
