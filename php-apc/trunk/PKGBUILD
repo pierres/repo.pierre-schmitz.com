@@ -3,12 +3,12 @@
 
 pkgname=php-apc
 pkgver=3.1.9
-pkgrel=3
+pkgrel=4
 arch=('i686' 'x86_64')
 pkgdesc='A free, open, and robust framework for caching and optimizing PHP intermediate code'
 url='http://pecl.php.net/package/APC'
 depends=('php')
-license="PHP"
+license=('PHP')
 source=("http://pecl.php.net/get/APC-${pkgver}.tgz")
 backup=('etc/php/conf.d/apc.ini')
 md5sums=('a2cf7fbf6f3a87f190d897a53260ddaa')
