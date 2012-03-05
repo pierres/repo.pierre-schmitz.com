@@ -2,7 +2,7 @@
 # Contributor: Dag Odenhall <dag.odenhall@gmail.com>
 pkgname=rss2email
 pkgver=2.71
-pkgrel=2
+pkgrel=2.1
 pkgdesc="A tool for delivering news from RSS feeds to your email program"
 arch=('any')
 url="http://www.allthingsrss.com/rss2email"
