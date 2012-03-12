@@ -3,25 +3,30 @@
 
 pkgname=php-apc
 pkgver=3.1.9
-pkgrel=5
+pkgrel=6
 arch=('i686' 'x86_64')
 pkgdesc='A free, open, and robust framework for caching and optimizing PHP intermediate code'
 url='http://pecl.php.net/package/APC'
 depends=('php')
 license=('PHP')
 source=("http://pecl.php.net/get/APC-${pkgver}.tgz"
-        'svn-323991.patch')
+        'svn-324146.patch')
 backup=('etc/php/conf.d/apc.ini')
 md5sums=('a2cf7fbf6f3a87f190d897a53260ddaa'
-         'a2aa0a0d1a2764b06d218f4f56b7d9df')
+         'cac6e0fb3e34b2b88c0db6604e3f9fbb')
 
 build() {
 	cd $srcdir/APC-$pkgver
-	patch -p0 -i ${srcdir}/svn-323991.patch
+	patch -p0 -i ${srcdir}/svn-324146.patch
 	phpize
 	./configure --prefix=/usr
 	make
 }
+
+# check() {
+# 	cd $srcdir/APC-$pkgver
+# 	make test
+# }
 
 package() {
 	cd $srcdir/APC-$pkgver
