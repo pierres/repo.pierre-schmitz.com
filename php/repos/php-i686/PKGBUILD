@@ -21,7 +21,7 @@ pkgname=('php'
          'php-sqlite'
          'php-tidy'
          'php-xsl')
-pkgver=5.4.0
+pkgver=5.4.1RC1
 _suhosinver=5.4.0-0.9.10
 pkgrel=1
 arch=('i686' 'x86_64')
@@ -31,15 +31,15 @@ makedepends=('apache' 'imap' 'postgresql-libs' 'libldap' 'postfix' 'libvpx'
              'sqlite3' 'unixodbc' 'net-snmp' 'libzip' 'enchant' 'file' 'freetds'
              'libmcrypt' 'tidyhtml' 'aspell' 'libltdl' 'libpng' 'libjpeg' 'icu'
              'curl' 'libxslt' 'openssl' 'bzip2' 'db' 'gmp' 'freetype2')
-source=("http://www.php.net/distributions/${pkgbase}-${pkgver}.tar.bz2"
+source=("http://downloads.php.net/stas/${pkgbase}-${pkgver}.tar.bz2"
 #        "http://download.suhosin.org/suhosin-patch-${_suhosinver}.patch.gz"
 #        "http://download.suhosin.org/suhosin-patch-${_suhosinver}.patch.gz.sig"
         'php.ini.patch' 'apache.conf' 'rc.d.php-fpm' 'php-fpm.conf.in.patch'
         'logrotate.d.php-fpm')
-md5sums=('04bb6f9d71ea86ba05685439d50db074'
+md5sums=('b6d0e6a963df39634929b14f3aa4b357'
 #         'c099b3d7eac95018ababd41ded7f3066'
 #         'c15d18f846be1d69144a5d0056ee6506'
-         '8466999c4a3140e51f770f184facac4c'
+         'cb314b23941ba35007823e619eb51304'
          'dec2cbaad64e3abf4f0ec70e1de4e8e9'
          'b01be5f816988fcee7e78225836e5e27'
          '1eae2e84ad25aa2b0082011407859c77'

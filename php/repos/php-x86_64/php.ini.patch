@@ -1,5 +1,5 @@
---- php-5.4.0/php.ini-production	2012-02-08 21:12:44.000000000 +0100
-+++ php-5.4.0/php.ini-production	2012-03-01 19:57:53.038101373 +0100
+--- php-5.4.1RC1/php.ini-production	2012-03-29 06:17:59.000000000 +0200
++++ php-5.4.1RC1/php.ini-production	2012-03-30 10:46:21.181340861 +0200
 @@ -305,7 +305,7 @@
  ; or per-virtualhost web server configuration file. This directive is
  ; *NOT* affected by whether Safe Mode is turned On or Off.
@@ -27,7 +27,7 @@
  ; On windows:
  ; extension_dir = "ext"
  
-@@ -859,52 +859,47 @@
+@@ -859,51 +859,47 @@
  ; If you only provide the name of the extension, PHP will look for it in its
  ; default extension directory.
  ;
@@ -70,7 +70,6 @@
 -
 -;extension=php_soap.dll
 -;extension=php_sockets.dll
--;extension=php_sqlite.dll
 -;extension=php_sqlite3.dll
 -;extension=php_sybase_ct.dll
 -;extension=php_tidy.dll
