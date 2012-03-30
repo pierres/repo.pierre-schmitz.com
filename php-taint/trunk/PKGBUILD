@@ -2,8 +2,8 @@
 # Maintainer: Pierre Schmitz <pierre@archlinux.de>
 
 pkgname=php-taint
-pkgver=0.4.1
-pkgrel=1.1
+pkgver=0.5.0
+pkgrel=1
 arch=('i686' 'x86_64')
 pkgdesc='extension used for detecting XSS codes(tainted string)'
 url='http://pecl.php.net/package/taint'
@@ -11,7 +11,7 @@ license=('PHP')
 source=("http://pecl.php.net/get/taint-${pkgver}.tgz")
 depends=('php')
 backup=('etc/php/conf.d/taint.ini')
-md5sums=('4da0525af5a09c01db065a5fb383b5d6')
+md5sums=('a7f4e360adcb61e9042caa3af2ea93e0')
 
 build() {
 	cd ${srcdir}/taint-${pkgver}
