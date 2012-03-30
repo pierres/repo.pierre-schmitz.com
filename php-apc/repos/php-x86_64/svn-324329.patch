@@ -1,7 +1,43 @@
 Index: apc_main.c
 ===================================================================
 --- apc_main.c	(Revision 311029)
-+++ apc_main.c	(Revision 324146)
++++ apc_main.c	(Revision 324625)
+@@ -391,7 +391,7 @@
+ /* }}} */
+ 
+ /* {{{ apc_compile_cache_entry  */
+-zend_bool apc_compile_cache_entry(apc_cache_key_t key, zend_file_handle* h, int type, time_t t, zend_op_array** op_array, apc_cache_entry_t** cache_entry TSRMLS_DC) {
++zend_bool apc_compile_cache_entry(apc_cache_key_t *key, zend_file_handle* h, int type, time_t t, zend_op_array** op_array, apc_cache_entry_t** cache_entry TSRMLS_DC) {
+     int num_functions, num_classes;
+     apc_function_t* alloc_functions;
+     zend_op_array* alloc_op_array;
+@@ -437,7 +437,7 @@
+             while((n = php_stream_read(stream, (char*)buf, sizeof(buf))) > 0) {
+                 PHP_MD5Update(&context, buf, n);
+             }
+-            PHP_MD5Final(key.md5, &context);
++            PHP_MD5Final(key->md5, &context);
+             php_stream_close(stream);
+             if(n<0) {
+                 apc_warning("Error while reading '%s' for md5 generation." TSRMLS_CC, filename);
+@@ -459,7 +459,7 @@
+     }
+ 
+     path = h->opened_path;
+-    if(!path && key.type == APC_CACHE_KEY_FPFILE) path = (char*)key.data.fpfile.fullpath;
++    if(!path && key->type == APC_CACHE_KEY_FPFILE) path = (char*)key->data.fpfile.fullpath;
+     if(!path) path=h->filename;
+ 
+     apc_debug("2. h->opened_path=[%s]  h->filename=[%s]\n" TSRMLS_CC, h->opened_path?h->opened_path:"null",h->filename);
+@@ -607,7 +607,7 @@
+ #endif
+ 
+     zend_try {
+-        if (apc_compile_cache_entry(key, h, type, t, &op_array, &cache_entry TSRMLS_CC) == SUCCESS) {
++        if (apc_compile_cache_entry(&key, h, type, t, &op_array, &cache_entry TSRMLS_CC) == SUCCESS) {
+             ctxt.pool = cache_entry->pool;
+             ctxt.copy = APC_COPY_IN_OPCODE;
+             if (apc_cache_insert(apc_cache, key, cache_entry, &ctxt, t TSRMLS_CC) != 1) {
 @@ -842,8 +842,10 @@
  #endif
  
@@ -37,7 +73,7 @@ Index: apc_main.c
 Index: apc_compile.c
 ===================================================================
 --- apc_compile.c	(Revision 311029)
-+++ apc_compile.c	(Revision 324146)
++++ apc_compile.c	(Revision 324625)
 @@ -33,14 +33,11 @@
  #include "apc_compile.h"
  #include "apc_globals.h"
@@ -171,7 +207,16 @@ Index: apc_compile.c
 Index: apc_iterator.c
 ===================================================================
 --- apc_iterator.c	(Revision 311029)
-+++ apc_iterator.c	(Revision 324146)
++++ apc_iterator.c	(Revision 324625)
+@@ -118,7 +118,7 @@
+     }
+     if (APC_ITER_MD5 & iterator->format) {
+         if(slot->value->type == APC_CACHE_ENTRY_FILE) {
+-            if(slot->key.md5) {
++            if(APCG(file_md5) && slot->key.md5) {
+                 make_digest(md5str, slot->key.md5);
+                 add_assoc_string(item->value, "md5", md5str, 1);
+             }
 @@ -217,6 +217,9 @@
      iterator->obj.ce = ce;
      ALLOC_HASHTABLE(iterator->obj.properties);
@@ -185,7 +230,7 @@ Index: apc_iterator.c
 Index: apc_windows_srwlock_kernel.c
 ===================================================================
 --- apc_windows_srwlock_kernel.c	(Revision 311029)
-+++ apc_windows_srwlock_kernel.c	(Revision 324146)
++++ apc_windows_srwlock_kernel.c	(Revision 324625)
 @@ -81,7 +81,15 @@
  
  void apc_windows_cs_destroy(apc_windows_cs_rwlock_t *lock)
@@ -206,7 +251,7 @@ Index: apc_windows_srwlock_kernel.c
 Index: apc_string.c
 ===================================================================
 --- apc_string.c	(Revision 311029)
-+++ apc_string.c	(Revision 324146)
++++ apc_string.c	(Revision 324625)
 @@ -25,7 +25,7 @@
  
   */
@@ -300,7 +345,7 @@ Added: svn:keywords
 Index: apc_bin.c
 ===================================================================
 --- apc_bin.c	(Revision 311029)
-+++ apc_bin.c	(Revision 324146)
++++ apc_bin.c	(Revision 324625)
 @@ -28,6 +28,7 @@
  #include "apc_globals.h"
  #include "apc_bin.h"
@@ -339,7 +384,7 @@ Index: apc_bin.c
 Index: apc_string.h
 ===================================================================
 --- apc_string.h	(Revision 311029)
-+++ apc_string.h	(Revision 324146)
++++ apc_string.h	(Revision 324625)
 @@ -25,17 +25,19 @@
  
   */
@@ -372,7 +417,7 @@ Added: svn:keywords
 Index: apc.c
 ===================================================================
 --- apc.c	(Revision 311029)
-+++ apc.c	(Revision 324146)
++++ apc.c	(Revision 324625)
 @@ -62,12 +62,13 @@
  
  void* apc_erealloc(void* p, size_t n TSRMLS_DC)
@@ -390,10 +435,23 @@ Index: apc.c
  }
  
  void apc_efree(void* p TSRMLS_DC)
+Index: php_apc.c
+===================================================================
+--- php_apc.c	(Revision 311029)
++++ php_apc.c	(Revision 324625)
+@@ -1260,7 +1260,7 @@
+ 
+             orig_current_execute_data = EG(current_execute_data);
+             zend_try {
+-                if (apc_compile_cache_entry(keys[i], &file_handle, ZEND_INCLUDE, t, &op_arrays[i], &cache_entries[i] TSRMLS_CC) != SUCCESS) {
++                if (apc_compile_cache_entry(&keys[i], &file_handle, ZEND_INCLUDE, t, &op_arrays[i], &cache_entries[i] TSRMLS_CC) != SUCCESS) {
+                     op_arrays[i] = NULL;
+                     cache_entries[i] = NULL;
+                     add_assoc_long(return_value, Z_STRVAL_PP(hentry), -2);  /* -2: input or cache insertion error */
 Index: apc_php.h
 ===================================================================
 --- apc_php.h	(Revision 311029)
-+++ apc_php.h	(Revision 324146)
++++ apc_php.h	(Revision 324625)
 @@ -63,6 +63,10 @@
  #include "zend_vm.h"
  #endif
@@ -408,7 +466,7 @@ Index: apc_php.h
 Index: tests/apc_011.phpt
 ===================================================================
 --- tests/apc_011.phpt	(Revision 0)
-+++ tests/apc_011.phpt	(Revision 324146)
++++ tests/apc_011.phpt	(Revision 324625)
 @@ -0,0 +1,26 @@
 +--TEST--
 +APC: apc_fetch resets array pointers
@@ -436,10 +494,113 @@ Index: tests/apc_011.phpt
 +string(3) "bar"
 +string(3) "bar"
 +===DONE===
+Index: tests/apc_012.phpt
+===================================================================
+--- tests/apc_012.phpt	(Revision 0)
++++ tests/apc_012.phpt	(Revision 324625)
+@@ -0,0 +1,98 @@
++--TEST--
++APC: apc_delete_file test with file_md5=on (see #61352)
++--SKIPIF--
++<?php require_once(dirname(__FILE__) . '/skipif.inc'); ?>
++--INI--
++apc.enabled=1
++apc.enable_cli=1
++apc.file_update_protection=0
++apc.stat=On
++apc.file_md5=1
++report_memleaks=0
++--FILE--
++<?php
++
++$files = array( 'apc_012.php',
++                'apc_009-1.php',
++                'apc_009-2.php',
++                'nofile.php',
++              );
++
++file_put_contents(dirname(__FILE__).'/apc_009-1.php', '<?php echo "test file";');
++file_put_contents(dirname(__FILE__).'/apc_009-2.php', '<?php syntaxerrorhere!');
++
++apc_compile_file($files[0]);
++check_file($files[0]);
++apc_delete_file($files[0]);
++check_file($files[0]);
++
++apc_compile_file($files[0]);
++apc_delete_file(array($files[0]));
++check_file($files[0]);
++
++apc_compile_file($files[0]);
++$it = new APCIterator('file');
++apc_delete_file($it);
++check_file($files[0]);
++
++var_dump(apc_compile_file(array($files[0], $files[1])));
++check_file(array($files[0], $files[1]));
++
++var_dump(apc_compile_file($files));
++check_file($files);
++
++function check_file($files) {
++
++  if (!is_array($files)) {
++    $files = array($files);
++  }
++
++  $info = apc_cache_info('file');
++
++  foreach ($files as $file) {
++    $match = 0;
++    foreach($info['cache_list'] as $cached_file) {
++      if (stristr($cached_file['filename'], $file)) $match = 1;
++    }
++    if ($match) {
++      echo "$file Found File\n";
++    } else {
++      echo "$file Not Found\n";
++    }
++  }
++}
++
++?>
++===DONE===
++<?php exit(0); ?>
++--CLEAN--
++<?php
++unlink('apc_009-1.php');
++unlink('apc_009-2.php');
++?>
++--EXPECTF--
++apc_012.php Found File
++apc_012.php Not Found
++apc_012.php Not Found
++apc_012.php Not Found
++array(0) {
++}
++apc_012.php Found File
++apc_009-1.php Found File
++
++Parse error: syntax error, unexpected '!' in %s/apc_009-2.php on line 1
++
++Warning: apc_compile_file(): Error compiling apc_009-2.php in apc_compile_file. in %s/apc_012.php on line 29
++
++Warning: apc_compile_file(): Error compiling nofile.php in apc_compile_file. in %s/apc_012.php on line 29
++array(2) {
++  ["apc_009-2.php"]=>
++  int(-1)
++  ["nofile.php"]=>
++  int(-1)
++}
++apc_012.php Found File
++apc_009-1.php Found File
++apc_009-2.php Not Found
++nofile.php Not Found
++===DONE===
 Index: apc_cache.c
 ===================================================================
 --- apc_cache.c	(Revision 311029)
-+++ apc_cache.c	(Revision 324146)
++++ apc_cache.c	(Revision 324625)
 @@ -314,7 +314,7 @@
  void apc_cache_destroy(apc_cache_t* cache TSRMLS_DC)
  {
@@ -460,10 +621,23 @@ Index: apc_cache.c
          }
  
          /* For each slot pending deletion */
+Index: apc_cache.h
+===================================================================
+--- apc_cache.h	(Revision 311029)
++++ apc_cache.h	(Revision 324625)
+@@ -287,7 +287,7 @@
+                                                     TSRMLS_DC);
+ 
+ 
+-zend_bool apc_compile_cache_entry(apc_cache_key_t key, zend_file_handle* h, int type, time_t t, zend_op_array** op_array_pp, apc_cache_entry_t** cache_entry_pp TSRMLS_DC);
++zend_bool apc_compile_cache_entry(apc_cache_key_t *key, zend_file_handle* h, int type, time_t t, zend_op_array** op_array_pp, apc_cache_entry_t** cache_entry_pp TSRMLS_DC);
+ 
+ /*
+  * apc_cache_make_user_entry creates an apc_cache_entry_t object given an info string
 Index: config.m4
 ===================================================================
 --- config.m4	(Revision 311029)
-+++ config.m4	(Revision 324146)
++++ config.m4	(Revision 324625)
 @@ -177,7 +177,7 @@
  	LIBS="$orig_LIBS"
  fi
@@ -491,7 +665,7 @@ Index: config.m4
 Index: apc_lock.h
 ===================================================================
 --- apc_lock.h	(Revision 311029)
-+++ apc_lock.h	(Revision 324146)
++++ apc_lock.h	(Revision 324625)
 @@ -154,7 +154,7 @@
  # define apc_lck_nb_lock(a)    apc_fcntl_nonblocking_lock(a TSRMLS_CC)
  # define apc_lck_rdlock(a)     apc_fcntl_rdlock(a TSRMLS_CC)
