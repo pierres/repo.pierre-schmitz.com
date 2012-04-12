@@ -21,14 +21,14 @@ pkgname=('php'
          'php-sqlite'
          'php-tidy'
          'php-xsl')
-pkgver=5.4.1RC1
+pkgver=5.4.1RC2
 _suhosinver=5.4.0-0.9.10
 pkgrel=1
 arch=('i686' 'x86_64')
 license=('PHP')
 url='http://www.php.net'
 makedepends=('apache' 'imap' 'postgresql-libs' 'libldap' 'postfix' 'libvpx'
-             'sqlite3' 'unixodbc' 'net-snmp' 'libzip' 'enchant' 'file' 'freetds'
+             'sqlite' 'unixodbc' 'net-snmp' 'libzip' 'enchant' 'file' 'freetds'
              'libmcrypt' 'tidyhtml' 'aspell' 'libltdl' 'libpng' 'libjpeg' 'icu'
              'curl' 'libxslt' 'openssl' 'bzip2' 'db' 'gmp' 'freetype2')
 source=("http://downloads.php.net/stas/${pkgbase}-${pkgver}.tar.bz2"
@@ -36,7 +36,7 @@ source=("http://downloads.php.net/stas/${pkgbase}-${pkgver}.tar.bz2"
 #        "http://download.suhosin.org/suhosin-patch-${_suhosinver}.patch.gz.sig"
         'php.ini.patch' 'apache.conf' 'rc.d.php-fpm' 'php-fpm.conf.in.patch'
         'logrotate.d.php-fpm')
-md5sums=('b6d0e6a963df39634929b14f3aa4b357'
+md5sums=('faa791f5aa09e640a410051d5bb83619'
 #         'c099b3d7eac95018ababd41ded7f3066'
 #         'c15d18f846be1d69144a5d0056ee6506'
          'cb314b23941ba35007823e619eb51304'
@@ -331,8 +331,8 @@ package_php-snmp() {
 }
 
 package_php-sqlite() {
-	depends=('php' 'sqlite3')
-	pkgdesc='sqlite3 module for PHP'
+	depends=('php' 'sqlite')
+	pkgdesc='sqlite module for PHP'
 	install -D -m755 ${srcdir}/build-php/modules/sqlite3.so ${pkgdir}/usr/lib/php/modules/sqlite3.so
 	install -D -m755 ${srcdir}/build-php/modules/pdo_sqlite.so ${pkgdir}/usr/lib/php/modules/pdo_sqlite.so
 }
