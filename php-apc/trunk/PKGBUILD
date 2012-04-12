@@ -1,23 +1,20 @@
-# $Id: PKGBUILD 135862 2011-08-19 20:05:54Z pierre $
+# $Id: PKGBUILD 156068 2012-04-12 18:41:18Z pierre $
 # Maintainer: Pierre Schmitz <pierre@archlinux.de>
 
 pkgname=php-apc
-pkgver=3.1.9
-pkgrel=7
+pkgver=3.1.10
+pkgrel=1.1
 arch=('i686' 'x86_64')
 pkgdesc='A free, open, and robust framework for caching and optimizing PHP intermediate code'
 url='http://pecl.php.net/package/APC'
 depends=('php')
 license=('PHP')
-source=("http://pecl.php.net/get/APC-${pkgver}.tgz"
-        'svn-324329.patch')
+source=("http://pecl.php.net/get/APC-${pkgver}.tgz")
 backup=('etc/php/conf.d/apc.ini')
-md5sums=('a2cf7fbf6f3a87f190d897a53260ddaa'
-         'e4a4f1302b37c8bdfe35f64e2e492f1c')
+md5sums=('f4a6b91903d6ba9dce89fc87bb6f26c9')
 
 build() {
 	cd $srcdir/APC-$pkgver
-	patch -p0 -i ${srcdir}/svn-324329.patch
 	phpize
 	./configure --prefix=/usr
 	make
