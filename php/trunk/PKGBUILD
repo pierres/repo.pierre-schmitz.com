@@ -30,7 +30,7 @@ makedepends=('apache' 'imap' 'postgresql-libs' 'libldap' 'postfix' 'libvpx'
              'sqlite' 'unixodbc' 'net-snmp' 'libzip' 'enchant' 'file' 'freetds'
              'libmcrypt' 'tidyhtml' 'aspell' 'libltdl' 'libpng' 'libjpeg' 'icu'
              'curl' 'libxslt' 'openssl' 'bzip2' 'db' 'gmp' 'freetype2')
-source=("http://downloads.php.net/stas/${pkgbase}-${pkgver}.tar.bz2"
+source=("http://www.php.net/distributions/${pkgbase}-${pkgver}.tar.bz2"
         'php.ini.patch' 'apache.conf' 'rc.d.php-fpm' 'php-fpm.conf.in.patch'
         'logrotate.d.php-fpm')
 md5sums=('5b9529ed89dbc48c498e9693d1af3caf'
