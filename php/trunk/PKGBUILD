@@ -21,8 +21,7 @@ pkgname=('php'
          'php-sqlite'
          'php-tidy'
          'php-xsl')
-pkgver=5.4.1RC2
-_suhosinver=5.4.0-0.9.10
+pkgver=5.4.1
 pkgrel=1
 arch=('i686' 'x86_64')
 license=('PHP')
@@ -32,13 +31,9 @@ makedepends=('apache' 'imap' 'postgresql-libs' 'libldap' 'postfix' 'libvpx'
              'libmcrypt' 'tidyhtml' 'aspell' 'libltdl' 'libpng' 'libjpeg' 'icu'
              'curl' 'libxslt' 'openssl' 'bzip2' 'db' 'gmp' 'freetype2')
 source=("http://downloads.php.net/stas/${pkgbase}-${pkgver}.tar.bz2"
-#        "http://download.suhosin.org/suhosin-patch-${_suhosinver}.patch.gz"
-#        "http://download.suhosin.org/suhosin-patch-${_suhosinver}.patch.gz.sig"
         'php.ini.patch' 'apache.conf' 'rc.d.php-fpm' 'php-fpm.conf.in.patch'
         'logrotate.d.php-fpm')
-md5sums=('faa791f5aa09e640a410051d5bb83619'
-#         'c099b3d7eac95018ababd41ded7f3066'
-#         'c15d18f846be1d69144a5d0056ee6506'
+md5sums=('5b9529ed89dbc48c498e9693d1af3caf'
          'cb314b23941ba35007823e619eb51304'
          'dec2cbaad64e3abf4f0ec70e1de4e8e9'
          'b01be5f816988fcee7e78225836e5e27'
@@ -123,9 +118,6 @@ build() {
 	export PEAR_INSTALLDIR
 
 	cd ${srcdir}/${pkgbase}-${pkgver}
-
-	# apply suhosin patch
-#	patch -p1 -i ${srcdir}/suhosin-patch-${_suhosinver}.patch
 
 	# adjust paths
 	patch -p1 -i ${srcdir}/php.ini.patch
