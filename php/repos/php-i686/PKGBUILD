@@ -21,8 +21,8 @@ pkgname=('php'
          'php-sqlite'
          'php-tidy'
          'php-xsl')
-pkgver=5.4.4RC1
-pkgrel=3
+pkgver=5.4.4RC2
+pkgrel=1
 arch=('i686' 'x86_64')
 license=('PHP')
 url='http://www.php.net'
@@ -33,14 +33,14 @@ makedepends=('apache' 'imap' 'postgresql-libs' 'libldap' 'postfix' 'libvpx'
 source=("http://downloads.php.net/stas/${pkgbase}-${pkgver}.tar.bz2"
         'php.ini.patch' 'apache.conf' 'rc.d.php-fpm' 'php-fpm.conf.in.patch'
         'logrotate.d.php-fpm' 'php-fpm.service' 'php-fpm.tmpfiles')
-md5sums=('8f8946b2432af7f977ea71cd611eba5c'
+md5sums=('b2f551968cf9a7c2d85b856893344905'
          '0b0bc7a917fc592bdf11dcd3c5c255e9'
          'dec2cbaad64e3abf4f0ec70e1de4e8e9'
-         '61837f1e9b50d7fdf4c8d1f81fa153f7'
-         '59b3a25f9eb3afc02f1adf9ee699808c'
-         'a2af49da239122eb45744f4446752050'
-         '84d0a4caf8d735279cf4500d1772e2a5'
-         'e808f39a075dd53cd8da70d984d0e166')
+         'aabda9f3f2f8b9d8fdc9558c31c718db'
+         '825e580dd5708d959b50944afa1b12b6'
+         'f56b5bb7e93c802ae8519182fbea3387'
+         '86c73d481f3099e740e602869bacf637'
+         'c60343df74f8e1afb13b084d5c0e47ed')
 
 build() {
 	phpconfig="--srcdir=../${pkgbase}-${pkgver} \
@@ -235,6 +235,7 @@ package_php-fpm() {
 	pkgdesc='FastCGI Process Manager for PHP'
 	depends=('php')
 	backup=('etc/php/php-fpm.conf')
+	install='php-fpm.install'
 
 	install -D -m755 ${srcdir}/build-fpm/sapi/fpm/php-fpm ${pkgdir}/usr/sbin/php-fpm
 	install -D -m644 ${srcdir}/build-fpm/sapi/fpm/php-fpm.8 ${pkgdir}/usr/share/man/man8/php-fpm.8
