@@ -14,7 +14,7 @@ license=('GPL')
 depends=('php53')
 conflicts=('xdebug')
 provides=("xdebug=${pkgver}")
-install="${pkgname}.install"
+install="xdebug.install"
 backup=('etc/php/conf.d/xdebug.ini')
 source=(http://www.xdebug.org/files/xdebug-$pkgver.tgz
 	xdebug-5.2.ini
