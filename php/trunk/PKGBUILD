@@ -1,4 +1,4 @@
-# $Id: PKGBUILD 161803 2012-06-14 17:05:48Z pierre $
+# $Id: PKGBUILD 166611 2012-09-13 04:24:27Z pierre $
 # Maintainer: Pierre Schmitz <pierre@archlinux.de>
 
 pkgbase=php
@@ -21,8 +21,9 @@ pkgname=('php'
          'php-sqlite'
          'php-tidy'
          'php-xsl')
-pkgver=5.4.5RC1
+pkgver=5.4.7
 pkgrel=1
+epoch=1
 arch=('i686' 'x86_64')
 license=('PHP')
 url='http://www.php.net'
@@ -33,16 +34,20 @@ makedepends=('apache' 'imap' 'postgresql-libs' 'libldap' 'postfix' 'libvpx'
 source=("http://downloads.php.net/stas/${pkgbase}-${pkgver}.tar.bz2"
         'php.ini.patch' 'apache.conf' 'rc.d.php-fpm' 'php-fpm.conf.in.patch'
         'logrotate.d.php-fpm' 'php-fpm.service' 'php-fpm.tmpfiles')
-md5sums=('4aa937a7126341561edf7e1b261f37d7'
+options=('!strip')
+md5sums=('9cd421f1cc8fa8e7f215e44a1b06199f'
          '0b0bc7a917fc592bdf11dcd3c5c255e9'
          'dec2cbaad64e3abf4f0ec70e1de4e8e9'
-         'aabda9f3f2f8b9d8fdc9558c31c718db'
-         '825e580dd5708d959b50944afa1b12b6'
+         '6d46667e00d65933ec0c958279c0a803'
+         '5c1f4c967b66ce3eaf819b46951dcbf5'
          'f56b5bb7e93c802ae8519182fbea3387'
          '86c73d481f3099e740e602869bacf637'
          'c60343df74f8e1afb13b084d5c0e47ed')
 
 build() {
+	export CFLAGS=${CFLAGS/-O2/-O0 -g}
+	export CXXLAGS=${CXXFLAGS/-O2/-O0 -g}
+
 	phpconfig="--srcdir=../${pkgbase}-${pkgver} \
 		--config-cache \
 		--prefix=/usr \
@@ -54,8 +59,12 @@ build() {
 		--disable-rpath \
 		--mandir=/usr/share/man \
 		--without-pear \
+		--disable-inline-optimization \
+		--enable-debug \
 		"
 
+	# pdo_mysql needs to be static in debug build
+	# see https://bugs.php.net/bug.php?id=60840
 	phpextensions="--enable-bcmath=shared \
 		--enable-calendar=shared \
 		--enable-dba=shared \
@@ -98,7 +107,7 @@ build() {
 		--with-mysqli=shared,mysqlnd \
 		--with-openssl=shared \
 		--with-pcre-regex=/usr \
-		--with-pdo-mysql=shared,mysqlnd \
+		--with-pdo-mysql=mysqlnd \
 		--with-pdo-odbc=shared,unixODBC,/usr \
 		--with-pdo-pgsql=shared \
 		--with-pdo-sqlite=shared,/usr \
@@ -187,10 +196,10 @@ build() {
 	make
 }
 
-# check() {
-# 	cd ${srcdir}/build-php
-# 	make test
-# }
+check() {
+	cd ${srcdir}/build-php
+	printf "Y\n$(echo ${PACKAGER} | sed -r 's/.*<(.+)>/\1/')\n" | make test
+}
 
 package_php() {
 	pkgdesc='An HTML-embedded scripting language'
