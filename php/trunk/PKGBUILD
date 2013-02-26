@@ -21,7 +21,7 @@ pkgname=('php'
          'php-sqlite'
          'php-tidy'
          'php-xsl')
-pkgver=5.4.7
+pkgver=5.4.12RC2
 pkgrel=1
 epoch=1
 arch=('i686' 'x86_64')
@@ -32,16 +32,15 @@ makedepends=('apache' 'imap' 'postgresql-libs' 'libldap' 'postfix' 'libvpx'
              'libmcrypt' 'tidyhtml' 'aspell' 'libltdl' 'libpng' 'libjpeg' 'icu'
              'curl' 'libxslt' 'openssl' 'bzip2' 'db' 'gmp' 'freetype2')
 source=("http://downloads.php.net/stas/${pkgbase}-${pkgver}.tar.bz2"
-        'php.ini.patch' 'apache.conf' 'rc.d.php-fpm' 'php-fpm.conf.in.patch'
+        'php.ini.patch' 'apache.conf' 'php-fpm.conf.in.patch'
         'logrotate.d.php-fpm' 'php-fpm.service' 'php-fpm.tmpfiles')
 options=('!strip')
-md5sums=('9cd421f1cc8fa8e7f215e44a1b06199f'
+md5sums=('b3f4f924f733f191249cebdfe3dced5e'
          '0b0bc7a917fc592bdf11dcd3c5c255e9'
          'dec2cbaad64e3abf4f0ec70e1de4e8e9'
-         '6d46667e00d65933ec0c958279c0a803'
          '5c1f4c967b66ce3eaf819b46951dcbf5'
-         'f56b5bb7e93c802ae8519182fbea3387'
-         '86c73d481f3099e740e602869bacf637'
+         'e036c721e5ad927cd1613c7475a58b3a'
+         'f8b206cb8fecb05cb1ded8bee45633ff'
          'c60343df74f8e1afb13b084d5c0e47ed')
 
 build() {
@@ -102,12 +101,13 @@ build() {
 		--with-mcrypt=shared \
 		--with-mhash \
 		--with-mssql=shared \
+		--enable-mysqlnd=shared \
 		--with-mysql-sock=/var/run/mysqld/mysqld.sock \
 		--with-mysql=shared,mysqlnd \
 		--with-mysqli=shared,mysqlnd \
 		--with-openssl=shared \
 		--with-pcre-regex=/usr \
-		--with-pdo-mysql=mysqlnd \
+		--with-pdo-mysql=shared,mysqlnd \
 		--with-pdo-odbc=shared,unixODBC,/usr \
 		--with-pdo-pgsql=shared \
 		--with-pdo-sqlite=shared,/usr \
@@ -133,6 +133,9 @@ build() {
 	# adjust paths
 	patch -p0 -i ${srcdir}/php.ini.patch
 	patch -p0 -i ${srcdir}/php-fpm.conf.in.patch
+
+	# workaround for pkg-config 0.28
+	sed 's/ && test -n "$OPENSSL_INCS"//g' -i configure
 
 	# php
 	mkdir ${srcdir}/build-php
@@ -198,7 +201,8 @@ build() {
 
 check() {
 	cd ${srcdir}/build-php
-	printf "Y\n$(echo ${PACKAGER} | sed -r 's/.*<(.+)>/\1/')\n" | make test
+	#printf "Y\n$(echo ${PACKAGER} | sed -r 's/.*<(.+)>/\1/')\n" | make test
+	printf "n\n" | make test
 }
 
 package_php() {
@@ -249,7 +253,6 @@ package_php-fpm() {
 	install -D -m755 ${srcdir}/build-fpm/sapi/fpm/php-fpm ${pkgdir}/usr/sbin/php-fpm
 	install -D -m644 ${srcdir}/build-fpm/sapi/fpm/php-fpm.8 ${pkgdir}/usr/share/man/man8/php-fpm.8
 	install -D -m644 ${srcdir}/build-fpm/sapi/fpm/php-fpm.conf ${pkgdir}/etc/php/php-fpm.conf
-	install -D -m755 ${srcdir}/rc.d.php-fpm ${pkgdir}/etc/rc.d/php-fpm
 	install -D -m644 ${srcdir}/logrotate.d.php-fpm ${pkgdir}/etc/logrotate.d/php-fpm
 	install -d -m755 ${pkgdir}/etc/php/fpm.d
 	install -D -m644 ${srcdir}/php-fpm.tmpfiles ${pkgdir}/usr/lib/tmpfiles.d/php-fpm.conf
