@@ -1,4 +1,4 @@
-# $Id: PKGBUILD 174305 2013-01-04 10:48:01Z pierre $
+# $Id$
 # Maintainer: Pierre Schmitz <pierre@archlinux.de>
 
 pkgname=php-zendoptimizerplus
