@@ -37,7 +37,7 @@ source=("http://downloads.php.net/dsp/${pkgbase}-${pkgver}.tar.bz2"
         'logrotate.d.php-fpm' 'php-fpm.service' 'php-fpm.tmpfiles')
 ${_debug} && options=('!strip')
 md5sums=('0b8eaea490888bc7881f60f54798f1cb'
-         '317f514977a0745c91dda0ad56213833'
+         '696ea38760f3b9cc6b9cd8391ea28df5'
          'dec2cbaad64e3abf4f0ec70e1de4e8e9'
          '5c1f4c967b66ce3eaf819b46951dcbf5'
          'e036c721e5ad927cd1613c7475a58b3a'
