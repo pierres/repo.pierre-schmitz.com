@@ -2,17 +2,18 @@
 # Maintainer: Pierre Schmitz <pierre@archlinux.de>
 
 pkgname=php-xcache
-pkgver=3.0.1
-pkgrel=1.1
+pkgver=3.1.0dev
+pkgrel=1
 arch=('i686' 'x86_64')
 pkgdesc='A PHP opcode cacher'
 url='http://xcache.lighttpd.net/'
 depends=('php')
+makedepends=('subversion')
 license=('custom')
-source=("http://xcache.lighttpd.net/pub/Releases/${pkgver}/xcache-${pkgver}.tar.bz2"
+source=("xcache-${pkgver}::svn://svn.lighttpd.net/xcache/trunk/#revision=1236"
         'xcache.ini')
 backup=('etc/php/conf.d/xcache.ini')
-md5sums=('45086010bc4f82f506c08be1c556941b'
+md5sums=('SKIP'
          '8fd9ce537ada9463c4b0c042243158c0')
 
 build() {
