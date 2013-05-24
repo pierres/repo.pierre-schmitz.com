@@ -24,7 +24,7 @@ pkgname=('php'
          'php-tidy'
          'php-xsl')
 pkgver=5.5.0RC2
-pkgrel=1
+pkgrel=2
 arch=('i686' 'x86_64')
 license=('PHP')
 url='http://www.php.net'
@@ -39,9 +39,9 @@ ${_debug} && options=('!strip')
 md5sums=('3148c96abf80f712c1d534195fbc4cdd'
          '696ea38760f3b9cc6b9cd8391ea28df5'
          'dec2cbaad64e3abf4f0ec70e1de4e8e9'
-         '5c1f4c967b66ce3eaf819b46951dcbf5'
+         'effd910ea3a601e790e91c68cbba5b09'
          'e036c721e5ad927cd1613c7475a58b3a'
-         '4310b14ea852cb9025316e52b5bda8fd'
+         'cc2940f5312ba42e7aa1ddfab74b84c4'
          'c60343df74f8e1afb13b084d5c0e47ed')
 
 prepare() {
