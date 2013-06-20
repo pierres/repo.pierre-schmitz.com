@@ -1,8 +1,8 @@
---- sapi/fpm/php-fpm.conf.in	2013-05-23 00:45:27.000000000 +0200
-+++ sapi/fpm/php-fpm.conf.in	2013-05-24 08:14:25.801723140 +0200
+--- sapi/fpm/php-fpm.conf.in	2013-06-19 22:03:18.000000000 +0200
++++ sapi/fpm/php-fpm.conf.in	2013-06-20 17:03:03.728835784 +0200
 @@ -12,7 +12,7 @@
  ; Relative path can also be used. They will be prefixed by:
- ;  - the global prefix if it's been set (-p arguement)
+ ;  - the global prefix if it's been set (-p argument)
  ;  - @prefix@ otherwise
 -;include=etc/fpm.d/*.conf
 +;include=/etc/php/fpm.d/*.conf
