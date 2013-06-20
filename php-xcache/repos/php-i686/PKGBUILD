@@ -3,14 +3,14 @@
 
 pkgname=php-xcache
 pkgver=3.1.0dev
-pkgrel=4
+pkgrel=5
 arch=('i686' 'x86_64')
 pkgdesc='A PHP opcode cacher'
 url='http://xcache.lighttpd.net/'
 depends=('php')
 makedepends=('subversion')
 license=('custom')
-source=("xcache-${pkgver}::svn://svn.lighttpd.net/xcache/trunk/#revision=1261"
+source=("xcache-${pkgver}::svn://svn.lighttpd.net/xcache/trunk/#revision=1265"
         'xcache.ini')
 backup=('etc/php/conf.d/xcache.ini')
 md5sums=('SKIP'
