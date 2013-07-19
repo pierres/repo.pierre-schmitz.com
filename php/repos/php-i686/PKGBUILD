@@ -23,7 +23,7 @@ pkgname=('php'
          'php-sqlite'
          'php-tidy'
          'php-xsl')
-pkgver=5.5.0
+pkgver=5.5.1
 pkgrel=1
 arch=('i686' 'x86_64')
 license=('PHP')
@@ -36,7 +36,7 @@ source=("http://www.php.net/distributions/${pkgbase}-${pkgver}.tar.bz2"
         'php.ini.patch' 'apache.conf' 'php-fpm.conf.in.patch'
         'logrotate.d.php-fpm' 'php-fpm.service' 'php-fpm.tmpfiles')
 ${_debug} && options=('!strip')
-md5sums=('daf2d54e79def9fd0fb2ac7dfcefb7f3'
+md5sums=('e6520ba8f86e03451f1e9226ca2be681'
          '696ea38760f3b9cc6b9cd8391ea28df5'
          'dec2cbaad64e3abf4f0ec70e1de4e8e9'
          '880afea327bb00c47082d22c507e6bfc'
