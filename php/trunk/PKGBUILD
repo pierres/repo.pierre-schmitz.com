@@ -1,7 +1,7 @@
 # $Id: PKGBUILD 184794 2013-05-08 16:00:30Z pierre $
 # Maintainer: Pierre Schmitz <pierre@archlinux.de>
 
-_debug=true
+_debug=false
 
 pkgbase=php
 pkgname=('php'
