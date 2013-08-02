@@ -24,14 +24,14 @@ pkgname=('php'
          'php-tidy'
          'php-xsl')
 pkgver=5.5.1
-pkgrel=2
+pkgrel=3
 arch=('i686' 'x86_64')
 license=('PHP')
 url='http://www.php.net'
-makedepends=('apache' 'imap' 'postgresql-libs' 'libldap' 'postfix'
+makedepends=('apache' 'imap' 'postgresql-libs' 'libldap' 'postfix' 'libvpx'
              'sqlite' 'unixodbc' 'net-snmp' 'libzip' 'enchant' 'file' 'freetds'
-             'libmcrypt' 'tidyhtml' 'aspell' 'libltdl' 'gd' 'libxpm' 'icu'
-             'curl' 'libxslt' 'openssl' 'bzip2' 'db' 'gmp' 'systemd')
+             'libmcrypt' 'tidyhtml' 'aspell' 'libltdl' 'libpng' 'libjpeg' 'icu'
+             'curl' 'libxslt' 'openssl' 'bzip2' 'db' 'gmp' 'freetype2' 'systemd')
 source=("http://www.php.net/distributions/${pkgbase}-${pkgver}.tar.bz2"
         'php.ini.patch' 'apache.conf' 'php-fpm.conf.in.patch'
         'logrotate.d.php-fpm' 'php-fpm.service' 'php-fpm.tmpfiles')
@@ -82,6 +82,7 @@ build() {
 		--enable-dba=shared \
 		--enable-exif=shared \
 		--enable-ftp=shared \
+		--enable-gd-native-ttf \
 		--enable-intl=shared \
 		--enable-mbstring \
 		--enable-opcache \
@@ -99,7 +100,8 @@ build() {
 		--with-db4=/usr \
 		--with-enchant=shared,/usr \
 		--with-fpm-systemd \
-		--with-gd=shared,/usr \
+		--with-freetype-dir=/usr \
+		--with-gd=shared \
 		--with-gdbm \
 		--with-gettext=shared \
 		--with-gmp=shared \
@@ -107,6 +109,8 @@ build() {
 		--with-icu-dir=/usr \
 		--with-imap-ssl \
 		--with-imap=shared \
+		--with-jpeg-dir=/usr \
+		--with-vpx-dir=/usr \
 		--with-ldap=shared \
 		--with-ldap-sasl \
 		--with-mcrypt=shared \
@@ -122,6 +126,7 @@ build() {
 		--with-pdo-pgsql=shared \
 		--with-pdo-sqlite=shared,/usr \
 		--with-pgsql=shared \
+		--with-png-dir=/usr \
 		--with-pspell=shared \
 		--with-snmp=shared \
 		--with-sqlite3=shared,/usr \
@@ -289,7 +294,7 @@ package_php-enchant() {
 }
 
 package_php-gd() {
-	depends=('php' 'gd')
+	depends=('php' 'libpng' 'libjpeg' 'freetype2' 'libvpx')
 	pkgdesc='gd module for PHP'
 	install -D -m755 ${srcdir}/build-php/modules/gd.so ${pkgdir}/usr/lib/php/modules/gd.so
 }
