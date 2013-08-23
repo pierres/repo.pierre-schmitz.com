@@ -1,4 +1,4 @@
-# $Id: PKGBUILD 193503 2013-08-21 12:43:35Z tpowa $
+# $Id: PKGBUILD 193465 2013-08-20 21:48:24Z tpowa $
 # Maintainer: Tobias Powalowski <tpowa@archlinux.org>
 # Maintainer: Thomas Baechler <thomas@archlinux.org>
 
@@ -6,7 +6,7 @@ pkgbase=linux               # Build stock -ARCH kernel
 #pkgbase=linux-custom       # Build kernel with a different name
 _srcname=linux-3.10
 pkgver=3.10.9
-pkgrel=1
+pkgrel=1.1
 arch=('i686' 'x86_64')
 url="http://www.kernel.org/"
 license=('GPL2')
@@ -20,6 +20,7 @@ source=("http://www.kernel.org/pub/linux/kernel/v3.x/${_srcname}.tar.xz"
         'linux.preset'
         'change-default-console-loglevel.patch'
         'criu-no-expert.patch'
+        'http://www.eworm.de/download/linux/mac80211_cck_rates.patch'
         '3.10.6-logitech-dj.patch')
 md5sums=('4f25cd5bec5f8d5a7d935b3f2ccb8481'
          '868d7f5315f95da5e48ed56691a36263'
@@ -28,6 +29,7 @@ md5sums=('4f25cd5bec5f8d5a7d935b3f2ccb8481'
          'eb14dcfd80c00852ef81ded6e826826a'
          'f3def2cefdcbb954c21d8505d23cc83c'
          'd50c1ac47394e9aec637002ef3392bd1'
+         '7e0b49b55e8878a20c19c824db246540'
          '3ff40ca684cfe719723e627e2cef7cea')
 
 _kernelname=${pkgbase#linux}
@@ -55,6 +57,9 @@ prepare() {
   # allow criu without expert option set
   # patch from fedora
   patch -Np1 -i "${srcdir}/criu-no-expert.patch"
+
+  # fix broken brcm80211
+  patch -Np1 -i "${srcdir}/mac80211_cck_rates.patch"
  
   # fix FS#35991 - [linux] 3.10.x renders Logitech Unified Receivers useless
   patch -Np1 -i  "${srcdir}/3.10.6-logitech-dj.patch"
