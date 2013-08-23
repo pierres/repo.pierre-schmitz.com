@@ -4,7 +4,7 @@
 
 pkgname=broadcom-wl
 pkgver=5.100.82.112
-pkgrel=13
+pkgrel=13.1
 pkgdesc='Broadcom 802.11abgn hybrid Linux networking device driver'
 url='http://www.broadcom.com/support/802.11/linux_sta.php'
 arch=('i686' 'x86_64')
@@ -27,7 +27,6 @@ backup=('etc/modprobe.d/broadcom-wl.conf')
 install=install
 
 _extramodules=extramodules-3.10-ARCH
-_kernver="$(cat /usr/lib/modules/${_extramodules}/version)"
 
 build() {
 	cd "${srcdir}"
@@ -35,6 +34,7 @@ build() {
 	patch -p1 -i linux-recent.patch
 	patch -p1 -i license.patch
 
+	_kernver="$(cat /usr/lib/modules/${_extramodules}/version)"
 	make -C /usr/lib/modules/"${_kernver}"/build M=`pwd`
 }
 
