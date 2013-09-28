@@ -1,0 +1,48 @@
+Date: Fri, 20 Sep 2013 22:53:52 +0200
+From: Olivier Brunel <jjk@jjacky.com>
+To: systemd-devel@lists.freedesktop.org
+Subject: [systemd-devel] [PATCH] Fix timeout when stopping Type=notify service
+
+Since 41efeaec a call to service_unwatch_main_pid() is done from
+service_set_main_pid(), which is called upon receiving message MAINPID=
+
+This had the side effect of not watching pid anymore, and would result in a
+useless timeout when stopping the service, as the unit wouldn't be identified
+from the pid, so not marked stopped which would result in systemd thinking this
+was a timeout.
+---
+I'm not exactly familiar with systemd's internals, so this might not be the
+correct way to fix this, please correct me if it isn't.
+
+ src/core/service.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/src/core/service.c b/src/core/service.c
+index 246a86e..1dccdff 100644
+--- a/src/core/service.c
++++ b/src/core/service.c
+@@ -3388,9 +3388,17 @@ static void service_notify_message(Unit *u, pid_t pid, char **tags) {
+                         log_warning_unit(u->id,
+                                          "Failed to parse notification message %s", e);
+                 else {
++                        int r;
++
+                         log_debug_unit(u->id,
+                                        "%s: got %s", u->id, e);
+                         service_set_main_pid(s, pid);
++                        r = unit_watch_pid(u, pid);
++                        if (r < 0)
++                                /* FIXME: we need to do something here */
++                                log_warning_unit(u->id,
++                                                 "Failed to watch PID %lu from service %s",
++                                                 (unsigned long) pid, u->id);
+                 }
+         }
+ 
+-- 
+1.8.4
+
+_______________________________________________
+systemd-devel mailing list
+systemd-devel@lists.freedesktop.org
+http://lists.freedesktop.org/mailman/listinfo/systemd-devel
