@@ -4,7 +4,7 @@
 pkgbase=systemd
 pkgname=('systemd' 'systemd-sysvcompat')
 pkgver=207
-pkgrel=6.1
+pkgrel=6.2
 arch=('i686' 'x86_64')
 url="http://www.freedesktop.org/wiki/Software/systemd"
 makedepends=('acl' 'cryptsetup' 'dbus-core' 'docbook-xsl' 'gobject-introspection' 'gperf'
@@ -26,7 +26,7 @@ md5sums=('7799f3cc9d289b8db1c1fa56ae7ecd88'
          '29245f7a240bfba66e2b1783b63b6b40'
          '8b68b0218a3897d4d37a6ccf47914774'
          'bde43090d4ac0ef048e3eaee8202a407'
-         '97dca2a9faf0891f5b73a151cccd6150'
+         '3db0beb4f1ae0ce8b0e7592a78788860'
          '9eb0a46aa2a3a6d74117f9a174dbe168'
          '182be4c729aaecde249b7b05b48a481f'
          'b54fbe35e2689ac36cda9ac4a5a86f24'
