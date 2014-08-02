@@ -22,7 +22,7 @@ pkgname=('php'
          'php-sqlite'
          'php-tidy'
          'php-xsl')
-pkgver=5.6.0RC2
+pkgver=5.6.0RC3
 pkgrel=1
 arch=('i686' 'x86_64')
 license=('PHP')
@@ -34,7 +34,7 @@ makedepends=('apache' 'imap' 'postgresql-libs' 'libldap' 'postfix' 'libvpx'
 source=("http://downloads.php.net/tyrael/${pkgbase}-${pkgver}.tar.xz"
         'php.ini.patch' 'apache.conf' 'php-fpm.conf.in.patch'
         'logrotate.d.php-fpm' 'php-fpm.service' 'php-fpm.tmpfiles')
-md5sums=('2b29936b7a383ee1e4b96615156991f8'
+md5sums=('8dcc08a801002fd5c51de712e162c4df'
          '4ca5c5735eb14c67e100dd8050dbda6a'
          'dec2cbaad64e3abf4f0ec70e1de4e8e9'
          '6bc1fc4ceee039d21ff3b56aa845cc5a'
