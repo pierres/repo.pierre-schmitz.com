@@ -3,7 +3,6 @@
 
 pkgname=cool-old-term-git
 pkgrel=1
-pkgver=0.9.r181.3d5ee0e
 pkgdesc='A good looking terminal emulator which mimics the old cathode display'
 arch=('i686' 'x86_64')
 url='https://github.com/Swordifish90/cool-old-term'
