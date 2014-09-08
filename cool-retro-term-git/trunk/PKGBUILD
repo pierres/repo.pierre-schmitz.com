@@ -2,7 +2,7 @@
 # Contributor: Glen Oakley <goakley123@gmail.com>
 # Contributor: Doug Newgard <scimmia at archlinux dot info>
 pkgname=cool-retro-term-git
-pkgrel=4
+pkgrel=1
 pkgver=0.9.r261.62b04ff
 pkgdesc='A good looking terminal emulator which mimics the old cathode display'
 arch=('i686' 'x86_64')
