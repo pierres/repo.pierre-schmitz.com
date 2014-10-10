@@ -3,7 +3,7 @@
 # Contributor: Doug Newgard <scimmia at archlinux dot info>
 pkgname=cool-retro-term-git
 pkgrel=1
-pkgver=0.9.r280.4b87b6e
+pkgver=0.9.r310.d4ca781
 pkgdesc='A good looking terminal emulator which mimics the old cathode display'
 arch=('i686' 'x86_64')
 url='https://github.com/Swordfish90/cool-retro-term'
