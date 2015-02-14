@@ -4,7 +4,7 @@
 
 pkgname=phpstorm
 _pkgname=PhpStorm # Directory name in the tar file
-_pkgbuild=139.732
+_pkgbuild=139.1348
 pkgver=8.0.3
 pkgrel=0.1
 pkgdesc="Lightweight and Smart PHP IDE."
