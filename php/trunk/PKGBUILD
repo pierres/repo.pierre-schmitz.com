@@ -21,7 +21,7 @@ pkgname=('php'
          'php-sqlite'
          'php-tidy'
          'php-xsl')
-pkgver=7.0.0dev.90178
+pkgver=7.0.0dev.90198
 pkgrel=1
 arch=('i686' 'x86_64')
 license=('PHP')
@@ -34,7 +34,7 @@ source=("${pkgbase}::git+https://git.php.net/repository/php-src.git#branch=maste
         'php.ini.patch' 'apache.conf' 'php-fpm.conf.in.patch'
         'logrotate.d.php-fpm' 'php-fpm.service' 'php-fpm.tmpfiles')
 md5sums=('SKIP'
-         '942f9d8af9bcab2487ca710ef42ef1de'
+         '4f00e9508203c7dae68cde1b3db8baf2'
          '00071bea18deee67a3b3dc636630823f'
          '16b5e2e4da59f15bea4c2db78a7bc8dc'
          '25bc67ad828e8147a817410b68d8016c'
@@ -52,7 +52,7 @@ pkgver() {
 prepare() {
 	cd ${srcdir}/${pkgname}
 
-	#patch -p0 -i ${srcdir}/php.ini.patch
+	patch -p0 -i ${srcdir}/php.ini.patch
 	#patch -p0 -i ${srcdir}/php-fpm.conf.in.patch
 	# Just because our Apache 2.4 is configured with a threaded MPM by default does not mean we want to build a ZTS PHP.
 	# Let's supress this behaviour and build a SAPI that works fine with the prefork MPM.
@@ -209,6 +209,7 @@ build() {
 # 	export SNMP_TIMEOUT=1
 # 	export SNMP_RETRIES=0
 # 	export NO_INTERACTION=1
+# 	export REPORT_EXIT_STATUS=1
 # 	make test
 # 	echo
 # }
