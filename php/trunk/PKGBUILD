@@ -22,7 +22,7 @@ pkgname=('php'
          'php-tidy'
          'php-xsl')
 pkgver=7.0.0dev.90203
-pkgrel=1
+pkgrel=2
 arch=('i686' 'x86_64')
 license=('PHP')
 url='http://www.php.net'
@@ -148,7 +148,7 @@ build() {
 
 	cd ${srcdir}/${pkgname}
 
-	# cli
+	# cli, cgi, fpm and embed
 	mkdir ${srcdir}/build-php
 	cd ${srcdir}/build-php
 	ln -s ../${pkgname}/configure
@@ -156,7 +156,6 @@ build() {
 		--enable-pcntl \
 		--enable-cgi \
 		--enable-fpm \
-		--enable-phpdbg \
 		--enable-embed=shared \
 		${_phpextensions}
 	make
@@ -167,6 +166,14 @@ build() {
 	cd ${srcdir}/build-apache
 	./configure ${_phpconfig} \
 		--with-apxs2 \
+		${_phpextensions}
+	make
+
+	# phpdbg
+	cp -a ${srcdir}/build-php ${srcdir}/build-phpdbg
+	cd ${srcdir}/build-phpdbg
+	./configure ${_phpconfig} \
+		--enable-phpdbg \
 		${_phpextensions}
 	make
 }
@@ -244,7 +251,7 @@ package_php-phpdbg() {
 	depends=('php')
 	options=('!emptydirs')
 
-	cd ${srcdir}/build-php
+	cd ${srcdir}/build-phpdbg
 	make -j1 INSTALL_ROOT=${pkgdir} install-phpdbg
 }
 
