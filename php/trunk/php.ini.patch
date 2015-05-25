@@ -9,7 +9,7 @@
  ; On windows:
  ; extension_dir = "ext"
  
-@@ -858,48 +858,46 @@
+@@ -858,48 +858,45 @@
  ; If you only provide the name of the extension, PHP will look for it in its
  ; default extension directory.
  ;
@@ -74,7 +74,6 @@
 +;extension=mysqli.so
 +;extension=odbc.so
 +;zend_extension=opcache.so
-+;extension=openssl.so
 +;extension=pdo_mysql.so
 +;extension=pdo_odbc.so
 +;extension=pdo_pgsql.so
