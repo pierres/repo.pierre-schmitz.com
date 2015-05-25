@@ -21,7 +21,7 @@ pkgname=('php'
          'php-sqlite'
          'php-tidy'
          'php-xsl')
-pkgver=7.0.0dev.90198
+pkgver=7.0.0dev.90203
 pkgrel=1
 arch=('i686' 'x86_64')
 license=('PHP')
@@ -30,14 +30,14 @@ makedepends=('apache' 'c-client' 'postgresql-libs' 'libldap' 'postfix'
              'sqlite' 'unixodbc' 'net-snmp' 'libzip' 'enchant' 'file'
              'libmcrypt' 'tidyhtml' 'aspell' 'libltdl' 'gd' 'icu'
              'curl' 'libxslt' 'openssl' 'db' 'gmp' 'systemd' 'git')
+checkdepends=('procps-ng')
 source=("${pkgbase}::git+https://git.php.net/repository/php-src.git#branch=master"
         'php.ini.patch' 'apache.conf' 'php-fpm.conf.in.patch'
-        'logrotate.d.php-fpm' 'php-fpm.service' 'php-fpm.tmpfiles')
+        'php-fpm.service' 'php-fpm.tmpfiles')
 md5sums=('SKIP'
-         '4f00e9508203c7dae68cde1b3db8baf2'
+         '29accdb86064899f6b2b4955382a2e5b'
          '00071bea18deee67a3b3dc636630823f'
          '16b5e2e4da59f15bea4c2db78a7bc8dc'
-         '25bc67ad828e8147a817410b68d8016c'
          'cc2940f5312ba42e7aa1ddfab74b84c4'
          'c60343df74f8e1afb13b084d5c0e47ed')
 validpgpkeys=('6E4F6AB321FDC07F2C332E3AC2BF0BC433CFC8B3'
@@ -53,6 +53,7 @@ prepare() {
 	cd ${srcdir}/${pkgname}
 
 	patch -p0 -i ${srcdir}/php.ini.patch
+	#sed 's#^; extension_dir = "./"$#extension_dir = "/usr/lib/php/modules/"#g' -i php.ini-production
 	#patch -p0 -i ${srcdir}/php-fpm.conf.in.patch
 	# Just because our Apache 2.4 is configured with a threaded MPM by default does not mean we want to build a ZTS PHP.
 	# Let's supress this behaviour and build a SAPI that works fine with the prefork MPM.
@@ -100,6 +101,9 @@ build() {
 		--with-db4=/usr \
 		--with-enchant=shared,/usr \
 		--with-fpm-systemd \
+		--with-fpm-acl \
+		--with-fpm-user=http \
+		--with-fpm-group=http \
 		--with-freetype-dir=/usr \
 		--with-xpm-dir=/usr \
 		--with-gd=shared,/usr \
@@ -120,7 +124,7 @@ build() {
 		--with-mhash \
 		--with-mysql-sock=/run/mysqld/mysqld.sock \
 		--with-mysqli=shared,mysqlnd \
-		--with-openssl=shared \
+		--with-openssl \
 		--with-pcre-regex=/usr \
 		--with-pdo-mysql=shared,mysqlnd \
 		--with-pdo-odbc=shared,unixODBC,/usr \
@@ -129,6 +133,7 @@ build() {
 		--with-pgsql=shared \
 		--with-png-dir=/usr \
 		--with-pspell=shared \
+		--with-readline \
 		--with-snmp=shared \
 		--with-sqlite3=shared,/usr \
 		--with-tidy=shared \
@@ -148,58 +153,20 @@ build() {
 	cd ${srcdir}/build-php
 	ln -s ../${pkgname}/configure
 	./configure ${_phpconfig} \
-		--with-readline \
 		--enable-pcntl \
-		${_phpextensions}
-	make
-
-	# cgi and fcgi
-	# reuse the previous run; this will save us a lot of time
-	cp -a ${srcdir}/build-php ${srcdir}/build-cgi
-	cd ${srcdir}/build-cgi
-	./configure ${_phpconfig} \
-		--disable-cli \
 		--enable-cgi \
-		${_phpextensions}
-	make
-
-	# apache
-	cp -a ${srcdir}/build-php ${srcdir}/build-apache
-	cd ${srcdir}/build-apache
-	./configure ${_phpconfig} \
-		--disable-cli \
-		--with-apxs2 \
-		${_phpextensions}
-	make
-
-	# fpm
-	cp -a ${srcdir}/build-php ${srcdir}/build-fpm
-	cd ${srcdir}/build-fpm
-	./configure ${_phpconfig} \
-		--disable-cli \
 		--enable-fpm \
-		--with-fpm-user=http \
-		--with-fpm-group=http \
-		${_phpextensions}
-	make
-
-	# embed
-	cp -a ${srcdir}/build-php ${srcdir}/build-embed
-	cd ${srcdir}/build-embed
-	./configure ${_phpconfig} \
-		--disable-cli \
+		--enable-phpdbg \
 		--enable-embed=shared \
 		${_phpextensions}
 	make
 
-	# phpdbg
-	cp -a ${srcdir}/build-php ${srcdir}/build-phpdbg
-	cd ${srcdir}/build-phpdbg
+	# apache
+	# reuse the previous run; this will save us a lot of time
+	cp -a ${srcdir}/build-php ${srcdir}/build-apache
+	cd ${srcdir}/build-apache
 	./configure ${_phpconfig} \
-		--disable-cli \
-		--disable-cgi \
-		--with-readline \
-		--enable-phpdbg \
+		--with-apxs2 \
 		${_phpextensions}
 	make
 }
@@ -210,6 +177,7 @@ build() {
 # 	export SNMP_RETRIES=0
 # 	export NO_INTERACTION=1
 # 	export REPORT_EXIT_STATUS=1
+# 	export SKIP_ONLINE_TESTS=1
 # 	make test
 # 	echo
 # }
@@ -220,8 +188,7 @@ package_php() {
 	backup=('etc/php/php.ini')
 
 	cd ${srcdir}/build-php
-	make -j1 INSTALL_ROOT=${pkgdir} install
-	# install php.ini
+	make -j1 INSTALL_ROOT=${pkgdir} install-modules install-cli install-build install-headers install-programs install-pharcmd
 	install -D -m644 ${srcdir}/${pkgname}/php.ini-production ${pkgdir}/etc/php/php.ini
 	install -d -m755 ${pkgdir}/etc/php/conf.d/
 
@@ -229,21 +196,16 @@ package_php() {
 	rm -f ${pkgdir}/usr/lib/php/modules/*.a
 	# remove modules provided by sub packages
 	rm -f ${pkgdir}/usr/lib/php/modules/{enchant,gd,imap,intl,ldap,mcrypt,odbc,pdo_odbc,pgsql,pdo_pgsql,pspell,snmp,sqlite3,pdo_sqlite,tidy,xsl}.so
-	# remove cgi
-	rm -f ${pkgdir}/usr/bin/php-cgi
-	rm -f ${pkgdir}/usr/share/man/man1/php-cgi.1
 	# remove empty directory
 	rmdir ${pkgdir}/usr/include/php/include
-	# fix broken link
-	ln -sf phar.phar ${pkgdir}/usr/bin/phar
 }
 
 package_php-cgi() {
 	pkgdesc='CGI and FCGI SAPI for PHP'
 	depends=('php')
 
-	install -D -m755 ${srcdir}/build-cgi/sapi/cgi/php-cgi ${pkgdir}/usr/bin/php-cgi
-	install -D -m755 ${srcdir}/build-cgi/sapi/cgi/php-cgi.1 ${pkgdir}/usr/share/man/man1/php-cgi.1
+	cd ${srcdir}/build-php
+	make -j1 INSTALL_ROOT=${pkgdir} install-cgi
 }
 
 package_php-apache() {
@@ -258,31 +220,32 @@ package_php-apache() {
 package_php-fpm() {
 	pkgdesc='FastCGI Process Manager for PHP'
 	depends=('php' 'systemd')
-	backup=('etc/php/php-fpm.conf')
+# 	backup=('etc/php/php-fpm.conf')
 	install='php-fpm.install'
+	options=('!emptydirs')
 
-	install -D -m755 ${srcdir}/build-fpm/sapi/fpm/php-fpm ${pkgdir}/usr/bin/php-fpm
-	install -D -m644 ${srcdir}/build-fpm/sapi/fpm/php-fpm.8 ${pkgdir}/usr/share/man/man8/php-fpm.8
-	install -D -m644 ${srcdir}/build-fpm/sapi/fpm/php-fpm.conf ${pkgdir}/etc/php/php-fpm.conf
-	install -D -m644 ${srcdir}/logrotate.d.php-fpm ${pkgdir}/etc/logrotate.d/php-fpm
-	install -d -m755 ${pkgdir}/etc/php/fpm.d
-	install -D -m644 ${srcdir}/php-fpm.tmpfiles ${pkgdir}/usr/lib/tmpfiles.d/php-fpm.conf
-	install -D -m644 ${srcdir}/php-fpm.service ${pkgdir}/usr/lib/systemd/system/php-fpm.service
+	cd ${srcdir}/build-php
+	make -j1 INSTALL_ROOT=${pkgdir} install-fpm
+ 	install -D -m644 ${srcdir}/php-fpm.tmpfiles ${pkgdir}/usr/lib/tmpfiles.d/php-fpm.conf
+ 	install -D -m644 ${srcdir}/php-fpm.service ${pkgdir}/usr/lib/systemd/system/php-fpm.service
 }
 
 package_php-embed() {
 	pkgdesc='Embedded PHP SAPI library'
-	depends=('php')
+	depends=('php' 'libsystemd')
+	options=('!emptydirs')
 
-	install -D -m755 ${srcdir}/build-embed/libs/libphp7.so ${pkgdir}/usr/lib/libphp7.so
-	install -D -m644 ${srcdir}/php/sapi/embed/php_embed.h ${pkgdir}/usr/include/php/sapi/embed/php_embed.h
+	cd ${srcdir}/build-php
+	make -j1 INSTALL_ROOT=${pkgdir} PHP_SAPI=embed install-sapi
 }
 
 package_php-phpdbg() {
 	pkgdesc='Interactive PHP debugger'
 	depends=('php')
+	options=('!emptydirs')
 
-	install -D -m755 ${srcdir}/build-phpdbg/sapi/phpdbg/phpdbg ${pkgdir}/usr/bin/phpdbg
+	cd ${srcdir}/build-php
+	make -j1 INSTALL_ROOT=${pkgdir} install-phpdbg
 }
 
 package_php-enchant() {
