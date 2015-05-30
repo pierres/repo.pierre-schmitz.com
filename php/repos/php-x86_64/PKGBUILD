@@ -21,7 +21,7 @@ pkgname=('php'
          'php-sqlite'
          'php-tidy'
          'php-xsl')
-pkgver=7.0.0dev.90274
+pkgver=7.0.0dev.90310
 pkgrel=1
 arch=('i686' 'x86_64')
 license=('PHP')
@@ -59,7 +59,7 @@ prepare() {
 	# Let's supress this behaviour and build a SAPI that works fine with the prefork MPM.
 	sed '/APACHE_THREADED_MPM=/d' -i sapi/apache2handler/config.m4
 
-        ./buildconf --copy --force
+        ./buildconf --force
 	./genfiles
 }
 
