@@ -21,7 +21,7 @@ pkgname=('php'
          'php-sqlite'
          'php-tidy'
          'php-xsl')
-pkgver=7.0.0dev.90362
+pkgver=7.0.0dev.90373
 pkgrel=1
 arch=('i686' 'x86_64')
 license=('PHP')
@@ -76,6 +76,7 @@ build() {
 		--disable-rpath \
 		--mandir=/usr/share/man \
 		--without-pear \
+		--enable-zend-signals \
 		"
 
 	local _phpextensions="--enable-bcmath=shared \
@@ -178,16 +179,20 @@ build() {
 	make
 }
 
-# check() {
-# 	cd ${srcdir}/build-php
-# 	export SNMP_TIMEOUT=1
-# 	export SNMP_RETRIES=0
-# 	export NO_INTERACTION=1
-# 	export REPORT_EXIT_STATUS=1
-# 	export SKIP_ONLINE_TESTS=1
-# 	make test
-# 	echo
-# }
+check() {
+	cd ${srcdir}/build-php
+
+	export REPORT_EXIT_STATUS=1
+	export NO_INTERACTION=1
+	export SKIP_ONLINE_TESTS=1
+	export SKIP_SLOW_TESTS=1
+
+	sapi/cli/php -n \
+		${srcdir}/${pkgname}/run-tests.php -n -P \
+		${srcdir}/${pkgname}/{Zend,ext/{date,pcre,spl,standard},sapi/cli}
+
+	echo
+}
 
 package_php() {
 	pkgdesc='An HTML-embedded scripting language'
