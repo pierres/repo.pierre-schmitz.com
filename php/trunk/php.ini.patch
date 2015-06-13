@@ -1,5 +1,5 @@
---- php.ini-production.orig	2015-06-13 10:02:09.408971497 +0200
-+++ php.ini-production	2015-06-13 10:02:10.432265251 +0200
+--- php.ini-production.orig	2015-06-13 21:16:42.461057511 +0200
++++ php.ini-production	2015-06-13 21:16:43.484368748 +0200
 @@ -720,7 +720,7 @@
  
  ; Directory in which the loadable extensions (modules) reside.
@@ -9,7 +9,7 @@
  ; On windows:
  ; extension_dir = "ext"
  
-@@ -858,48 +858,45 @@
+@@ -858,47 +858,45 @@
  ; If you only provide the name of the extension, PHP will look for it in its
  ; default extension directory.
  ;
@@ -31,7 +31,6 @@
 -;extension=php_ldap.dll
 -;extension=php_mbstring.dll
 -;extension=php_exif.dll      ; Must be after mbstring as it depends on it
--;extension=php_mysql.dll
 -;extension=php_mysqli.dll
 -;extension=php_oci8_12c.dll  ; Use with Oracle Database 12c Instant Client
 -;extension=php_openssl.dll
