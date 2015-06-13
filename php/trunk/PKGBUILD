@@ -12,7 +12,6 @@ pkgname=('php'
          'php-gd'
          'php-imap'
          'php-intl'
-         'php-ldap'
          'php-mcrypt'
          'php-odbc'
          'php-pgsql'
@@ -21,50 +20,45 @@ pkgname=('php'
          'php-sqlite'
          'php-tidy'
          'php-xsl')
-pkgver=7.0.0dev.90373
+pkgver=7.0.0dev.90543
 pkgrel=1
 arch=('i686' 'x86_64')
 license=('PHP')
 url='http://www.php.net'
-makedepends=('apache' 'c-client' 'postgresql-libs' 'libldap' 'postfix'
-             'sqlite' 'unixodbc' 'net-snmp' 'libzip' 'enchant' 'file'
-             'libmcrypt' 'tidyhtml' 'aspell' 'libltdl' 'gd' 'icu'
-             'curl' 'libxslt' 'openssl' 'db' 'gmp' 'systemd' 'git')
+makedepends=('apache' 'aspell' 'c-client' 'db' 'enchant' 'gd' 'git' 'gmp' 'icu' 'libmcrypt' 'libxslt' 'libzip' 'net-snmp'
+             'postgresql-libs' 'sqlite' 'systemd' 'tidyhtml' 'unixodbc')
 checkdepends=('procps-ng')
 source=("${pkgbase}::git+https://git.php.net/repository/php-src.git#branch=master"
-        'php.ini.patch' 'apache.conf' 'php-fpm.conf.in.patch'
-        'php-fpm.service' 'php-fpm.tmpfiles')
+        'apache.patch' 'apache.conf' 'php-fpm.patch' 'php-fpm.service' 'php-fpm.tmpfiles' 'php.ini.patch')
 md5sums=('SKIP'
-         '29accdb86064899f6b2b4955382a2e5b'
-         '00071bea18deee67a3b3dc636630823f'
-         '16b5e2e4da59f15bea4c2db78a7bc8dc'
+         '55386294eb99b0fcac9f8d8680fd05ea'
+         '0677a10d2e721472d6fccb470356b322'
+         '31c9a139ff11a6d422049a5463236e76'
          'cc2940f5312ba42e7aa1ddfab74b84c4'
-         'c60343df74f8e1afb13b084d5c0e47ed')
+         'c60343df74f8e1afb13b084d5c0e47ed'
+         '49be147a889c0786a4b5e11f4f36f495')
 validpgpkeys=('6E4F6AB321FDC07F2C332E3AC2BF0BC433CFC8B3'
               '0BD78B5F97500D450838F95DFE857D9A90D90EC1')
 
 pkgver() {
-	cd ${srcdir}/${pkgname}
+	cd ${srcdir}/${pkgbase}
 
 	echo "7.0.0dev.$(git rev-list master --count)"
 }
 
 prepare() {
-	cd ${srcdir}/${pkgname}
+	cd ${srcdir}/${pkgbase}
 
+	patch -p0 -i ${srcdir}/apache.patch
+	patch -p0 -i ${srcdir}/php-fpm.patch
 	patch -p0 -i ${srcdir}/php.ini.patch
-	#sed 's#^; extension_dir = "./"$#extension_dir = "/usr/lib/php/modules/"#g' -i php.ini-production
-	#patch -p0 -i ${srcdir}/php-fpm.conf.in.patch
-	# Just because our Apache 2.4 is configured with a threaded MPM by default does not mean we want to build a ZTS PHP.
-	# Let's supress this behaviour and build a SAPI that works fine with the prefork MPM.
-	sed '/APACHE_THREADED_MPM=/d' -i sapi/apache2handler/config.m4
 
         ./buildconf --force
 	./genfiles
 }
 
 build() {
-	local _phpconfig="--srcdir=../${pkgname} \
+	local _phpconfig="--srcdir=../${pkgbase} \
 		--config-cache \
 		--prefix=/usr \
 		--sbindir=/usr/bin \
@@ -147,12 +141,12 @@ build() {
 	EXTENSION_DIR=/usr/lib/php/modules
 	export EXTENSION_DIR
 
-	cd ${srcdir}/${pkgname}
+	cd ${srcdir}/${pkgbase}
 
 	# cli, cgi, fpm and embed
 	mkdir ${srcdir}/build-php
 	cd ${srcdir}/build-php
-	ln -s ../${pkgname}/configure
+	ln -s ../${pkgbase}/configure
 	./configure ${_phpconfig} \
 		--enable-pcntl \
 		--enable-cgi \
@@ -188,26 +182,27 @@ check() {
 	export SKIP_SLOW_TESTS=1
 
 	sapi/cli/php -n \
-		${srcdir}/${pkgname}/run-tests.php -n -P \
-		${srcdir}/${pkgname}/{Zend,ext/{date,pcre,spl,standard},sapi/cli}
-
-	echo
+		${srcdir}/${pkgbase}/run-tests.php -n -P \
+		${srcdir}/${pkgbase}/{Zend,ext/{date,pcre,spl,standard},sapi/cli}
 }
 
 package_php() {
 	pkgdesc='An HTML-embedded scripting language'
-	depends=('pcre' 'libxml2' 'curl' 'libzip')
+	depends=('libxml2' 'curl' 'libzip')
+	replaces=('php-ldap')
+	conflicts=('php-ldap')
+	provides=("php-ldap=${pkgver}")
 	backup=('etc/php/php.ini')
 
 	cd ${srcdir}/build-php
-	make -j1 INSTALL_ROOT=${pkgdir} install-modules install-cli install-build install-headers install-programs install-pharcmd
-	install -D -m644 ${srcdir}/${pkgname}/php.ini-production ${pkgdir}/etc/php/php.ini
+	make -j1 INSTALL_ROOT=${pkgdir} install-{modules,cli,build,headers,programs,pharcmd}
+	install -D -m644 ${srcdir}/${pkgbase}/php.ini-production ${pkgdir}/etc/php/php.ini
 	install -d -m755 ${pkgdir}/etc/php/conf.d/
 
 	# remove static modules
 	rm -f ${pkgdir}/usr/lib/php/modules/*.a
 	# remove modules provided by sub packages
-	rm -f ${pkgdir}/usr/lib/php/modules/{enchant,gd,imap,intl,ldap,mcrypt,odbc,pdo_odbc,pgsql,pdo_pgsql,pspell,snmp,sqlite3,pdo_sqlite,tidy,xsl}.so
+	rm -f ${pkgdir}/usr/lib/php/modules/{enchant,gd,imap,intl,mcrypt,odbc,pdo_odbc,pgsql,pdo_pgsql,pspell,snmp,sqlite3,pdo_sqlite,tidy,xsl}.so
 	# remove empty directory
 	rmdir ${pkgdir}/usr/include/php/include
 }
@@ -288,16 +283,9 @@ package_php-intl() {
 	install -D -m755 ${srcdir}/build-php/modules/intl.so ${pkgdir}/usr/lib/php/modules/intl.so
 }
 
-package_php-ldap() {
-	pkgdesc='ldap module for PHP'
-	depends=('php' 'libldap')
-
-	install -D -m755 ${srcdir}/build-php/modules/ldap.so ${pkgdir}/usr/lib/php/modules/ldap.so
-}
-
 package_php-mcrypt() {
 	pkgdesc='mcrypt module for PHP'
-	depends=('php' 'libmcrypt' 'libltdl')
+	depends=('php' 'libmcrypt' 'libtool')
 
 	install -D -m755 ${srcdir}/build-php/modules/mcrypt.so ${pkgdir}/usr/lib/php/modules/mcrypt.so
 }
