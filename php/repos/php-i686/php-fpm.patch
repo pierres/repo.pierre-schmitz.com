@@ -1,0 +1,52 @@
+--- sapi/fpm/Makefile.frag.orig	2015-06-13 10:02:09.415637907 +0200
++++ sapi/fpm/Makefile.frag	2015-06-13 10:02:10.415599230 +0200
+@@ -12,8 +12,8 @@
+ 
+ 	@echo "Installing PHP FPM config:        $(INSTALL_ROOT)$(sysconfdir)/" && \
+ 	$(mkinstalldirs) $(INSTALL_ROOT)$(sysconfdir)/php-fpm.d || :
+-	@$(INSTALL_DATA) sapi/fpm/php-fpm.conf $(INSTALL_ROOT)$(sysconfdir)/php-fpm.conf.default || :
+-	@$(INSTALL_DATA) sapi/fpm/www.conf $(INSTALL_ROOT)$(sysconfdir)/php-fpm.d/www.conf.default || :
++	@$(INSTALL_DATA) sapi/fpm/php-fpm.conf $(INSTALL_ROOT)$(sysconfdir)/php-fpm.conf || :
++	@$(INSTALL_DATA) sapi/fpm/www.conf $(INSTALL_ROOT)$(sysconfdir)/php-fpm.d/www.conf || :
+ 
+ 	@echo "Installing PHP FPM man page:      $(INSTALL_ROOT)$(mandir)/man8/"
+ 	@$(mkinstalldirs) $(INSTALL_ROOT)$(mandir)/man8
+--- sapi/fpm/php-fpm.conf.in.orig	2015-06-13 10:02:09.418971110 +0200
++++ sapi/fpm/php-fpm.conf.in	2015-06-13 10:02:10.418932433 +0200
+@@ -14,14 +14,14 @@
+ ; Pid file
+ ; Note: the default prefix is @EXPANDED_LOCALSTATEDIR@
+ ; Default Value: none
+-;pid = run/php-fpm.pid
++;pid = /run/php-fpm/php-fpm.pid
+ 
+ ; Error log file
+ ; If it's set to "syslog", log is sent to syslogd instead of being written
+ ; in a local file.
+ ; Note: the default prefix is @EXPANDED_LOCALSTATEDIR@
+ ; Default Value: log/php-fpm.log
+-;error_log = log/php-fpm.log
++error_log=syslog
+ 
+ ; syslog_facility is used to specify what type of program is logging the
+ ; message. This lets syslogd specify that messages from different facilities
+--- sapi/fpm/www.conf.in.orig	2015-06-13 10:02:09.422304315 +0200
++++ sapi/fpm/www.conf.in	2015-06-13 10:02:10.422265637 +0200
+@@ -33,7 +33,7 @@
+ ;                            (IPv6 and IPv4-mapped) on a specific port;
+ ;   '/path/to/unix/socket' - to listen on a unix socket.
+ ; Note: This value is mandatory.
+-listen = 127.0.0.1:9000
++listen = /run/php-fpm/php-fpm.sock
+ 
+ ; Set listen(2) backlog.
+ ; Default Value: 511 (-1 on FreeBSD and OpenBSD)
+@@ -352,7 +352,7 @@
+ ; Chdir to this directory at the start.
+ ; Note: relative path can be used.
+ ; Default Value: current directory or / when chroot
+-;chdir = /var/www
++;chdir = /srv/http
+ 
+ ; Redirect worker stdout and stderr into main error log. If not set, stdout and
+ ; stderr will be redirected to /dev/null according to FastCGI specs.

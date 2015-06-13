@@ -1,5 +1,5 @@
---- php.ini-production	2015-05-23 07:25:19.256101729 +0200
-+++ php.ini-production	2015-05-23 08:07:10.260835608 +0200
+--- php.ini-production.orig	2015-06-13 10:02:09.408971497 +0200
++++ php.ini-production	2015-06-13 10:02:10.432265251 +0200
 @@ -720,7 +720,7 @@
  
  ; Directory in which the loadable extensions (modules) reside.
