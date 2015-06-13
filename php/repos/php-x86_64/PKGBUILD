@@ -21,7 +21,7 @@ pkgname=('php'
          'php-tidy'
          'php-xsl')
 pkgver=7.0.0dev.90543
-pkgrel=1
+pkgrel=2
 arch=('i686' 'x86_64')
 license=('PHP')
 url='http://www.php.net'
@@ -187,7 +187,7 @@ check() {
 }
 
 package_php() {
-	pkgdesc='An HTML-embedded scripting language'
+	pkgdesc='A general-purpose scripting language that is especially suited to web development'
 	depends=('libxml2' 'curl' 'libzip')
 	replaces=('php-ldap')
 	conflicts=('php-ldap')
@@ -227,7 +227,7 @@ package_php-apache() {
 package_php-fpm() {
 	pkgdesc='FastCGI Process Manager for PHP'
 	depends=('php' 'systemd')
-# 	backup=('etc/php/php-fpm.conf')
+	backup=('etc/php/php-fpm.conf' 'etc/php/php-fpm.d/www.conf')
 	install='php-fpm.install'
 	options=('!emptydirs')
 
