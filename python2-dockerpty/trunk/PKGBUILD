@@ -10,6 +10,7 @@ pkgrel=1
 pkgdesc="Python library to use the pseudo-tty of a docker container"
 arch=('any')
 depends=('python2-docker-py')
+makedepends=('python2-setuptools')
 
 url="https://github.com/d11wtq/dockerpty"
 license=('Apache2')
