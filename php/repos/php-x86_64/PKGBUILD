@@ -20,7 +20,7 @@ pkgname=('php'
          'php-sqlite'
          'php-tidy'
          'php-xsl')
-pkgver=7.0.0dev.90551
+pkgver=7.0.0dev.90584
 pkgrel=1
 arch=('i686' 'x86_64')
 license=('PHP')
@@ -82,6 +82,7 @@ build() {
 		--enable-intl=shared \
 		--enable-mbstring \
 		--enable-opcache \
+		--enable-opcache-file \
 		--enable-phar=shared \
 		--enable-posix=shared \
 		--enable-shmop=shared \
