@@ -1,5 +1,5 @@
---- sapi/apache2handler/config.m4.orig	2015-06-13 21:16:42.464390773 +0200
-+++ sapi/apache2handler/config.m4	2015-06-13 21:16:43.467702441 +0200
+--- sapi/apache2handler/config.m4.orig	2015-07-15 08:21:40.425298709 +0200
++++ sapi/apache2handler/config.m4	2015-07-15 08:21:41.421939175 +0200
 @@ -122,7 +122,6 @@
        PHP_BUILD_THREAD_SAFE
      fi
