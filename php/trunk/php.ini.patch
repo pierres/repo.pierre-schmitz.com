@@ -1,5 +1,5 @@
---- php.ini-production.orig	2015-06-13 21:16:42.461057511 +0200
-+++ php.ini-production	2015-06-13 21:16:43.484368748 +0200
+--- php.ini-production.orig	2015-07-15 08:21:40.421965463 +0200
++++ php.ini-production	2015-07-15 08:21:41.441938649 +0200
 @@ -720,7 +720,7 @@
  
  ; Directory in which the loadable extensions (modules) reside.
@@ -9,7 +9,7 @@
  ; On windows:
  ; extension_dir = "ext"
  
-@@ -858,47 +858,45 @@
+@@ -858,46 +858,45 @@
  ; If you only provide the name of the extension, PHP will look for it in its
  ; default extension directory.
  ;
@@ -41,7 +41,6 @@
 -;extension=php_pdo_pgsql.dll
 -;extension=php_pdo_sqlite.dll
 -;extension=php_pgsql.dll
--;extension=php_pspell.dll
 -;extension=php_shmop.dll
 -
 -; The MIBS data available in the PHP distribution must be installed. 
