@@ -20,7 +20,7 @@ pkgname=('php'
          'php-sqlite'
          'php-tidy'
          'php-xsl')
-pkgver=7.0.0dev.91579
+pkgver=7.0.0dev.91645
 pkgrel=1
 arch=('i686' 'x86_64')
 license=('PHP')
@@ -37,8 +37,8 @@ md5sums=('SKIP'
          'cc2940f5312ba42e7aa1ddfab74b84c4'
          'c60343df74f8e1afb13b084d5c0e47ed'
          'c1103c943488973b0e876f8cf02954eb')
-validpgpkeys=('6E4F6AB321FDC07F2C332E3AC2BF0BC433CFC8B3'
-              '0BD78B5F97500D450838F95DFE857D9A90D90EC1')
+validpgpkeys=('D620173D6924BA1C2244C7C41B6B667622FE5A12'
+              '1A4E8B7277C42E53DBA9C7B9BCAA30EA9C0D5763')
 
 pkgver() {
 	cd ${srcdir}/${pkgbase}
