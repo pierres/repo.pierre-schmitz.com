@@ -1,18 +1,19 @@
 #Maintainer: Iwan Timmer <irtimmer@gmail.com>
 
 pkgname=kubernetes
-pkgver=0.17.1
+pkgver=1.0.3
 pkgrel=1
 pkgdesc="Container Cluster Manager for Docker"
 depends=('glibc')
 makedepends=('go' 'rsync')
+optdepends=('etcd: etcd cluster required to run Kubernetes')
 arch=('x86_64' 'i686')
 source=("https://github.com/GoogleCloudPlatform/kubernetes/archive/v$pkgver.tar.gz"
         "kubernetes.install")
 url="http://kubernetes.io/"
 license="APACHE"
 install=kubernetes.install
-sha256sums=('24d0109a3c9eb5fef394508c7effd6610f8e2e025a87060d76ddba73086b9050'
+sha256sums=('9a3eb4df4b7075f91b2fb76c35218ce5f84cdf5b7ab14136b97a40dc0841a7a5'
             'f40b4b14a71f8138de69021e967d993e8b14db2cebe66eee20c7e66839ad1fde')
 
 build() {
