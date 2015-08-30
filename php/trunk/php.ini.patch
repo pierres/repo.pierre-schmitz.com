@@ -1,5 +1,5 @@
---- php.ini-production.orig	2015-07-15 08:21:40.421965463 +0200
-+++ php.ini-production	2015-07-15 08:21:41.441938649 +0200
+--- php.ini-production.orig	2015-08-30 15:08:49.649001628 +0200
++++ php.ini-production	2015-08-30 15:08:50.818973338 +0200
 @@ -720,7 +720,7 @@
  
  ; Directory in which the loadable extensions (modules) reside.
@@ -54,7 +54,7 @@
 -;extension=php_xmlrpc.dll
 -;extension=php_xsl.dll
 +;extension=bcmath.so
-+;extension=bz2.so
++extension=bz2.so
 +;extension=calendar.so
 +extension=curl.so
 +;extension=dba.so
@@ -66,7 +66,7 @@
 +;extension=gmp.so
 +;extension=iconv.so
 +;extension=imap.so
-+;extension=intl.so
++extension=intl.so
 +;extension=ldap.so
 +;extension=mcrypt.so
 +;extension=mysqli.so
@@ -77,7 +77,7 @@
 +;extension=pdo_pgsql.so
 +;extension=pdo_sqlite.so
 +;extension=pgsql.so
-+;extension=phar.so
++extension=phar.so
 +;extension=posix.so
 +;extension=pspell.so
 +;extension=shmop.so
@@ -91,7 +91,7 @@
 +;extension=tidy.so
 +;extension=xmlrpc.so
 +;extension=xsl.so
-+;extension=zip.so
++extension=zip.so
  
  ;;;;;;;;;;;;;;;;;;;
  ; Module Settings ;
