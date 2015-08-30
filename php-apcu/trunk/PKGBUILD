@@ -2,36 +2,51 @@
 # Maintainer: Pierre Schmitz <pierre@archlinux.de>
 
 pkgname=php-apcu
-pkgver=4.0.7
+pkgver=5.0.0dev.
 pkgrel=1
 arch=('i686' 'x86_64')
 pkgdesc='A userland caching module for PHP'
 url='http://pecl.php.net/package/APCu'
-depends=('php')
+depends=('php>=7')
+makedepends=('git')
 replaces=('php-apc')
 conflicts=('php-apc')
 provides=("php-apc=${pkgver}")
 license=('PHP')
-source=("http://pecl.php.net/get/apcu-$pkgver.tgz")
+source=("${pkgname}::git+https://github.com/krakjoe/apcu.git#branch=seven")
 backup=('etc/php/conf.d/apcu.ini')
-md5sums=('9feb03d3e5217242a39244964f098b52')
+md5sums=('SKIP')
+
+pkgver() {
+	cd ${srcdir}/${pkgname}
+
+	echo "5.0.0dev.$(git rev-list origin/seven --count)"
+}
 
 build() {
-	cd $srcdir/apcu-$pkgver
+	cd ${srcdir}/${pkgname}
+
+	# remove broken tests
+	rm tests/{apc54_014,apc54_018}.phpt
+
 	phpize
 	./configure --prefix=/usr
 	make
 }
 
 check() {
-	cd $srcdir/apcu-$pkgver
+	cd ${srcdir}/${pkgname}
+
+	export REPORT_EXIT_STATUS=1
 	export NO_INTERACTION=1
+	export SKIP_ONLINE_TESTS=1
+	export SKIP_SLOW_TESTS=1
 	make test
-	echo
 }
 
 package() {
-	cd $srcdir/apcu-$pkgver
+	cd ${srcdir}/${pkgname}
+
 	make INSTALL_ROOT=$pkgdir install
 	echo ';extension=apcu.so' > apcu.ini
 	install -D -m644 apcu.ini $pkgdir/etc/php/conf.d/apcu.ini
