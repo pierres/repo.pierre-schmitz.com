@@ -3,21 +3,18 @@
 
 pkgname=php-composer
 pkgver=1.0.0.alpha10.460
-pkgrel=1
+pkgrel=1.1
 pkgdesc="Dependency Manager for PHP"
 arch=('any')
 license=('MIT')
 url='http://getcomposer.org/'
-depends=('php' 'php-intl')
+depends=('php>=7')
 makedepends=('git')
 checkdepends=('mercurial')
 source=("${pkgname}::git+https://github.com/composer/composer.git"
-        "composer-${pkgver}.phar::https://getcomposer.org/composer.phar"
-        'php.ini')
-backup=('usr/share/php-composer/php.ini')
+        "composer-${pkgver}.phar::https://getcomposer.org/composer.phar")
 md5sums=('SKIP'
-         '4984cb6ddc0a3fa25117bfe7199a9986'
-         'b31326c352763328dca0a567a67609ab')
+         '2d44a591185d703dcf8bb038fc6048a3')
 
 pkgver() {
 	cd ${srcdir}/${pkgname}
@@ -29,15 +26,13 @@ pkgver() {
 prepare() {
 	cd ${srcdir}/${pkgname}
 
-	sed "s~^#!/usr/bin/env php~#!/usr/bin/php -nc/usr/share/${pkgname}/php.ini~g" -i src/Composer/Compiler.php
-	sed "s~php bin/composer~php -nc/usr/share/${pkgname}/php.ini bin/composer~g" -i bin/compile
-	/usr/bin/php -nc ${srcdir}/php.ini ${srcdir}/composer-${pkgver}.phar -n install --no-dev
+	php ${srcdir}/composer-${pkgver}.phar -n install --no-dev
 }
 
 build() {
 	cd ${srcdir}/${pkgname}
 
-	/usr/bin/php -nc ${srcdir}/php.ini bin/compile
+	php -dphar.readonly=Off bin/compile
 }
 
 check() {
@@ -47,14 +42,13 @@ check() {
 	git config --global user.name "${USER}"
 
 	# install the dev dependencies to run the unit tests
-	/usr/bin/php -nc ${srcdir}/php.ini bin/composer install
-	/usr/bin/php -nc ${srcdir}/php.ini vendor/bin/phpunit
+	bin/composer -n install
+	vendor/bin/phpunit
 }
 
 package() {
 	cd ${srcdir}/${pkgname}
 
 	install -Dm644 LICENSE ${pkgdir}/usr/share/licenses/${pkgname}/LICENSE
-	install -Dm644 ${srcdir}/php.ini ${pkgdir}/usr/share/php-composer/php.ini
 	install -Dm755 composer.phar ${pkgdir}/usr/bin/composer
 }
