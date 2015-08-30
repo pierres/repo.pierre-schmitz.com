@@ -21,7 +21,7 @@ pkgname=('php'
          'php-tidy'
          'php-xsl')
 pkgver=7.0.0dev.92038
-pkgrel=1
+pkgrel=2
 arch=('i686' 'x86_64')
 license=('PHP')
 url='http://www.php.net'
@@ -36,7 +36,7 @@ md5sums=('SKIP'
          '09798edf8b02c1dabd1c747b67907a5b'
          'cc2940f5312ba42e7aa1ddfab74b84c4'
          'c60343df74f8e1afb13b084d5c0e47ed'
-         '54fa86ea7029473475b93e0402a6d239')
+         'd68d238540c44163ba06c438f18f814c')
 validpgpkeys=('D620173D6924BA1C2244C7C41B6B667622FE5A12'
               '1A4E8B7277C42E53DBA9C7B9BCAA30EA9C0D5763')
 
