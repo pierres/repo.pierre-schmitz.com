@@ -20,8 +20,8 @@ pkgname=('php'
          'php-sqlite'
          'php-tidy'
          'php-xsl')
-pkgver=7.0.0dev.92038
-pkgrel=2
+pkgver=7.0.0dev.92045
+pkgrel=1
 arch=('i686' 'x86_64')
 license=('PHP')
 url='http://www.php.net'
@@ -31,12 +31,12 @@ checkdepends=('procps-ng')
 source=("${pkgbase}::git+https://git.php.net/repository/php-src.git#branch=master"
         'apache.patch' 'apache.conf' 'php-fpm.patch' 'php-fpm.service' 'php-fpm.tmpfiles' 'php.ini.patch')
 md5sums=('SKIP'
-         '45d41808d99e5eb627821e9666fc7f31'
+         '9bec49e2d2c0d2e24c283eb530238b31'
          '0677a10d2e721472d6fccb470356b322'
-         '09798edf8b02c1dabd1c747b67907a5b'
+         '8297f40e3d14a86f5130dfffe0b6c241'
          'cc2940f5312ba42e7aa1ddfab74b84c4'
          'c60343df74f8e1afb13b084d5c0e47ed'
-         'd68d238540c44163ba06c438f18f814c')
+         '73aa20422f7b7709ba3f58976f9fe44c')
 validpgpkeys=('D620173D6924BA1C2244C7C41B6B667622FE5A12'
               '1A4E8B7277C42E53DBA9C7B9BCAA30EA9C0D5763')
 

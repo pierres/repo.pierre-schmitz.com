@@ -1,5 +1,5 @@
---- php.ini-production.orig	2015-08-30 15:08:49.649001628 +0200
-+++ php.ini-production	2015-08-30 15:08:50.818973338 +0200
+--- php.ini-production.orig	2015-08-31 18:08:38.947334732 +0200
++++ php.ini-production	2015-08-31 18:08:39.664003010 +0200
 @@ -720,7 +720,7 @@
  
  ; Directory in which the loadable extensions (modules) reside.
@@ -43,8 +43,8 @@
 -;extension=php_pgsql.dll
 -;extension=php_shmop.dll
 -
--; The MIBS data available in the PHP distribution must be installed. 
--; See http://www.php.net/manual/en/snmp.installation.php 
+-; The MIBS data available in the PHP distribution must be installed.
+-; See http://www.php.net/manual/en/snmp.installation.php
 -;extension=php_snmp.dll
 -
 -;extension=php_soap.dll
