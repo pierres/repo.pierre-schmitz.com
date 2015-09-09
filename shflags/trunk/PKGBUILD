@@ -13,6 +13,7 @@ options=(zipman)
 source=(http://shflags.googlecode.com/files/$pkgname-$pkgver.tgz{,.sig})
 md5sums=('b4d7133696ec05b71b27d8df5e278f0f'
          'SKIP')
+validpgpkeys=('D84429D6ADEB3CBA943E666A1F2A442D08A844B4')
 
 package() {
   src="$srcdir/$pkgname-$pkgver/src/"
