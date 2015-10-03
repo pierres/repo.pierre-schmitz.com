@@ -2,7 +2,7 @@
 # Maintainer: Pierre Schmitz <pierre@archlinux.de>
 
 pkgname=php-composer
-pkgver=1.0.0.alpha10.485
+pkgver=1.0.0.alpha10.562
 pkgrel=1
 pkgdesc="Dependency Manager for PHP"
 arch=('any')
@@ -14,7 +14,7 @@ checkdepends=('mercurial')
 source=("${pkgname}::git+https://github.com/composer/composer.git"
         "composer-${pkgver}.phar::https://getcomposer.org/composer.phar")
 md5sums=('SKIP'
-         '9a14ccc80923b78f03291b65b7a5ee66')
+         '2fb2d0b7d5e631dc4517ab3021c634d6')
 
 pkgver() {
 	cd ${srcdir}/${pkgname}
