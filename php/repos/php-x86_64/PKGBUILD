@@ -20,7 +20,7 @@ pkgname=('php'
          'php-sqlite'
          'php-tidy'
          'php-xsl')
-pkgver=7.0.0dev.92455
+pkgver=7.0.0RC4
 pkgrel=1
 arch=('i686' 'x86_64')
 license=('PHP')
@@ -28,7 +28,7 @@ url='http://www.php.net'
 makedepends=('apache' 'aspell' 'c-client' 'db' 'enchant' 'gd' 'git' 'gmp' 'icu' 'libmcrypt' 'libxslt' 'libzip' 'net-snmp'
              'postgresql-libs' 'sqlite' 'systemd' 'tidyhtml' 'unixodbc')
 checkdepends=('procps-ng')
-source=("${pkgbase}::git+https://git.php.net/repository/php-src.git#branch=PHP-7.0"
+source=("${pkgbase}::git+https://git.php.net/repository/php-src.git#tag=php-${pkgver}"
         'apache.patch' 'apache.conf' 'php-fpm.patch' 'php-fpm.service' 'php-fpm.tmpfiles' 'php.ini.patch')
 md5sums=('SKIP'
          '9bec49e2d2c0d2e24c283eb530238b31'
@@ -40,14 +40,10 @@ md5sums=('SKIP'
 validpgpkeys=('D620173D6924BA1C2244C7C41B6B667622FE5A12'
               '1A4E8B7277C42E53DBA9C7B9BCAA30EA9C0D5763')
 
-pkgver() {
-	cd ${srcdir}/${pkgbase}
-
-	echo "7.0.0dev.$(git rev-list origin/PHP-7.0 --count)"
-}
-
 prepare() {
 	cd ${srcdir}/${pkgbase}
+
+	git tag -v php-${pkgver}
 
 	patch -p0 -i ${srcdir}/apache.patch
 	patch -p0 -i ${srcdir}/php-fpm.patch
@@ -112,7 +108,6 @@ build() {
 		--with-imap=shared \
 		--with-kerberos=/usr \
 		--with-jpeg-dir=/usr \
-		--with-vpx-dir=/usr \
 		--with-ldap=shared \
 		--with-ldap-sasl \
 		--with-libzip \
