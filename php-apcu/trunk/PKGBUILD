@@ -3,7 +3,7 @@
 
 pkgname=php-apcu
 pkgver=5.0.0dev.439
-pkgrel=1
+pkgrel=2
 arch=('i686' 'x86_64')
 pkgdesc='A userland caching module for PHP'
 url='http://pecl.php.net/package/APCu'
