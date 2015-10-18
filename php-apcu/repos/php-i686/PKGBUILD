@@ -2,7 +2,7 @@
 # Maintainer: Pierre Schmitz <pierre@archlinux.de>
 
 pkgname=php-apcu
-pkgver=5.0.0dev.446
+pkgver=5.0.0dev.448
 pkgrel=1
 arch=('i686' 'x86_64')
 pkgdesc='A userland caching module for PHP'
