@@ -2,8 +2,8 @@
 # Maintainer: Pierre Schmitz <pierre@archlinux.de>
 
 pkgname=php-composer
-pkgver=1.0.0.alpha10.564
-pkgrel=1
+pkgver=1.0.0.alpha10.671
+pkgrel=1.1
 pkgdesc="Dependency Manager for PHP"
 arch=('any')
 license=('MIT')
