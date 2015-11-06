@@ -21,7 +21,7 @@ pkgname=('php'
          'php-tidy'
          'php-xsl')
 pkgver=7.0.0RC6
-pkgrel=1
+pkgrel=2
 arch=('i686' 'x86_64')
 license=('PHP')
 url='http://www.php.net'
@@ -179,7 +179,7 @@ check() {
 
 	sapi/cli/php -n \
 		${srcdir}/${pkgbase}/run-tests.php -n -P \
-		${srcdir}/${pkgbase}/{Zend,ext/{spl,standard},sapi/cli}
+		${srcdir}/${pkgbase}/{Zend,ext/spl,sapi/cli}
 }
 
 package_php() {
