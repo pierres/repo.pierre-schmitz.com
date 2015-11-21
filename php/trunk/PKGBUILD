@@ -21,7 +21,7 @@ pkgname=('php'
          'php-tidy'
          'php-xsl')
 pkgver=7.0.0RC7
-pkgrel=1
+pkgrel=2
 arch=('i686' 'x86_64')
 license=('PHP')
 url='http://www.php.net'
@@ -177,9 +177,11 @@ check() {
 	export SKIP_ONLINE_TESTS=1
 	export SKIP_SLOW_TESTS=1
 
+	rm ${srcdir}/${pkgbase}/ext/pcre/tests/backtrack_limit.phpt
+
 	sapi/cli/php -n \
 		${srcdir}/${pkgbase}/run-tests.php -n -P \
-		${srcdir}/${pkgbase}/{Zend,ext/spl,sapi/cli}
+		${srcdir}/${pkgbase}/{Zend,ext/{date,pcre,spl,standard},sapi/cli}
 }
 
 package_php() {
