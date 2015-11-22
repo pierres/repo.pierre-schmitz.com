@@ -3,7 +3,7 @@
 
 pkgname=php-apcu
 pkgver=5.1.0
-pkgrel=1
+pkgrel=2
 arch=('i686' 'x86_64')
 pkgdesc='A userland caching module for PHP'
 url='http://pecl.php.net/package/APCu'
@@ -16,7 +16,7 @@ md5sums=('8fc4f2a9a2447c760ee826e1786725d7')
 build() {
 	cd $srcdir/apcu-$pkgver
 	phpize
-	./configure --prefix=/usr
+	./configure --prefix=/usr --enable-apcu-bc
 	make
 }
 
