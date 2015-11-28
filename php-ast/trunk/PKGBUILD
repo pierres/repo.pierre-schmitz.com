@@ -2,7 +2,7 @@
 # Maintainer: Pierre Schmitz <pierre@archlinux.de>
 
 pkgname=php-ast
-pkgver=0.0.64
+pkgver=0.1.0.64
 pkgrel=1
 arch=('i686' 'x86_64')
 pkgdesc=' Extension exposing PHP 7 abstract syntax tree'
@@ -17,7 +17,7 @@ md5sums=('SKIP')
 pkgver() {
 	cd ${srcdir}/${pkgname}
 
-	echo "0.0.$(git rev-list master --count)"
+	echo "0.1.0.$(git rev-list master --count)"
 }
 
 build() {
