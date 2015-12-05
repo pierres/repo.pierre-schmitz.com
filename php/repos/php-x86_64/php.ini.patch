@@ -1,5 +1,5 @@
---- php.ini-production.orig	2015-08-31 18:08:38.947334732 +0200
-+++ php.ini-production	2015-08-31 18:08:39.664003010 +0200
+--- php.ini-production.orig	2015-12-01 14:36:27.000000000 +0100
++++ php.ini-production	2015-12-05 18:44:25.259931816 +0100
 @@ -720,7 +720,7 @@
  
  ; Directory in which the loadable extensions (modules) reside.
@@ -9,7 +9,7 @@
  ; On windows:
  ; extension_dir = "ext"
  
-@@ -858,46 +858,45 @@
+@@ -858,46 +858,43 @@
  ; If you only provide the name of the extension, PHP will look for it in its
  ; default extension directory.
  ;
@@ -77,8 +77,6 @@
 +;extension=pdo_pgsql.so
 +;extension=pdo_sqlite.so
 +;extension=pgsql.so
-+extension=phar.so
-+;extension=posix.so
 +;extension=pspell.so
 +;extension=shmop.so
 +;extension=snmp.so

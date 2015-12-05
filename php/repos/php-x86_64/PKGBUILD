@@ -4,7 +4,6 @@
 pkgbase=php
 pkgname=('php'
          'php-cgi'
-         'php-apache'
          'php-fpm'
          'php-embed'
          'php-phpdbg'
@@ -21,40 +20,33 @@ pkgname=('php'
          'php-tidy'
          'php-xsl')
 pkgver=7.0.0
-pkgrel=1
+pkgrel=2
 arch=('i686' 'x86_64')
 license=('PHP')
 url='http://www.php.net'
-makedepends=('apache' 'aspell' 'c-client' 'db' 'enchant' 'gd' 'git' 'gmp' 'icu' 'libmcrypt' 'libxslt' 'libzip' 'net-snmp'
+makedepends=('aspell' 'c-client' 'db' 'enchant' 'gd' 'gmp' 'icu' 'libmcrypt' 'libxslt' 'libzip' 'net-snmp'
              'postgresql-libs' 'sqlite' 'systemd' 'tidyhtml' 'unixodbc')
 checkdepends=('procps-ng')
-source=("${pkgbase}::git+https://git.php.net/repository/php-src.git#tag=php-${pkgver}"
-        'apache.patch' 'apache.conf' 'php-fpm.patch' 'php-fpm.service' 'php-fpm.tmpfiles' 'php.ini.patch')
-md5sums=('SKIP'
-         '9bec49e2d2c0d2e24c283eb530238b31'
-         '0677a10d2e721472d6fccb470356b322'
-         '8297f40e3d14a86f5130dfffe0b6c241'
-         'cc2940f5312ba42e7aa1ddfab74b84c4'
-         'c60343df74f8e1afb13b084d5c0e47ed'
-         '73aa20422f7b7709ba3f58976f9fe44c')
-validpgpkeys=('D620173D6924BA1C2244C7C41B6B667622FE5A12'
-              '1A4E8B7277C42E53DBA9C7B9BCAA30EA9C0D5763')
+source=("https://www.php.net/distributions/${pkgbase}-${pkgver}.tar.xz"{,.asc}
+        'php-fpm.patch' 'php-fpm.service' 'php-fpm.tmpfiles' 'php.ini.patch')
+sha256sums=('7dbdda74c502960febe0544b3e3a7c430389a7a4260e94c73fd8ca26c33b8540'
+            'SKIP'
+            '2261b84df9c05818d19cc91850acca2cdb8ce4b5471ed41a2f0eb17ee0b278da'
+            'b4e91a2712ee16175f924e1b1906c062065d287918c13b45fc3e3fddb014621e'
+            '640dba0d960bfeaae9ad38d2826d3f6b5d6c175a4d3e16664eefff29141faad5'
+            '2a9e5d818731e5adca8b836dc501d10f223add5800eb899d6031fcfd93b03ccd')
+validpgpkeys=('1A4E8B7277C42E53DBA9C7B9BCAA30EA9C0D5763'
+              '6E4F6AB321FDC07F2C332E3AC2BF0BC433CFC8B3')
 
 prepare() {
-	cd ${srcdir}/${pkgbase}
+	cd ${srcdir}/${pkgbase}-${pkgver}
 
-	git tag -v php-${pkgver}
-
-	patch -p0 -i ${srcdir}/apache.patch
 	patch -p0 -i ${srcdir}/php-fpm.patch
 	patch -p0 -i ${srcdir}/php.ini.patch
-
-        ./buildconf --force
-	./genfiles
 }
 
 build() {
-	local _phpconfig="--srcdir=../${pkgbase} \
+	local _phpconfig="--srcdir=../${pkgbase}-${pkgver} \
 		--config-cache \
 		--prefix=/usr \
 		--sbindir=/usr/bin \
@@ -74,13 +66,8 @@ build() {
 		--enable-dba=shared \
 		--enable-exif=shared \
 		--enable-ftp=shared \
-		--enable-gd-native-ttf \
 		--enable-intl=shared \
 		--enable-mbstring \
-		--enable-opcache \
-		--enable-opcache-file \
-		--enable-phar=shared \
-		--enable-posix=shared \
 		--enable-shmop=shared \
 		--enable-soap=shared \
 		--enable-sockets=shared \
@@ -96,18 +83,14 @@ build() {
 		--with-fpm-acl \
 		--with-fpm-user=http \
 		--with-fpm-group=http \
-		--with-freetype-dir=/usr \
-		--with-xpm-dir=/usr \
 		--with-gd=shared,/usr \
 		--with-gdbm \
 		--with-gettext=shared \
 		--with-gmp=shared \
 		--with-iconv=shared \
-		--with-icu-dir=/usr \
 		--with-imap-ssl \
 		--with-imap=shared \
 		--with-kerberos=/usr \
-		--with-jpeg-dir=/usr \
 		--with-ldap=shared \
 		--with-ldap-sasl \
 		--with-libzip \
@@ -122,7 +105,6 @@ build() {
 		--with-pdo-pgsql=shared \
 		--with-pdo-sqlite=shared,/usr \
 		--with-pgsql=shared \
-		--with-png-dir=/usr \
 		--with-pspell=shared \
 		--with-readline \
 		--with-snmp=shared \
@@ -132,31 +114,22 @@ build() {
 		--with-xmlrpc=shared \
 		--with-xsl=shared \
 		--with-zlib \
+		--enable-pcntl \
 		"
 
 	EXTENSION_DIR=/usr/lib/php/modules
 	export EXTENSION_DIR
 
-	cd ${srcdir}/${pkgbase}
+	cd ${srcdir}/${pkgbase}-${pkgver}
 
 	# cli, cgi, fpm and embed
 	mkdir ${srcdir}/build-php
 	cd ${srcdir}/build-php
-	ln -s ../${pkgbase}/configure
+	ln -s ../${pkgbase}-${pkgver}/configure
 	./configure ${_phpconfig} \
-		--enable-pcntl \
 		--enable-cgi \
 		--enable-fpm \
 		--enable-embed=shared \
-		${_phpextensions}
-	make
-
-	# apache
-	# reuse the previous run; this will save us a lot of time
-	cp -a ${srcdir}/build-php ${srcdir}/build-apache
-	cd ${srcdir}/build-apache
-	./configure ${_phpconfig} \
-		--with-apxs2 \
 		${_phpextensions}
 	make
 
@@ -172,16 +145,16 @@ build() {
 check() {
 	cd ${srcdir}/build-php
 
+	return
+
 	export REPORT_EXIT_STATUS=1
 	export NO_INTERACTION=1
 	export SKIP_ONLINE_TESTS=1
 	export SKIP_SLOW_TESTS=1
 
-	rm ${srcdir}/${pkgbase}/ext/pcre/tests/backtrack_limit.phpt
-
 	sapi/cli/php -n \
-		${srcdir}/${pkgbase}/run-tests.php -n -P \
-		${srcdir}/${pkgbase}/{Zend,ext/{date,pcre,spl,standard},sapi/cli}
+		${srcdir}/${pkgbase}-${pkgver}/run-tests.php -n -P \
+		${srcdir}/${pkgbase}-${pkgver}/{tests,Zend,ext/{spl,standard},sapi/cli}
 }
 
 package_php() {
@@ -194,7 +167,7 @@ package_php() {
 
 	cd ${srcdir}/build-php
 	make -j1 INSTALL_ROOT=${pkgdir} install-{modules,cli,build,headers,programs,pharcmd}
-	install -D -m644 ${srcdir}/${pkgbase}/php.ini-production ${pkgdir}/etc/php/php.ini
+	install -D -m644 ${srcdir}/${pkgbase}-${pkgver}/php.ini-production ${pkgdir}/etc/php/php.ini
 	install -d -m755 ${pkgdir}/etc/php/conf.d/
 
 	# remove static modules
@@ -211,15 +184,6 @@ package_php-cgi() {
 
 	cd ${srcdir}/build-php
 	make -j1 INSTALL_ROOT=${pkgdir} install-cgi
-}
-
-package_php-apache() {
-	pkgdesc='Apache SAPI for PHP'
-	depends=('php' 'apache')
-	backup=('etc/httpd/conf/extra/php7_module.conf')
-
-	install -D -m755 ${srcdir}/build-apache/libs/libphp7.so ${pkgdir}/usr/lib/httpd/modules/libphp7.so
-	install -D -m644 ${srcdir}/apache.conf ${pkgdir}/etc/httpd/conf/extra/php7_module.conf
 }
 
 package_php-fpm() {
