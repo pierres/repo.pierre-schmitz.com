@@ -1,5 +1,5 @@
 --- sapi/fpm/Makefile.frag.orig	2015-12-01 14:36:27.000000000 +0100
-+++ sapi/fpm/Makefile.frag	2015-12-05 18:44:25.243265560 +0100
++++ sapi/fpm/Makefile.frag	2015-12-06 11:20:16.827056359 +0100
 @@ -12,8 +12,8 @@
  
  	@echo "Installing PHP FPM config:        $(INSTALL_ROOT)$(sysconfdir)/" && \
@@ -12,7 +12,7 @@
  	@echo "Installing PHP FPM man page:      $(INSTALL_ROOT)$(mandir)/man8/"
  	@$(mkinstalldirs) $(INSTALL_ROOT)$(mandir)/man8
 --- sapi/fpm/php-fpm.conf.in.orig	2015-12-01 14:36:27.000000000 +0100
-+++ sapi/fpm/php-fpm.conf.in	2015-12-05 18:44:25.243265560 +0100
++++ sapi/fpm/php-fpm.conf.in	2015-12-06 11:20:16.830389607 +0100
 @@ -14,14 +14,14 @@
  ; Pid file
  ; Note: the default prefix is @EXPANDED_LOCALSTATEDIR@
@@ -26,12 +26,12 @@
  ; Note: the default prefix is @EXPANDED_LOCALSTATEDIR@
  ; Default Value: log/php-fpm.log
 -;error_log = log/php-fpm.log
-+error_log=syslog
++error_log = syslog
  
  ; syslog_facility is used to specify what type of program is logging the
  ; message. This lets syslogd specify that messages from different facilities
 --- sapi/fpm/www.conf.in.orig	2015-12-01 14:36:27.000000000 +0100
-+++ sapi/fpm/www.conf.in	2015-12-05 18:44:25.246598812 +0100
++++ sapi/fpm/www.conf.in	2015-12-06 11:20:16.833722854 +0100
 @@ -33,7 +33,7 @@
  ;                            (IPv6 and IPv4-mapped) on a specific port;
  ;   '/path/to/unix/socket' - to listen on a unix socket.
@@ -50,3 +50,14 @@
  
  ; Redirect worker stdout and stderr into main error log. If not set, stdout and
  ; stderr will be redirected to /dev/null according to FastCGI specs.
+--- sapi/fpm/php-fpm.service.in.orig	2015-12-01 14:36:27.000000000 +0100
++++ sapi/fpm/php-fpm.service.in	2015-12-06 11:20:16.833722854 +0100
+@@ -4,7 +4,7 @@
+ 
+ [Service]
+ Type=@php_fpm_systemd@
+-PIDFile=@localstatedir@/run/php-fpm.pid
++PIDFile=/run/php-fpm/php-fpm.pid
+ ExecStart=@sbindir@/php-fpm --nodaemonize --fpm-config @sysconfdir@/php-fpm.conf
+ ExecReload=/bin/kill -USR2 $MAINPID
+ 
