@@ -20,7 +20,7 @@ pkgname=('php'
          'php-tidy'
          'php-xsl')
 pkgver=7.0.0
-pkgrel=2
+pkgrel=3
 arch=('i686' 'x86_64')
 license=('PHP')
 url='http://www.php.net'
@@ -28,13 +28,12 @@ makedepends=('aspell' 'c-client' 'db' 'enchant' 'gd' 'gmp' 'icu' 'libmcrypt' 'li
              'postgresql-libs' 'sqlite' 'systemd' 'tidyhtml' 'unixodbc')
 checkdepends=('procps-ng')
 source=("https://www.php.net/distributions/${pkgbase}-${pkgver}.tar.xz"{,.asc}
-        'php-fpm.patch' 'php-fpm.service' 'php-fpm.tmpfiles' 'php.ini.patch')
+        'php-fpm.patch' 'php-fpm.tmpfiles' 'php.ini.patch')
 sha256sums=('7dbdda74c502960febe0544b3e3a7c430389a7a4260e94c73fd8ca26c33b8540'
             'SKIP'
-            '2261b84df9c05818d19cc91850acca2cdb8ce4b5471ed41a2f0eb17ee0b278da'
-            'b4e91a2712ee16175f924e1b1906c062065d287918c13b45fc3e3fddb014621e'
+            '3cbdf0f34440feea0d168855d3af47e34546c2366b60986e24116eb86c1759ff'
             '640dba0d960bfeaae9ad38d2826d3f6b5d6c175a4d3e16664eefff29141faad5'
-            '2a9e5d818731e5adca8b836dc501d10f223add5800eb899d6031fcfd93b03ccd')
+            'c304ef873fdd04322678ec9ddeaea4d8708b9e0a58e0dd0810e36e266c410673')
 validpgpkeys=('1A4E8B7277C42E53DBA9C7B9BCAA30EA9C0D5763'
               '6E4F6AB321FDC07F2C332E3AC2BF0BC433CFC8B3')
 
@@ -195,8 +194,8 @@ package_php-fpm() {
 
 	cd ${srcdir}/build-php
 	make -j1 INSTALL_ROOT=${pkgdir} install-fpm
- 	install -D -m644 ${srcdir}/php-fpm.tmpfiles ${pkgdir}/usr/lib/tmpfiles.d/php-fpm.conf
- 	install -D -m644 ${srcdir}/php-fpm.service ${pkgdir}/usr/lib/systemd/system/php-fpm.service
+	install -D -m644 sapi/fpm/php-fpm.service ${pkgdir}/usr/lib/systemd/system/php-fpm.service
+	install -D -m644 ${srcdir}/php-fpm.tmpfiles ${pkgdir}/usr/lib/tmpfiles.d/php-fpm.conf
 }
 
 package_php-embed() {

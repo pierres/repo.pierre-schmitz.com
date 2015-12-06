@@ -1,5 +1,5 @@
 --- php.ini-production.orig	2015-12-01 14:36:27.000000000 +0100
-+++ php.ini-production	2015-12-05 18:44:25.259931816 +0100
++++ php.ini-production	2015-12-06 11:20:16.847055844 +0100
 @@ -720,7 +720,7 @@
  
  ; Directory in which the loadable extensions (modules) reside.
@@ -54,7 +54,7 @@
 -;extension=php_xmlrpc.dll
 -;extension=php_xsl.dll
 +;extension=bcmath.so
-+extension=bz2.so
++;extension=bz2.so
 +;extension=calendar.so
 +extension=curl.so
 +;extension=dba.so
