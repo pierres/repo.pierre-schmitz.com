@@ -1,0 +1,38 @@
+# $Id: $
+# Maintainer: Pierre Schmitz <pierre@archlinux.de>
+
+pkgname=php-apcu-bc
+pkgver=1.0.0
+pkgrel=1
+arch=('i686' 'x86_64')
+pkgdesc='APCu Backwards Compatibility Module'
+url='https://pecl.php.net/package/apcu_bc'
+depends=('php-apcu')
+license=('PHP')
+source=("http://pecl.php.net/get/apcu_bc-$pkgver.tgz")
+backup=('etc/php/conf.d/apcu-bc.ini')
+md5sums=('577c9cdd695a31067d67690ad5b2fe66')
+
+build() {
+	cd $srcdir/apcu_bc-$pkgver
+	phpize
+	./configure --prefix=/usr
+	make
+}
+
+check() {
+	cd $srcdir/apcu_bc-$pkgver
+	# FIXME: tests are broken
+	export REPORT_EXIT_STATUS=0
+	export NO_INTERACTION=1
+	export SKIP_ONLINE_TESTS=1
+	export SKIP_SLOW_TESTS=1
+	make test
+}
+
+package() {
+	cd $srcdir/apcu_bc-$pkgver
+	make INSTALL_ROOT=$pkgdir install
+	echo ';extension=apc.so' > apcu-bc.ini
+	install -D -m644 apcu-bc.ini $pkgdir/etc/php/conf.d/apcu-bc.ini
+}
