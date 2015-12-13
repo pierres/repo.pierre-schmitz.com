@@ -19,18 +19,18 @@ pkgname=('php'
          'php-sqlite'
          'php-tidy'
          'php-xsl')
-pkgver=7.0.0
-pkgrel=5
+pkgver=7.0.1RC1
+pkgrel=1
 arch=('i686' 'x86_64')
 license=('PHP')
 url='http://www.php.net'
 makedepends=('aspell' 'c-client' 'db' 'enchant' 'gd' 'gmp' 'icu' 'libmcrypt' 'libxslt' 'libzip' 'net-snmp'
              'postgresql-libs' 'sqlite' 'systemd' 'tidyhtml' 'unixodbc')
 checkdepends=('procps-ng')
-source=("https://www.php.net/distributions/${pkgbase}-${pkgver}.tar.xz"{,.asc}
+source=("https://downloads.php.net/~ab/${pkgbase}-${pkgver}.tar.xz"
+#"https://www.php.net/distributions/${pkgbase}-${pkgver}.tar.xz"{,.asc}
         'php-fpm.patch' 'php-fpm.tmpfiles' 'php.ini.patch')
-sha256sums=('7dbdda74c502960febe0544b3e3a7c430389a7a4260e94c73fd8ca26c33b8540'
-            'SKIP'
+sha256sums=('7b448dda5bfcbe6a0f6e7d502e6a608416aca6a6fc5ddc89fa25034d9609fb7d'
             '3cbdf0f34440feea0d168855d3af47e34546c2366b60986e24116eb86c1759ff'
             '640dba0d960bfeaae9ad38d2826d3f6b5d6c175a4d3e16664eefff29141faad5'
             'c304ef873fdd04322678ec9ddeaea4d8708b9e0a58e0dd0810e36e266c410673')
