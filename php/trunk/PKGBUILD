@@ -20,7 +20,7 @@ pkgname=('php'
          'php-tidy'
          'php-xsl')
 pkgver=7.0.1RC1
-pkgrel=1
+pkgrel=2
 arch=('i686' 'x86_64')
 license=('PHP')
 url='http://www.php.net'
@@ -60,7 +60,8 @@ build() {
 		--enable-zend-signals \
 		"
 
-	local _phpextensions="--enable-bcmath=shared \
+	local _phpextensions="\
+		--enable-bcmath=shared \
 		--enable-calendar=shared \
 		--enable-dba=shared \
 		--enable-exif=shared \
@@ -119,23 +120,13 @@ build() {
 	EXTENSION_DIR=/usr/lib/php/modules
 	export EXTENSION_DIR
 
-	cd ${srcdir}/${pkgbase}-${pkgver}
-
-	# cli, cgi, fpm and embed
-	mkdir ${srcdir}/build-php
-	cd ${srcdir}/build-php
+	mkdir ${srcdir}/build
+	cd ${srcdir}/build
 	ln -s ../${pkgbase}-${pkgver}/configure
 	./configure ${_phpconfig} \
 		--enable-cgi \
 		--enable-fpm \
 		--enable-embed=shared \
-		${_phpextensions}
-	make
-
-	# phpdbg
-	cp -a ${srcdir}/build-php ${srcdir}/build-phpdbg
-	cd ${srcdir}/build-phpdbg
-	./configure ${_phpconfig} \
 		--enable-phpdbg \
 		${_phpextensions}
 	make
@@ -149,9 +140,9 @@ check() {
 	export SKIP_ONLINE_TESTS=1
 	export SKIP_SLOW_TESTS=1
 
-	${srcdir}/build-php/sapi/cli/php -n \
+	${srcdir}/build/sapi/cli/php -n \
 		run-tests.php -n -P \
-		{tests,Zend,ext/{spl,standard},sapi/cli}
+		{tests,Zend}
 }
 
 package_php() {
@@ -162,7 +153,7 @@ package_php() {
 	provides=("php-ldap=${pkgver}")
 	backup=('etc/php/php.ini')
 
-	cd ${srcdir}/build-php
+	cd ${srcdir}/build
 	make -j1 INSTALL_ROOT=${pkgdir} install-{modules,cli,build,headers,programs,pharcmd}
 	install -D -m644 ${srcdir}/${pkgbase}-${pkgver}/php.ini-production ${pkgdir}/etc/php/php.ini
 	install -d -m755 ${pkgdir}/etc/php/conf.d/
@@ -179,7 +170,7 @@ package_php-cgi() {
 	pkgdesc='CGI and FCGI SAPI for PHP'
 	depends=('php')
 
-	cd ${srcdir}/build-php
+	cd ${srcdir}/build
 	make -j1 INSTALL_ROOT=${pkgdir} install-cgi
 }
 
@@ -190,7 +181,7 @@ package_php-fpm() {
 	install='php-fpm.install'
 	options=('!emptydirs')
 
-	cd ${srcdir}/build-php
+	cd ${srcdir}/build
 	make -j1 INSTALL_ROOT=${pkgdir} install-fpm
 	install -D -m644 sapi/fpm/php-fpm.service ${pkgdir}/usr/lib/systemd/system/php-fpm.service
 	install -D -m644 ${srcdir}/php-fpm.tmpfiles ${pkgdir}/usr/lib/tmpfiles.d/php-fpm.conf
@@ -201,7 +192,7 @@ package_php-embed() {
 	depends=('php' 'libsystemd')
 	options=('!emptydirs')
 
-	cd ${srcdir}/build-php
+	cd ${srcdir}/build
 	make -j1 INSTALL_ROOT=${pkgdir} PHP_SAPI=embed install-sapi
 }
 
@@ -210,7 +201,7 @@ package_php-phpdbg() {
 	depends=('php')
 	options=('!emptydirs')
 
-	cd ${srcdir}/build-phpdbg
+	cd ${srcdir}/build
 	make -j1 INSTALL_ROOT=${pkgdir} install-phpdbg
 }
 
@@ -218,85 +209,85 @@ package_php-enchant() {
 	pkgdesc='enchant module for PHP'
 	depends=('php' 'enchant')
 
-	install -D -m755 ${srcdir}/build-php/modules/enchant.so ${pkgdir}/usr/lib/php/modules/enchant.so
+	install -D -m755 ${srcdir}/build/modules/enchant.so ${pkgdir}/usr/lib/php/modules/enchant.so
 }
 
 package_php-gd() {
 	pkgdesc='gd module for PHP'
 	depends=('php' 'gd')
 
-	install -D -m755 ${srcdir}/build-php/modules/gd.so ${pkgdir}/usr/lib/php/modules/gd.so
+	install -D -m755 ${srcdir}/build/modules/gd.so ${pkgdir}/usr/lib/php/modules/gd.so
 }
 
 package_php-imap() {
 	pkgdesc='imap module for PHP'
 	depends=('php' 'c-client')
 
-	install -D -m755 ${srcdir}/build-php/modules/imap.so ${pkgdir}/usr/lib/php/modules/imap.so
+	install -D -m755 ${srcdir}/build/modules/imap.so ${pkgdir}/usr/lib/php/modules/imap.so
 }
 
 package_php-intl() {
 	pkgdesc='intl module for PHP'
 	depends=('php' 'icu')
 
-	install -D -m755 ${srcdir}/build-php/modules/intl.so ${pkgdir}/usr/lib/php/modules/intl.so
+	install -D -m755 ${srcdir}/build/modules/intl.so ${pkgdir}/usr/lib/php/modules/intl.so
 }
 
 package_php-mcrypt() {
 	pkgdesc='mcrypt module for PHP'
 	depends=('php' 'libmcrypt' 'libtool')
 
-	install -D -m755 ${srcdir}/build-php/modules/mcrypt.so ${pkgdir}/usr/lib/php/modules/mcrypt.so
+	install -D -m755 ${srcdir}/build/modules/mcrypt.so ${pkgdir}/usr/lib/php/modules/mcrypt.so
 }
 
 package_php-odbc() {
 	pkgdesc='ODBC modules for PHP'
 	depends=('php' 'unixodbc')
 
-	install -D -m755 ${srcdir}/build-php/modules/odbc.so ${pkgdir}/usr/lib/php/modules/odbc.so
-	install -D -m755 ${srcdir}/build-php/modules/pdo_odbc.so ${pkgdir}/usr/lib/php/modules/pdo_odbc.so
+	install -D -m755 ${srcdir}/build/modules/odbc.so ${pkgdir}/usr/lib/php/modules/odbc.so
+	install -D -m755 ${srcdir}/build/modules/pdo_odbc.so ${pkgdir}/usr/lib/php/modules/pdo_odbc.so
 }
 
 package_php-pgsql() {
 	pkgdesc='PostgreSQL modules for PHP'
 	depends=('php' 'postgresql-libs')
 
-	install -D -m755 ${srcdir}/build-php/modules/pgsql.so ${pkgdir}/usr/lib/php/modules/pgsql.so
-	install -D -m755 ${srcdir}/build-php/modules/pdo_pgsql.so ${pkgdir}/usr/lib/php/modules/pdo_pgsql.so
+	install -D -m755 ${srcdir}/build/modules/pgsql.so ${pkgdir}/usr/lib/php/modules/pgsql.so
+	install -D -m755 ${srcdir}/build/modules/pdo_pgsql.so ${pkgdir}/usr/lib/php/modules/pdo_pgsql.so
 }
 
 package_php-pspell() {
 	pkgdesc='pspell module for PHP'
 	depends=('php' 'aspell')
 
-	install -D -m755 ${srcdir}/build-php/modules/pspell.so ${pkgdir}/usr/lib/php/modules/pspell.so
+	install -D -m755 ${srcdir}/build/modules/pspell.so ${pkgdir}/usr/lib/php/modules/pspell.so
 }
 
 package_php-snmp() {
 	pkgdesc='snmp module for PHP'
 	depends=('php' 'net-snmp')
 
-	install -D -m755 ${srcdir}/build-php/modules/snmp.so ${pkgdir}/usr/lib/php/modules/snmp.so
+	install -D -m755 ${srcdir}/build/modules/snmp.so ${pkgdir}/usr/lib/php/modules/snmp.so
 }
 
 package_php-sqlite() {
 	pkgdesc='sqlite module for PHP'
 	depends=('php' 'sqlite')
 
-	install -D -m755 ${srcdir}/build-php/modules/sqlite3.so ${pkgdir}/usr/lib/php/modules/sqlite3.so
-	install -D -m755 ${srcdir}/build-php/modules/pdo_sqlite.so ${pkgdir}/usr/lib/php/modules/pdo_sqlite.so
+	install -D -m755 ${srcdir}/build/modules/sqlite3.so ${pkgdir}/usr/lib/php/modules/sqlite3.so
+	install -D -m755 ${srcdir}/build/modules/pdo_sqlite.so ${pkgdir}/usr/lib/php/modules/pdo_sqlite.so
 }
 
 package_php-tidy() {
 	pkgdesc='tidy module for PHP'
 	depends=('php' 'tidyhtml')
 
-	install -D -m755 ${srcdir}/build-php/modules/tidy.so ${pkgdir}/usr/lib/php/modules/tidy.so
+	install -D -m755 ${srcdir}/build/modules/tidy.so ${pkgdir}/usr/lib/php/modules/tidy.so
 }
 
 package_php-xsl() {
 	pkgdesc='xsl module for PHP'
 	depends=('php' 'libxslt')
 
-	install -D -m755 ${srcdir}/build-php/modules/xsl.so ${pkgdir}/usr/lib/php/modules/xsl.so
+	install -D -m755 ${srcdir}/build/modules/xsl.so ${pkgdir}/usr/lib/php/modules/xsl.so
 }
