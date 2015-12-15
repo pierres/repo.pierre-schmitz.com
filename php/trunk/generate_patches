@@ -6,6 +6,8 @@ makepkg -o --nodeps --noprepare --skipinteg
 
 pushd src/${pkgbase}-${pkgver}
 
+sed '/APACHE_THREADED_MPM=/d' -i.orig sapi/apache2handler/config.m4 -i.orig configure
+
 sed 's/.conf.default/.conf/g' -i.orig sapi/fpm/Makefile.frag
 
 sed \
@@ -30,6 +32,9 @@ sed \
 sed \
 	-e 's#^; extension_dir = "\./"$#extension_dir = "/usr/lib/php/modules/"#g' \
 	-i php.ini-production
+
+diff -u sapi/apache2handler/config.m4.orig sapi/apache2handler/config.m4 > ../../apache.patch
+diff -u configure.orig configure >> ../../apache.patch
 
 diff -u sapi/fpm/Makefile.frag.orig sapi/fpm/Makefile.frag > ../../php-fpm.patch
 diff -u sapi/fpm/php-fpm.conf.in.orig sapi/fpm/php-fpm.conf.in >> ../../php-fpm.patch
