@@ -5,7 +5,7 @@ pkgname=php-ast
 pkgver=0.1.1
 pkgrel=1
 arch=('i686' 'x86_64')
-pkgdesc=' Extension exposing PHP 7 abstract syntax tree'
+pkgdesc='Extension exposing PHP 7 abstract syntax tree'
 url='https://github.com/nikic/php-ast'
 depends=('php>=7')
 makedepends=('git')
