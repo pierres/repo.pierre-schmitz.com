@@ -5,7 +5,7 @@
 # Contributor: sracker <smb.sac@gmail.com>
 
 pkgname=xdebug
-pkgver=2.3.3
+pkgver=2.4.0RC3
 pkgrel=1
 pkgdesc="PHP debugging extension"
 arch=('i686' 'x86_64')
@@ -13,14 +13,10 @@ url="http://www.xdebug.org"
 license=('GPL')
 depends=('php')
 backup=('etc/php/conf.d/xdebug.ini')
-source=(http://www.xdebug.org/files/$pkgname-$pkgver.tgz
+source=(http://www.xdebug.org/files/$pkgname-${pkgver,,}.tgz
 	xdebug.ini)
-md5sums=('60e6fdf41840104a23debe16db15a2af'
-         '6a1f2ef91c632d4c9b7b218cd2e278ef')
-
-prepare() {
-  cd $srcdir/$pkgname-$pkgver
-}
+md5sums=('cc799ad91b3addf9c92b15bdfc25e9ee'
+         '0e601dfb867b248f28d6a647611e4400')
 
 build() {
   cd $srcdir/$pkgname-$pkgver
@@ -34,8 +30,6 @@ build() {
 }
 
 package() {
-  local PHPVER=`php -r 'echo phpversion();'`
-
   cd $srcdir/$pkgname-$pkgver/debugclient
   make DESTDIR=$pkgdir install
 
