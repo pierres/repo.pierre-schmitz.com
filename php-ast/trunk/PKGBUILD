@@ -3,11 +3,11 @@
 
 pkgname=php-ast
 pkgver=0.1.1
-pkgrel=1
+pkgrel=2
 arch=('i686' 'x86_64')
 pkgdesc='Extension exposing PHP 7 abstract syntax tree'
 url='https://github.com/nikic/php-ast'
-depends=('php>=7')
+depends=('php')
 makedepends=('git')
 license=('PHP')
 source=("${pkgname}::git+https://github.com/nikic/php-ast.git#tag=v${pkgver}")
