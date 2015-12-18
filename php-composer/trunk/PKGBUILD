@@ -31,7 +31,7 @@ build() {
 check() {
 	cd ${srcdir}/${pkgname}
 
-	# check if the upstream built and ours differ
+	# check if the upstream build and ours differ
 	diff -q ${srcdir}/composer-${pkgver}.phar composer.phar
 
 	# Install the dev dependencies to run the unit tests
