@@ -5,35 +5,38 @@
 # Contributor: sracker <smb.sac@gmail.com>
 
 pkgname=xdebug
-pkgver=2.4.0RC3
-pkgrel=2
+pkgver=2.4.0RC4dev
+pkgrel=1
 pkgdesc="PHP debugging extension"
 arch=('i686' 'x86_64')
 url="http://www.xdebug.org"
 license=('GPL')
 depends=('php')
+makedepends=('git')
+options=('!makeflags')
 backup=('etc/php/conf.d/xdebug.ini')
-source=(http://www.xdebug.org/files/$pkgname-${pkgver,,}.tgz
-	xdebug.ini)
-md5sums=('cc799ad91b3addf9c92b15bdfc25e9ee'
+source=('git+https://github.com/xdebug/xdebug.git#commit=f6a28e6df492d1bd3343a4436855834564c6fc66'
+	'xdebug.ini')
+md5sums=('SKIP'
          '0e601dfb867b248f28d6a647611e4400')
 
 build() {
-  cd $srcdir/$pkgname-$pkgver
+  cd $srcdir/$pkgname
   phpize
   ./configure --prefix=/usr --enable-xdebug
   make
 
-  cd debugclient
+  cd $srcdir/$pkgname/debugclient
+  ./buildconf
   ./configure --prefix=/usr
   make
 }
 
 package() {
-  cd $srcdir/$pkgname-$pkgver/debugclient
+  cd $srcdir/$pkgname/debugclient
   make DESTDIR=$pkgdir install
 
-  cd $srcdir/$pkgname-$pkgver
+  cd $srcdir/$pkgname
   make INSTALL_ROOT=$pkgdir install
   install -D -m 644 $srcdir/xdebug.ini $pkgdir/etc/php/conf.d/xdebug.ini
 }
