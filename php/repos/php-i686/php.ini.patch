@@ -1,6 +1,6 @@
 --- php.ini-production.orig
 +++ php.ini-production
-@@ -719,7 +719,7 @@
+@@ -722,7 +722,7 @@
  
  ; Directory in which the loadable extensions (modules) reside.
  ; http://php.net/extension-dir
@@ -9,7 +9,7 @@
  ; On windows:
  ; extension_dir = "ext"
  
-@@ -857,47 +857,44 @@
+@@ -860,47 +860,44 @@
  ; If you only provide the name of the extension, PHP will look for it in its
  ; default extension directory.
  ;
