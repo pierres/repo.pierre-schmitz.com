@@ -3,8 +3,8 @@
 
 pkgname=php-memcache
 pkgver=3.0.8
-pkgrel=4
-_commit=fdbd46bbc6f53ed6e024521895e142cbfc9b3340
+pkgrel=4.1
+_commit=88750b4203914bc3c40b485cfa139e3094e0fd04
 pkgdesc="Memcache module for PHP"
 arch=('i686' 'x86_64')
 url="http://pecl.php.net/package/memcache"
@@ -25,9 +25,7 @@ prepare() {
   sed -i "s|^\(\$udpPort2\? =\) .*|\1 0;|" tests/connect.inc
 
   # Remove flaky tests
-  #   [tests/040.phpt] memcache->increment()/decrement() with multiple keys
-  #   [tests/042.phpt] memcache->set() with multiple values
-  rm tests/{040,042}.phpt
+  rm tests/{036,053,045,051}.phpt
 }
 
 build() {
