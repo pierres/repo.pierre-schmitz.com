@@ -9,7 +9,7 @@
  ; On windows:
  ; extension_dir = "ext"
  
-@@ -871,47 +871,44 @@
+@@ -883,47 +883,44 @@
  ; If you only provide the name of the extension, PHP will look for it in its
  ; default extension directory.
  ;
