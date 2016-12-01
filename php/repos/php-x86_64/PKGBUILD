@@ -21,7 +21,7 @@ pkgname=('php'
          'php-sqlite'
          'php-tidy'
          'php-xsl')
-pkgver=7.1.0RC6
+pkgver=7.1.0
 pkgrel=1
 arch=('i686' 'x86_64')
 license=('PHP')
@@ -176,7 +176,7 @@ check() {
 
 package_php() {
 	pkgdesc='A general-purpose scripting language that is especially suited to web development'
-	depends=('libxml2' 'curl' 'libzip')
+	depends=('libxml2' 'curl' 'libzip' 'pcre')
 	replaces=('php-ldap')
 	conflicts=('php-ldap')
 	provides=("php-ldap=${pkgver}")
