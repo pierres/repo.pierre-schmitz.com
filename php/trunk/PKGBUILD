@@ -22,12 +22,12 @@ pkgname=('php'
          'php-tidy'
          'php-xsl')
 pkgver=7.1.0
-pkgrel=1
+pkgrel=1.1
 arch=('i686' 'x86_64')
 license=('PHP')
 url='http://www.php.net'
 makedepends=('apache' 'aspell' 'c-client' 'db' 'enchant' 'gd' 'gmp' 'icu' 'libmcrypt' 'libxslt' 'libzip' 'net-snmp'
-             'postgresql-libs' 'sqlite' 'systemd' 'tidy' 'unixodbc' 'curl' 'libtool' 'postfix' 'freetds' 'git')
+             'postgresql-libs' 'sqlite' 'systemd' 'tidy' 'unixodbc' 'curl' 'libtool' 'postfix' 'freetds' 'pcre' 'git')
 checkdepends=('procps-ng')
 source=("${pkgbase}::git+https://git.php.net/repository/php-src.git#tag=php-${pkgver}"
         'apache.patch' 'apache.conf' 'php-fpm.patch' 'php-fpm.tmpfiles' 'php.ini.patch')
@@ -37,8 +37,7 @@ sha256sums=('SKIP'
             '3dc0b9f86d7d89bbcd011ded1faaf298d595c45e6693c7f8bccb34838a50eefd'
             '640dba0d960bfeaae9ad38d2826d3f6b5d6c175a4d3e16664eefff29141faad5'
             '78f60b1d9f3a0ef8af77208feed76e303b3a13e93b80613c1e5a729004a5343c')
-validpgpkeys=('09B989D0E156A11C4AC176EC9640A184C3953C55'
-              'A917B1ECDA84AEC2B568FED6F50ABC807BD5DCD0')
+validpgpkeys=('A917B1ECDA84AEC2B568FED6F50ABC807BD5DCD0')
 
 prepare() {
 	cd ${srcdir}/${pkgbase}
@@ -66,7 +65,6 @@ build() {
 		--disable-rpath \
 		--mandir=/usr/share/man \
 		--without-pear \
-		--enable-zend-signals \
 		"
 
 	local _phpextensions="\
