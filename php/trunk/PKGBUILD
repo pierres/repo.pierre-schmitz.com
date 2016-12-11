@@ -21,15 +21,17 @@ pkgname=('php'
          'php-sqlite'
          'php-tidy'
          'php-xsl')
-pkgver=7.1.0
-pkgrel=1.1
+pkgver=7.1.1dev.99236
+pkgrel=1
+_branch=PHP-7.1
+_target=7.1.1
 arch=('i686' 'x86_64')
 license=('PHP')
 url='http://www.php.net'
 makedepends=('apache' 'aspell' 'c-client' 'db' 'enchant' 'gd' 'gmp' 'icu' 'libmcrypt' 'libxslt' 'libzip' 'net-snmp'
              'postgresql-libs' 'sqlite' 'systemd' 'tidy' 'unixodbc' 'curl' 'libtool' 'postfix' 'freetds' 'pcre' 'git')
 checkdepends=('procps-ng')
-source=("${pkgbase}::git+https://git.php.net/repository/php-src.git#tag=php-${pkgver}"
+source=("${pkgbase}::git+https://git.php.net/repository/php-src.git#branch=${_branch}"
         'apache.patch' 'apache.conf' 'php-fpm.patch' 'php-fpm.tmpfiles' 'php.ini.patch')
 sha256sums=('SKIP'
             'ad75fe516609ad4df5d6258e61b236aff6fc357448862f2214e1274009f1594e'
@@ -39,10 +41,16 @@ sha256sums=('SKIP'
             '78f60b1d9f3a0ef8af77208feed76e303b3a13e93b80613c1e5a729004a5343c')
 validpgpkeys=('A917B1ECDA84AEC2B568FED6F50ABC807BD5DCD0')
 
+pkgver() {
+	cd ${srcdir}/${pkgbase}
+
+	echo "${_target}dev.$(git rev-list origin/${_branch} --count)"
+}
+
 prepare() {
 	cd ${srcdir}/${pkgbase}
 
-	git tag -v php-${pkgver}
+# 	git tag -v php-${pkgver}
 
 	patch -p0 -i ${srcdir}/apache.patch
 	patch -p0 -i ${srcdir}/php-fpm.patch
