@@ -21,7 +21,7 @@ pkgname=('php'
          'php-sqlite'
          'php-tidy'
          'php-xsl')
-pkgver=7.1.1dev.99384
+pkgver=7.1.1dev.99475
 pkgrel=1
 _branch=PHP-7.1
 _target=7.1.1
@@ -36,7 +36,7 @@ source=("${pkgbase}::git+https://git.php.net/repository/php-src.git#branch=${_br
 sha256sums=('SKIP'
             'ad75fe516609ad4df5d6258e61b236aff6fc357448862f2214e1274009f1594e'
             'ebc0af1ef3a6baccb013d0ccb29923895a7b22ff2d032e3bba802dc6328301ce'
-            '3dc0b9f86d7d89bbcd011ded1faaf298d595c45e6693c7f8bccb34838a50eefd'
+            '236fdf535389b5b1b60db5c63f91705832191f7de2cf812d79b1cd8744c97c6d'
             '640dba0d960bfeaae9ad38d2826d3f6b5d6c175a4d3e16664eefff29141faad5'
             '78f60b1d9f3a0ef8af77208feed76e303b3a13e93b80613c1e5a729004a5343c')
 validpgpkeys=('A917B1ECDA84AEC2B568FED6F50ABC807BD5DCD0')
