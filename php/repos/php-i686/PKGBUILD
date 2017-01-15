@@ -21,7 +21,7 @@ pkgname=('php'
          'php-sqlite'
          'php-tidy'
          'php-xsl')
-pkgver=7.1.2dev.99682
+pkgver=7.1.2dev.99688
 pkgrel=1
 _branch=PHP-7.1
 _target=7.1.2
@@ -31,7 +31,7 @@ url='http://www.php.net'
 makedepends=('apache' 'aspell' 'c-client' 'db' 'enchant' 'gd' 'gmp' 'icu' 'libmcrypt' 'libxslt' 'libzip' 'net-snmp'
              'postgresql-libs' 'sqlite' 'systemd' 'tidy' 'unixodbc' 'curl' 'libtool' 'postfix' 'freetds' 'pcre' 'git')
 checkdepends=('procps-ng')
-source=("${pkgbase}::git+https://git.php.net/repository/php-src.git#branch=${_branch}"
+source=("${pkgbase}::git+https://github.com/php/php-src.git#branch=${_branch}"
         'apache.patch' 'apache.conf' 'php-fpm.patch' 'php-fpm.tmpfiles' 'php.ini.patch')
 sha256sums=('SKIP'
             'ad75fe516609ad4df5d6258e61b236aff6fc357448862f2214e1274009f1594e'
@@ -222,7 +222,6 @@ package_php-fpm() {
 	pkgdesc='FastCGI Process Manager for PHP'
 	depends=('php' 'systemd')
 	backup=('etc/php/php-fpm.conf' 'etc/php/php-fpm.d/www.conf')
-	install='php-fpm.install'
 	options=('!emptydirs')
 
 	cd ${srcdir}/build
