@@ -21,7 +21,7 @@ pkgname=('php'
          'php-sqlite'
          'php-tidy'
          'php-xsl')
-pkgver=7.1.2dev.99762
+pkgver=7.1.2dev.99786
 pkgrel=1
 _branch=PHP-7.1
 _target=7.1.2
