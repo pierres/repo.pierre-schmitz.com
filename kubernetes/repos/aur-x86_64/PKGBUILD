@@ -1,12 +1,12 @@
 #Maintainer: Iwan Timmer <irtimmer@gmail.com>
 
 pkgname=kubernetes
-pkgver=1.3.7
+pkgver=1.5.2
 _contribver=0.7.0
 pkgrel=1
 pkgdesc="Container Cluster Manager for Docker"
-depends=('glibc' 'bash')
-makedepends=('go' 'rsync')
+depends=('docker' 'etcd')
+makedepends=('go' 'rsync' 'go-bindata')
 optdepends=('etcd: etcd cluster required to run Kubernetes')
 arch=('x86_64' 'i686')
 source=("https://github.com/kubernetes/kubernetes/archive/v$pkgver.tar.gz"
@@ -21,22 +21,25 @@ backup=('etc/kubernetes/apiserver'
 	'etc/kubernetes/proxy'
 	'etc/kubernetes/scheduler')
 install=kubernetes.install
-sha256sums=('40a655b5ae1734acfda157088a20853aaf87945508edf73497bec5fa26352a9b'
+sha256sums=('e1c4050ff67d31a2a98d303785f52fbf5033c2f33b61d525a821fb82c8820eae'
             '1d4e651ea59ea0d2b440e290fda5e166a21847891abca2907b8a1683c2252b8d'
             'f40b4b14a71f8138de69021e967d993e8b14db2cebe66eee20c7e66839ad1fde')
 
 build() {
     cd $srcdir/kubernetes-$pkgver
     
-    ./hack/build-go.sh
+    make
 }
 
 package() {
     cd $srcdir/kubernetes-$pkgver
 
-    binaries=(kube-apiserver kube-controller-manager kube-scheduler kube-proxy kubelet kubectl kubemark hyperkube)
+    [ "$CARCH" = 'i686' ] && _kubearch=386
+    [ "$CARCH" = 'x86_64' ] && _kubearch=amd64
+
+    binaries=(kube-dns kube-proxy kube-apiserver kube-controller-manager kubelet kubeadm kubemark hyperkube kube-scheduler kubectl kube-discovery kubefed)
     for bin in "${binaries[@]}"; do
-        install -Dm755 _output/local/bin/linux/amd64/$bin $pkgdir/usr/bin/$bin
+        install -Dm755 _output/local/bin/linux/$_kubearch/$bin $pkgdir/usr/bin/$bin
     done
    
     # install manpages
