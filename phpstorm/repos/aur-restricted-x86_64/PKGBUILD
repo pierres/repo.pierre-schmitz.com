@@ -8,7 +8,7 @@ pkgbase=phpstorm
 pkgname=(phpstorm phpstorm-jre)
 pkgver=2017.1
 _pkgver=171.3780.104
-pkgrel=0.1
+pkgrel=1
 pkgdesc='Lightweight and Smart PHP IDE'
 arch=('x86_64' 'i686')
 license=('Commercial')
@@ -24,19 +24,19 @@ package_phpstorm() {
   optdepends=('phpstorm-jre: JetBrains custom Java Runtime (Recommended)'
               'java-runtime>=8: JRE - Required if phpstorm-jre is not installed')
 
-  install -d -m 755 ${pkgdir}/opt/
-  install -d -m 755 ${pkgdir}/usr/bin/
-  install -d -m 755 ${pkgdir}/usr/share/applications/
-  install -d -m 755 ${pkgdir}/usr/share/pixmaps/
+  install -d -m 755 "${pkgdir}/opt/"
+  install -d -m 755 "${pkgdir}/usr/bin/"
+  install -d -m 755 "${pkgdir}/usr/share/applications/"
+  install -d -m 755 "${pkgdir}/usr/share/pixmaps/"
 
-  rsync -rtl ${srcdir}/PhpStorm-${_pkgver}/ ${pkgdir}/opt/${pkgbase} --exclude=/jre
+  rsync -rtl "${srcdir}/PhpStorm-${_pkgver}/" "${pkgdir}/opt/${pkgbase}" --exclude=/jre
 
-  ln -s /opt/${pkgbase}/bin/${pkgbase}.sh ${pkgdir}/usr/bin/${pkgbase}
-  install -D -m 644 ${srcdir}/jetbrains-${pkgbase}.desktop ${pkgdir}/usr/share/applications/
-  install -D -m 644 ${pkgdir}/opt/${pkgbase}/bin/${pkgbase}.png ${pkgdir}/usr/share/pixmaps/${pkgbase}.png
+  ln -s "/opt/${pkgbase}/bin/${pkgbase}.sh" "${pkgdir}/usr/bin/${pkgbase}"
+  install -D -m 644 "${srcdir}/jetbrains-${pkgbase}.desktop" "${pkgdir}/usr/share/applications/"
+  install -D -m 644 "${pkgdir}/opt/${pkgbase}/bin/${pkgbase}.png" "${pkgdir}/usr/share/pixmaps/${pkgbase}.png"
 }
 
 package_phpstorm-jre() {
-  install -d -m 755 ${pkgdir}/opt/${pkgbase}
-  rsync -rtl ${srcdir}/PhpStorm-${_pkgver}/jre ${pkgdir}/opt/${pkgbase}
+  install -d -m 755 "${pkgdir}/opt/${pkgbase}"
+  rsync -rtl "${srcdir}/PhpStorm-${_pkgver}/jre" "${pkgdir}/opt/${pkgbase}"
 }
