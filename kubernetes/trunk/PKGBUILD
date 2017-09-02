@@ -1,34 +1,34 @@
 #Maintainer: Iwan Timmer <irtimmer@gmail.com>
 
 pkgname=kubernetes
-pkgver=1.7.3
+pkgver=1.7.5
 _contribver=0.7.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Container Cluster Manager for Docker"
 depends=('glibc' 'bash')
 makedepends=('go' 'rsync' 'go-bindata')
 optdepends=('etcd: etcd cluster required to run Kubernetes')
 arch=('x86_64' 'i686')
 source=("https://github.com/kubernetes/kubernetes/archive/v$pkgver.tar.gz"
-	"https://github.com/kubernetes/contrib/archive/$_contribver.tar.gz"
+        "https://github.com/kubernetes/contrib/archive/$_contribver.tar.gz"
         "kubernetes.install")
 url="http://kubernetes.io/"
 license=("APACHE")
 backup=('etc/kubernetes/apiserver'
-	'etc/kubernetes/config'
-	'etc/kubernetes/controller-manager'
-	'etc/kubernetes/kubelet'
-	'etc/kubernetes/proxy'
-	'etc/kubernetes/scheduler')
+        'etc/kubernetes/config'
+        'etc/kubernetes/controller-manager'
+        'etc/kubernetes/kubelet'
+        'etc/kubernetes/proxy'
+        'etc/kubernetes/scheduler')
 install=kubernetes.install
-sha256sums=('7f84e08c2944865247c3fee26b010452e4a315a1cdd7983ff59d151f17167b13'
+sha256sums=('5fe434de8b17ef951d156f7cee24b24a0c5a071a85a612bba4890603541e1ff1'
             'ab36d4243baf8cd47aba94f22f4c41a2980cf2ffca51ccda28b1e7685f500282'
-            'f40b4b14a71f8138de69021e967d993e8b14db2cebe66eee20c7e66839ad1fde')
+            'fb6fce3ef4b793863286dafb5856ce28027427005d6c6fd44162844921ab714b')
 
 build() {
     cd $srcdir/kubernetes-$pkgver
     
-    make
+    make -j1
     hack/generate-docs.sh
 }
 
