@@ -11,7 +11,7 @@ arch=('i686' 'x86_64')
 url="https://github.com/nm-l2tp/NetworkManager-l2tp"
 license=('GPL2')
 depends=('libnm' 'ppp' 'xl2tpd' 'libsecret')
-makedepends=('libnm-gtk' 'intltool')
+makedepends=('libnm-gtk' 'intltool' 'python')
 optdepends=(
   'libreswan: IPSec support (recommended)'
   'strongswan: IPSec support'
