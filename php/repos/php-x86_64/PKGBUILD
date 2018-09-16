@@ -21,7 +21,7 @@ pkgname=('php'
          'php-sqlite'
          'php-tidy'
          'php-xsl')
-pkgver=7.3.0beta3
+pkgver=7.3.0RC1
 pkgrel=1
 arch=('x86_64')
 license=('PHP')
@@ -52,7 +52,6 @@ prepare() {
 	patch -p1 -i ${srcdir}/freetype.patch
 
 	rm tests/output/stream_isatty_*.phpt
-	rm Zend/tests/concat_002.phpt
 
 	./buildconf --force
 	./genfiles
