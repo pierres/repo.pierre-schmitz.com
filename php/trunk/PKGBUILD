@@ -21,7 +21,7 @@ pkgname=('php'
          'php-sqlite'
          'php-tidy'
          'php-xsl')
-pkgver=7.3.0RC1
+pkgver=7.3.0RC2
 pkgrel=1
 arch=('x86_64')
 license=('PHP')
