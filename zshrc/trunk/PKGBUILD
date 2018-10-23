@@ -1,0 +1,24 @@
+# Maintainer: Pierre Schmitz <pierre@archlinux.de>
+
+pkgname=zshrc
+pkgver=1
+pkgrel=1
+pkgdesc='Usable ZSH configuration'
+arch=('any')
+url='https://github.com/pierres/zshrc'
+license=('GPL')
+depends=('zsh' 'zsh-completions' 'zsh-history-substring-search' 'zsh-theme-powerlevel9k')
+makedepends=('git')
+source=('git+https://github.com/pierres/zshrc.git')
+md5sums=('SKIP')
+
+pkgver() {
+	cd ${srcdir}/${pkgname}
+
+	git rev-list origin/master --count
+}
+
+package() {
+	cd ${srcdir}/${pkgname}
+	install -D -m644 zshrc ${pkgdir}/etc/zsh/zshrc
+}
