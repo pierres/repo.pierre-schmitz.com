@@ -1,7 +1,7 @@
 # Maintainer: Pierre Schmitz <pierre@archlinux.de>
 
 pkgname=zshrc
-pkgver=1
+pkgver=2
 pkgrel=1
 pkgdesc='Usable ZSH configuration'
 arch=('any')
