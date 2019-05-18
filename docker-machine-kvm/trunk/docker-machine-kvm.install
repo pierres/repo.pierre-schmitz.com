@@ -1,3 +1,0 @@
-post_install() {
-  echo Please make sure to start the firewalld and libvirtd daemon before creating any KVM docker machines.
-}
