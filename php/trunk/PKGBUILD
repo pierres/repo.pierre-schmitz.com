@@ -1,4 +1,3 @@
-# $Id: PKGBUILD 301475 2017-08-01 19:01:02Z pierre $
 # Maintainer: Pierre Schmitz <pierre@archlinux.de>
 
 pkgbase=php
@@ -21,47 +20,49 @@ pkgname=('php'
          'php-sqlite'
          'php-tidy'
          'php-xsl')
-pkgver=7.3.0RC5
+pkgver=7.4.0alpha1
 pkgrel=1
 arch=('x86_64')
 license=('PHP')
-url='http://www.php.net'
+url='https://secure.php.net/'
 makedepends=('apache' 'aspell' 'c-client' 'db' 'enchant' 'gd' 'gmp' 'icu' 'libsodium' 'libxslt' 'libzip' 'net-snmp'
-             'postgresql-libs' 'sqlite' 'systemd' 'tidy' 'unixodbc' 'curl' 'libtool' 'postfix' 'freetds' 'pcre2' 'libnsl' 'git')
+             'postgresql-libs' 'sqlite' 'systemd' 'tidy' 'unixodbc' 'curl' 'libtool' 'postfix' 'freetds' 'pcre2' 'libnsl'
+             'git' 're2c' 'oniguruma')
 checkdepends=('procps-ng')
-source=("${pkgbase}::git+https://github.com/php/php-src.git#tag=php-${pkgver}"
+source=("${pkgbase}-${pkgver}::git+https://github.com/php/php-src.git#tag=php-${pkgver}"
         'apache.patch' 'apache.conf' 'php-fpm.patch' 'php-fpm.tmpfiles' 'php.ini.patch'
-        'enchant-2.patch' 'freetype.patch')
+        'enchant-2.patch')
 sha256sums=('SKIP'
             '62e5ceea3c90a3c6eab1166488f876e766efcfd7d4e973c44060a9e72d51a98a'
             'ebc0af1ef3a6baccb013d0ccb29923895a7b22ff2d032e3bba802dc6328301ce'
-            '3de3c76930874c81824c23aa033cb9e66631659fd31f925d7c58f0479aeb18a9'
+            'a19bbef2124cba50c96e0f4c5a97589547073fbb1c5e7cbe523e8ee2037b2406'
             '640dba0d960bfeaae9ad38d2826d3f6b5d6c175a4d3e16664eefff29141faad5'
-            'ba63ff727d911882726e4e5e513249d29e9ccc842ebee10a07b160b4718ba20d'
-            '3992491eebaf5b31f6b00095a7276d11682f9a8aaff473bfb25afbdcfa6eba32'
-            '07c4648669dc05afc3c1ad5a4739768079c423b817eabf5296ca3d1ea5ffd163')
-validpgpkeys=('CBAF69F173A0FEA4B537F470D66C9593118BCCB6')
+            'b173ff4889a1e51f619a705769f36582800ddf16c4d66ac033d0f0b0f448d8a2'
+            '92a048073713c3600713b3dd46e96b33a2dde2aef1fbdf175d83da1dc679a0c5')
+validpgpkeys=('5A52880781F755608BF815FC910DEB46F53EA312'
+              '42670A7FE4D0441C8E4632349E4FDC074A4EF02D')
 
 prepare() {
-	cd ${srcdir}/${pkgbase}
+	cd ${srcdir}/${pkgbase}-${pkgver}
+
+	git tag -v
 
 	patch -p0 -i ${srcdir}/apache.patch
 	patch -p0 -i ${srcdir}/php-fpm.patch
 	patch -p0 -i ${srcdir}/php.ini.patch
-	patch -p1 -i ${srcdir}/enchant-2.patch
-	patch -p1 -i ${srcdir}/freetype.patch
+	patch -p0 -i ${srcdir}/enchant-2.patch
 
 	rm tests/output/stream_isatty_*.phpt
-
+	
 	./buildconf --force
-	./genfiles
+	./scripts/dev/genfiles
 }
 
 build() {
 	# http://site.icu-project.org/download/61#TOC-Migration-Issues
 	CPPFLAGS+=' -DU_USING_ICU_NAMESPACE=1'
 
-	local _phpconfig="--srcdir=../${pkgbase} \
+	local _phpconfig="--srcdir=../${pkgbase}-${pkgver} \
 		--config-cache \
 		--prefix=/usr \
 		--sbindir=/usr/bin \
@@ -72,7 +73,6 @@ build() {
 		--with-config-file-scan-dir=/etc/php/conf.d \
 		--disable-rpath \
 		--mandir=/usr/share/man \
-		--without-pear \
 		"
 
 	local _phpextensions="\
@@ -81,21 +81,22 @@ build() {
 		--enable-dba=shared \
 		--enable-exif=shared \
 		--enable-ftp=shared \
+		--enable-gd=shared \
 		--enable-intl=shared \
 		--enable-mbstring \
+		--enable-pcntl \
 		--enable-shmop=shared \
 		--enable-soap=shared \
 		--enable-sockets=shared \
 		--enable-sysvmsg=shared \
 		--enable-sysvsem=shared \
 		--enable-sysvshm=shared \
-		--enable-zip=shared \
 		--with-bz2=shared \
 		--with-curl=shared \
 		--with-db4=/usr \
-		--with-enchant=shared,/usr \
-		--with-freetype-dir=/usr \
-		--with-gd=shared,/usr \
+		--with-enchant=shared \
+		--with-external-gd \
+		--with-external-pcre \
 		--with-gdbm \
 		--with-gettext=shared \
 		--with-gmp=shared \
@@ -105,13 +106,11 @@ build() {
 		--with-kerberos=/usr \
 		--with-ldap=shared \
 		--with-ldap-sasl \
-		--with-libzip \
 		--with-mhash \
 		--with-mysql-sock=/run/mysqld/mysqld.sock \
 		--with-mysqli=shared,mysqlnd \
 		--with-openssl \
 		--with-password-argon2 \
-		--with-pcre-regex=/usr \
 		--with-pdo-dblib=shared,/usr \
 		--with-pdo-mysql=shared,mysqlnd \
 		--with-pdo-odbc=shared,unixODBC,/usr \
@@ -127,8 +126,8 @@ build() {
 		--with-unixODBC=shared,/usr \
 		--with-xmlrpc=shared \
 		--with-xsl=shared \
+		--with-zip=shared \
 		--with-zlib \
-		--enable-pcntl \
 		"
 
 	EXTENSION_DIR=/usr/lib/php/modules
@@ -136,7 +135,7 @@ build() {
 
 	mkdir ${srcdir}/build
 	cd ${srcdir}/build
-	ln -s ../${pkgbase}/configure
+	ln -s ../${pkgbase}-${pkgver}/configure
 	./configure ${_phpconfig} \
 		--enable-cgi \
 		--enable-fpm \
@@ -167,7 +166,7 @@ build() {
 }
 
 check() {
-	cd ${srcdir}/${pkgbase}
+	cd ${srcdir}/${pkgbase}-${pkgver}
 
 	# Check if sendmail was configured correctly (FS#47600)
 	${srcdir}/build/sapi/cli/php -n -r 'echo ini_get("sendmail_path");' | grep -q '/usr/bin/sendmail'
@@ -182,7 +181,7 @@ check() {
 
 package_php() {
 	pkgdesc='A general-purpose scripting language that is especially suited to web development'
-	depends=('libxml2' 'curl' 'libzip' 'pcre2' 'argon2')
+	depends=('libxml2' 'curl' 'libzip' 'pcre2' 'argon2' 'oniguruma')
 	replaces=('php-ldap')
 	conflicts=('php-ldap')
 	provides=("php-ldap=${pkgver}")
@@ -190,7 +189,7 @@ package_php() {
 
 	cd ${srcdir}/build
 	make -j1 INSTALL_ROOT=${pkgdir} install-{modules,cli,build,headers,programs,pharcmd}
-	install -D -m644 ${srcdir}/${pkgbase}/php.ini-production ${pkgdir}/etc/php/php.ini
+	install -D -m644 ${srcdir}/${pkgbase}-${pkgver}/php.ini-production ${pkgdir}/etc/php/php.ini
 	install -d -m755 ${pkgdir}/etc/php/conf.d/
 
 	# remove static modules
@@ -232,7 +231,7 @@ package_php-fpm() {
 
 package_php-embed() {
 	pkgdesc='Embedded PHP SAPI library'
-	depends=('php' 'libsystemd' 'libnsl')
+	depends=('php' 'systemd-libs' 'libnsl')
 	options=('!emptydirs')
 
 	cd ${srcdir}/build

@@ -1,6 +1,6 @@
 --- php.ini-production.orig
 +++ php.ini-production
-@@ -752,7 +752,7 @@
+@@ -747,7 +747,7 @@
  
  ; Directory in which the loadable extensions (modules) reside.
  ; http://php.net/extension-dir
@@ -9,7 +9,7 @@
  ; On windows:
  ;extension_dir = "ext"
  
-@@ -900,48 +900,44 @@
+@@ -895,47 +895,44 @@
  ; deprecated in a future PHP major version. So, when it is possible, please
  ; move to the new ('extension=<ext>) syntax.
  ;
@@ -36,7 +36,6 @@
 -;extension=intl
 +;extension=iconv
  ;extension=imap
--;extension=interbase
 +;extension=intl
 +;extension=sodium
  ;extension=ldap

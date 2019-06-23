@@ -4,7 +4,7 @@
 
 makepkg -o --nodeps --noprepare --skipinteg
 
-pushd src/${pkgbase}
+pushd src/${pkgbase}-${pkgver}
 
 sed '/APACHE_THREADED_MPM=/d' -i.orig sapi/apache2handler/config.m4
 
@@ -35,6 +35,19 @@ sed \
 	-e 's#^;extension_dir = "\./"$#extension_dir = "/usr/lib/php/modules/"#g' \
 	-i php.ini-production
 
+sed \
+	-r 's#PKG_CHECK_MODULES\(\[ENCHANT\], \[enchant\]\)#PKG_CHECK_MODULES([ENCHANT], [enchant-2])#g' \
+	-i.orig ext/enchant/config.m4
+sed \
+	-r 's#enchant_dict_free_suggestions\(pdict->pdict, suggs\)#enchant_dict_free_string_list(pdict->pdict, suggs)#g' \
+	-i.orig ext/enchant/enchant.c
+sed \
+	-r 's#enchant_dict_add_to_personal\(pdict->pdict, word, wordlen\)#enchant_dict_add(pdict->pdict, word, wordlen)#g' \
+	-i ext/enchant/enchant.c
+sed \
+	-r 's#enchant_dict_is_in_session\(pdict->pdict, word, wordlen\)#enchant_dict_is_added(pdict->pdict, word, wordlen)#g' \
+	-i ext/enchant/enchant.c
+
 diff -u sapi/apache2handler/config.m4.orig sapi/apache2handler/config.m4 | filterdiff --clean --remove-timestamps > ../../apache.patch
 
 diff -u sapi/fpm/Makefile.frag.orig sapi/fpm/Makefile.frag | filterdiff --clean --remove-timestamps > ../../php-fpm.patch
@@ -43,5 +56,8 @@ diff -u sapi/fpm/www.conf.in.orig sapi/fpm/www.conf.in | filterdiff --clean --re
 diff -u sapi/fpm/php-fpm.service.in.orig sapi/fpm/php-fpm.service.in | filterdiff --clean --remove-timestamps >> ../../php-fpm.patch
 
 diff -u php.ini-production.orig php.ini-production | filterdiff --clean --remove-timestamps > ../../php.ini.patch
+
+diff -u ext/enchant/config.m4.orig ext/enchant/config.m4 | filterdiff --clean --remove-timestamps > ../../enchant-2.patch
+diff -u ext/enchant/enchant.c.orig ext/enchant/enchant.c | filterdiff --clean --remove-timestamps >> ../../enchant-2.patch
 
 popd
