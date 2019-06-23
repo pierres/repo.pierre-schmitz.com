@@ -9,7 +9,7 @@
  ; On windows:
  ;extension_dir = "ext"
  
-@@ -895,47 +895,44 @@
+@@ -895,47 +895,45 @@
  ; deprecated in a future PHP major version. So, when it is possible, please
  ; move to the new ('extension=<ext>) syntax.
  ;
@@ -29,6 +29,7 @@
 +;extension=dba
 +;extension=enchant
 +;extension=exif
++;extension=ffi
 +;extension=ftp
 +;extension=gd
  ;extension=gettext
@@ -37,7 +38,6 @@
 +;extension=iconv
  ;extension=imap
 +;extension=intl
-+;extension=sodium
  ;extension=ldap
 -;extension=mbstring
 -;extension=exif      ; Must be after mbstring as it depends on it
@@ -63,7 +63,7 @@
 -
  ;extension=soap
  ;extension=sockets
--;extension=sodium
+ ;extension=sodium
  ;extension=sqlite3
 +;extension=sysvmsg
 +;extension=sysvsem
