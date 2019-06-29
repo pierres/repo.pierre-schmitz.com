@@ -29,7 +29,7 @@ makedepends=('apache' 'aspell' 'c-client' 'db' 'enchant' 'gd' 'gmp' 'icu' 'libso
              'postgresql-libs' 'sqlite' 'systemd' 'tidy' 'unixodbc' 'curl' 'libtool' 'postfix' 'freetds' 'pcre2' 'libnsl'
              'git' 're2c' 'oniguruma')
 checkdepends=('procps-ng')
-source=("${pkgbase}-${pkgver}::git+https://github.com/php/php-src.git#tag=php-${pkgver}"
+source=("${pkgbase}-${pkgver}::git+https://github.com/php/php-src.git?signed#tag=php-${pkgver}"
         'apache.patch' 'apache.conf' 'php-fpm.patch' 'php-fpm.tmpfiles' 'php.ini.patch'
         'enchant-2.patch')
 sha256sums=('SKIP'
@@ -44,8 +44,6 @@ validpgpkeys=('5A52880781F755608BF815FC910DEB46F53EA312'
 
 prepare() {
 	cd ${srcdir}/${pkgbase}-${pkgver}
-
-	git tag -v
 
 	patch -p0 -i ${srcdir}/apache.patch
 	patch -p0 -i ${srcdir}/php-fpm.patch
