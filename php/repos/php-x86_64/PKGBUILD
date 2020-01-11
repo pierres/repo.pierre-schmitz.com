@@ -20,47 +20,53 @@ pkgname=('php'
          'php-sqlite'
          'php-tidy'
          'php-xsl')
-pkgver=7.4.0RC6
+pkgver=8.0.0alpha117039
 pkgrel=1
+_branch=master
 arch=('x86_64')
 license=('PHP')
-url='https://secure.php.net/'
+url='https://www.php.net/'
 makedepends=('apache' 'aspell' 'c-client' 'db' 'enchant' 'gd' 'gmp' 'icu' 'libsodium' 'libxslt' 'libzip' 'net-snmp'
              'postgresql-libs' 'sqlite' 'systemd' 'tidy' 'unixodbc' 'curl' 'libtool' 'postfix' 'freetds' 'pcre2' 'libnsl'
              'git' 're2c' 'oniguruma')
 checkdepends=('procps-ng')
-source=("${pkgbase}-${pkgver}::git+https://github.com/php/php-src.git?signed#tag=php-${pkgver}"
+source=("${pkgbase}-${_branch}::git+https://github.com/php/php-src.git?#branch=${_branch}"
         'apache.patch' 'apache.conf' 'php-fpm.patch' 'php-fpm.tmpfiles' 'php.ini.patch'
         'enchant-2.patch')
 sha256sums=('SKIP'
             'b4ea038f2863801175d6c4e74c685913feecdd5be3d49aff7d9b3fa92d8c4159'
-            'ebc0af1ef3a6baccb013d0ccb29923895a7b22ff2d032e3bba802dc6328301ce'
+            '4a2add00d93fa991ccdf6356090264c1059c79935642afff6e8d4a2107fa037e'
             '41f23ebc2d986473b9a4eb3f233428349367b2baa2bb715c53e720cc34c9378c'
             '640dba0d960bfeaae9ad38d2826d3f6b5d6c175a4d3e16664eefff29141faad5'
-            '03beeb8b62a499805a4b912cb19d048635cb5542478753e58364bf24fb42ff3c'
-            '92a048073713c3600713b3dd46e96b33a2dde2aef1fbdf175d83da1dc679a0c5')
+            'b381fdcbaff46b5f53cab95bd5ce2feccff553fa0ba5a7f26434e337197f1969'
+            'cabcc12f9bd0cd795dc4a778642a3f1b5d92611b5b6d5a9277038fb78c870be8')
 validpgpkeys=('5A52880781F755608BF815FC910DEB46F53EA312'
               '42670A7FE4D0441C8E4632349E4FDC074A4EF02D')
 
+pkgver() {
+	cd ${srcdir}/${pkgbase}-${_branch}
+
+	echo "8.0.0alpha$(git rev-list origin/${_branch} --count)"
+}
+
 prepare() {
-	cd ${srcdir}/${pkgbase}-${pkgver}
+	cd ${srcdir}/${pkgbase}-${_branch}
 
 	patch -p0 -i ${srcdir}/apache.patch
 	patch -p0 -i ${srcdir}/php-fpm.patch
 	patch -p0 -i ${srcdir}/php.ini.patch
 	patch -p0 -i ${srcdir}/enchant-2.patch
-
-	rm tests/output/stream_isatty_*.phpt
-	
 	./buildconf --force
 	./scripts/dev/genfiles
+
+	rm tests/output/stream_isatty_*.phpt
 }
 
 build() {
 	# http://site.icu-project.org/download/61#TOC-Migration-Issues
 	CPPFLAGS+=' -DU_USING_ICU_NAMESPACE=1'
 
-	local _phpconfig="--srcdir=../${pkgbase}-${pkgver} \
+	local _phpconfig="--srcdir=../${pkgbase}-${_branch} \
 		--config-cache \
 		--prefix=/usr \
 		--sbindir=/usr/bin \
@@ -134,7 +140,7 @@ build() {
 
 	mkdir ${srcdir}/build
 	cd ${srcdir}/build
-	ln -s ../${pkgbase}-${pkgver}/configure
+	ln -s ../${pkgbase}-${_branch}/configure
 	./configure ${_phpconfig} \
 		--enable-cgi \
 		--enable-fpm \
@@ -165,17 +171,19 @@ build() {
 }
 
 check() {
-	cd ${srcdir}/${pkgbase}-${pkgver}
+	cd ${srcdir}/build
 
 	# Check if sendmail was configured correctly (FS#47600)
-	${srcdir}/build/sapi/cli/php -n -r 'echo ini_get("sendmail_path");' | grep -q '/usr/bin/sendmail'
+	sapi/cli/php -n -r 'echo ini_get("sendmail_path");' | grep -q '/usr/bin/sendmail'
 
 	export REPORT_EXIT_STATUS=1
 	export NO_INTERACTION=1
 	export SKIP_ONLINE_TESTS=1
 	export SKIP_SLOW_TESTS=1
+	export TEST_PHP_ARGS="-j$(nproc)"
+	export TESTS='tests Zend'
 
-	${srcdir}/build/sapi/cli/php -n run-tests.php -n -P {tests,Zend}
+	make test
 }
 
 package_php() {
@@ -188,7 +196,7 @@ package_php() {
 
 	cd ${srcdir}/build
 	make -j1 INSTALL_ROOT=${pkgdir} install-{modules,cli,build,headers,programs,pharcmd}
-	install -D -m644 ${srcdir}/${pkgbase}-${pkgver}/php.ini-production ${pkgdir}/etc/php/php.ini
+	install -D -m644 ${srcdir}/${pkgbase}-${_branch}/php.ini-production ${pkgdir}/etc/php/php.ini
 	install -d -m755 ${pkgdir}/etc/php/conf.d/
 
 	# remove static modules
@@ -210,10 +218,10 @@ package_php-cgi() {
 package_php-apache() {
 	pkgdesc='Apache SAPI for PHP'
 	depends=('php' 'apache' 'libnsl')
-	backup=('etc/httpd/conf/extra/php7_module.conf')
+	backup=('etc/httpd/conf/extra/php_module.conf')
 
-	install -D -m755 ${srcdir}/build-apache/libs/libphp7.so ${pkgdir}/usr/lib/httpd/modules/libphp7.so
-	install -D -m644 ${srcdir}/apache.conf ${pkgdir}/etc/httpd/conf/extra/php7_module.conf
+	install -D -m755 ${srcdir}/build-apache/libs/libphp.so ${pkgdir}/usr/lib/httpd/modules/libphp.so
+	install -D -m644 ${srcdir}/apache.conf ${pkgdir}/etc/httpd/conf/extra/php_module.conf
 }
 
 package_php-fpm() {
