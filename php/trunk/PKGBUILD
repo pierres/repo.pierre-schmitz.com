@@ -20,7 +20,7 @@ pkgname=('php'
          'php-sqlite'
          'php-tidy'
          'php-xsl')
-pkgver=8.0.0alpha117039
+pkgver=8.0.0alpha117084
 pkgrel=1
 _branch=master
 arch=('x86_64')
@@ -38,7 +38,7 @@ sha256sums=('SKIP'
             '4a2add00d93fa991ccdf6356090264c1059c79935642afff6e8d4a2107fa037e'
             '41f23ebc2d986473b9a4eb3f233428349367b2baa2bb715c53e720cc34c9378c'
             '640dba0d960bfeaae9ad38d2826d3f6b5d6c175a4d3e16664eefff29141faad5'
-            'b381fdcbaff46b5f53cab95bd5ce2feccff553fa0ba5a7f26434e337197f1969'
+            '8e65c1d373413a1924826453141dd183d22d35e4009e8de44b7b8330511db08e'
             'cabcc12f9bd0cd795dc4a778642a3f1b5d92611b5b6d5a9277038fb78c870be8')
 validpgpkeys=('5A52880781F755608BF815FC910DEB46F53EA312'
               '42670A7FE4D0441C8E4632349E4FDC074A4EF02D')
