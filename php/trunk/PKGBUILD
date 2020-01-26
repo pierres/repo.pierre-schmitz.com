@@ -20,7 +20,7 @@ pkgname=('php'
          'php-sqlite'
          'php-tidy'
          'php-xsl')
-pkgver=8.0.0alpha117149
+pkgver=8.0.0alpha117208
 pkgrel=1
 _branch=master
 arch=('x86_64')
