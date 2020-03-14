@@ -1,0 +1,30 @@
+pkgname=python-exif
+pkgver=0.8.2
+pkgrel=1
+pkgdesc='Read and modify image EXIF metadata using Python'
+arch=('any')
+url='https://github.com/TNThieding/exif'
+license=('MIT')
+depends=('python')
+makedepends=('git' 'python-setuptools')
+source=("${pkgname}-${pkgver}::git+https://github.com/TNThieding/exif.git")
+sha256sums=('SKIP')
+
+pkgver() {
+	cd "${pkgname}-${pkgver}"
+
+	python setup.py --version
+}
+
+build() {
+	cd "${pkgname}-${pkgver}"
+
+	python setup.py build
+}
+
+package() {
+	cd "${pkgname}-${pkgver}"
+
+	python setup.py install --root="${pkgdir}" --optimize=1
+	install -D -m644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}
