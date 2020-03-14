@@ -10,6 +10,17 @@ makedepends=('python-setuptools')
 source=("${pkgname}-${pkgver}.tar.gz::https://github.com/gilesknap/gphotos-sync/archive/${pkgver}.tar.gz")
 sha256sums=('b99d541191f60aad0f0da68b39b38e20343a7f7eb7b36bd417984a417a17e326')
 
+build() {
+	cd "${pkgname}-${pkgver}"
+
+	python setup.py build
+}
+
+check() {
+	cd "${pkgname}-${pkgver}"
+
+	python setup.py test
+}
 package() {
 	cd "${pkgname}-${pkgver}"
 
