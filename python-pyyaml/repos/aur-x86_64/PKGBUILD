@@ -1,0 +1,24 @@
+pkgname=python-pyyaml
+pkgver=5.3
+pkgrel=1
+pkgdesc='YAML parser and emitter for Python'
+arch=('x86_64')
+url='https://github.com/yaml/pyyaml'
+license=('MIT')
+depends=('python' 'libyaml')
+makedepends=('python-setuptools' 'cython')
+source=("${pkgname}-${pkgver}.tar.gz::https://github.com/yaml/pyyaml/archive/${pkgver}.tar.gz")
+sha256sums=('c9418e892bbe2b3270a1daf684c2c4cca407b2577b5f2124d09c54d287b97890')
+
+build() {
+	cd "${pkgname//python-}-${pkgver}"
+
+	python setup.py build
+}
+
+package() {
+	cd "${pkgname//python-}-${pkgver}"
+
+	python setup.py install --root="${pkgdir}" --optimize=1
+	install -D -m644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}
