@@ -16,11 +16,6 @@ build() {
 	python setup.py build
 }
 
-check() {
-	cd "${pkgname}-${pkgver}"
-
-	python setup.py test
-}
 package() {
 	cd "${pkgname}-${pkgver}"
 
