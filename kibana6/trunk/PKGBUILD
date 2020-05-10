@@ -14,17 +14,17 @@ depends=('nodejs')
 optdepends=('elasticsearch')
 backup=('etc/kibana6/kibana.yml')
 options=('!strip' 'emptydirs')
-source=(https://artifacts.elastic.co/downloads/${_pkgname}/${pkgname}-oss-${pkgver}-linux-x86_64.tar.gz
+source=(https://artifacts.elastic.co/downloads/${_pkgname}/${_pkgname}-oss-${pkgver}-linux-x86_64.tar.gz
         kibana6.service
         tmpfile.conf
         user.conf)
-sha512sums=('639119273e0184640cf25513dd29633939c4bdc173e6577d377d60503db68989980fe09829fad8ba0862695dd7f79fd7dbd0102c3c2f9eb5e762071579a3d424'
-            '3216c2864cf184cea0883677a05bf83cf396fda52dbd3d9a187de22f0c45d13db58f8fb4dc926694ba7d7a24000cf6d5f6218805f74fb5d729fc85c643ca8f2f'
-            'afed49c164561f3c658a6d2423519adcf4d5293c416cd93fa5c9d12421416c1e9cb4287e832009049cfd014b365dc1cd93d9cf879117c701cce4caad3b772a8e'
-            '9085884430c656cc68b855c3d6740e5fd0854a8785930341b29e15e201deacc1870d8223255d9ebe096cb111319bea9bf4faa03d0760d5819976ebf912221c7d')
+sha512sums=('f9ab47daecbe55a47995d40d22109ecd767803162c168784fbb6cd9fe2ba5be0045265fc114cdb291efdcff713a6b7c0e00aee64c53a763657e84af1e555f6cf'
+            '6e1b23df0bcd51f8bd262cf5aa82c6f21cc9e910355763f99125103f5293982c94451b8c6b01872dd7d7cb5645f23bc6aca4545f00b4bf8dbe335792d1d03abf'
+            'b9c09618bb5c41bb8de106d162db1a6efc0c5f26fd34ad16161d5719a30ef923e2a6b84c3e351335d622e5deef835f605aed01a21afd3db44b89da5fb85273c8'
+            '1027e200a1d517d41a9e57fa4e30064c35065841ac4a602fcfd2a59cfbf1ec83f39fb6e5c29b69e6a78cbec126fac5cb9c82826f665243d36d4f58553f3140d8')
 
 prepare() {
-  cd ${_pkgbase}-${pkgver}-linux-x86_64
+  cd ${_pkgname}-${pkgver}-linux-x86_64
 
   # remove nodejs strict version requirements
   sed "s@^require('./node_version_validator');@// \0@" -i src/setup_node_env/index.js
@@ -34,7 +34,7 @@ prepare() {
 }
 
 package() {
-  cd ${_pkgbase}-${pkgver}-linux-x86_64
+  cd ${_pkgname}-${pkgver}-linux-x86_64
 
   install -dm 755 "${pkgdir}/usr/share/kibana6"
   cp -a * "${pkgdir}/usr/share/kibana6"
