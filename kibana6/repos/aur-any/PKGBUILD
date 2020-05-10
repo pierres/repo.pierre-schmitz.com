@@ -1,0 +1,52 @@
+# Maintainer: Levente Polyak <anthraxx[at]archlinux[dot]org>
+# Maintainer: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
+# Contributor: Spider.007 <archlinux AT spider007 DOT net>
+
+_pkgname=kibana
+pkgname=kibana6
+pkgver=6.8.6
+pkgrel=1
+pkgdesc='Browser based analytics and search dashboard for Elasticsearch'
+url='https://www.elastic.co/products/kibana'
+arch=('any')
+license=('Apache')
+depends=('nodejs')
+optdepends=('elasticsearch')
+backup=('etc/kibana6/kibana.yml')
+options=('!strip' 'emptydirs')
+source=(https://artifacts.elastic.co/downloads/${_pkgname}/${_pkgname}-oss-${pkgver}-linux-x86_64.tar.gz
+        kibana6.service
+        tmpfile.conf
+        user.conf)
+sha512sums=('f9ab47daecbe55a47995d40d22109ecd767803162c168784fbb6cd9fe2ba5be0045265fc114cdb291efdcff713a6b7c0e00aee64c53a763657e84af1e555f6cf'
+            '6e1b23df0bcd51f8bd262cf5aa82c6f21cc9e910355763f99125103f5293982c94451b8c6b01872dd7d7cb5645f23bc6aca4545f00b4bf8dbe335792d1d03abf'
+            'b9c09618bb5c41bb8de106d162db1a6efc0c5f26fd34ad16161d5719a30ef923e2a6b84c3e351335d622e5deef835f605aed01a21afd3db44b89da5fb85273c8'
+            '1027e200a1d517d41a9e57fa4e30064c35065841ac4a602fcfd2a59cfbf1ec83f39fb6e5c29b69e6a78cbec126fac5cb9c82826f665243d36d4f58553f3140d8')
+
+prepare() {
+  cd ${_pkgname}-${pkgver}-linux-x86_64
+
+  # remove nodejs strict version requirements
+  sed "s@^require('./node_version_validator');@// \0@" -i src/setup_node_env/index.js
+
+  # set default quiet mode for systemd, cli option forces specified values
+  sed -r 's|#(logging.quiet:) false|\1 true|' -i config/kibana.yml
+}
+
+package() {
+  cd ${_pkgname}-${pkgver}-linux-x86_64
+
+  install -dm 755 "${pkgdir}/usr/share/kibana6"
+  cp -a * "${pkgdir}/usr/share/kibana6"
+
+  install -dm 750 "${pkgdir}/etc/kibana6"
+  install -Dm 640 config/kibana.yml -t "${pkgdir}/etc/kibana6"
+  install -Dm 644 "${srcdir}/kibana6.service" -t "${pkgdir}/usr/lib/systemd/system"
+  install -Dm 644 "${srcdir}/user.conf" "${pkgdir}/usr/lib/sysusers.d/kibana6.conf"
+  install -Dm 644 "${srcdir}/tmpfile.conf" "${pkgdir}/usr/lib/tmpfiles.d/kibana6.conf"
+
+  rm -r "${pkgdir}/usr/share/kibana6/node"
+  find "${pkgdir}/usr/share/kibana6/node_modules" -type d -empty -delete
+}
+
+# vim: ts=2 sw=2 et:
