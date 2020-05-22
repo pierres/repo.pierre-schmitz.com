@@ -1,0 +1,44 @@
+# Maintainer: Christian Rebischke <chris.rebischke@archlinux.org>
+# Contributor: Ivan Shapovalov <intelfx@intelfx.name>
+
+pkgname=minikube
+pkgver=1.10.1
+_minikube_commit=63ab801ac27e5742ae442ce36dff7877dcccb278
+pkgrel=1.1
+pkgdesc="A tool that makes it easy to run Kubernetes locally"
+url="https://github.com/kubernetes/minikube"
+license=('Apache')
+arch=('x86_64')
+optdepends=(
+  'kubectl: to manage the cluster'
+  'virtualbox: to use --vm-driver=virtualbox'
+)
+makedepends=('git' 'go-pie' 'go-bindata')
+depends=('glibc')
+source=("git+https://github.com/kubernetes/minikube.git#commit=${_minikube_commit}"
+        'https://patch-diff.githubusercontent.com/raw/kubernetes/minikube/pull/8136.patch')
+md5sums=('SKIP'
+         '310019f6432f3f2a471e22578dee26bb')
+changelog=CHANGELOG.md
+
+prepare() {
+  rm -rf "$srcdir/src"
+  mkdir -p "$srcdir/src/k8s.io"
+  mv -T "$srcdir/minikube" "$srcdir/src/k8s.io/minikube"
+
+  cd $srcdir/src/k8s.io/minikube
+  patch -p1 -i $srcdir/8136.patch
+}
+
+build() {
+  export GOPATH="$srcdir"
+  cd "$GOPATH/src/k8s.io/minikube"
+  make
+}
+
+package() {
+  install -Dm755 "$srcdir/src/k8s.io/minikube/out/minikube" -t "$pkgdir/usr/bin"
+
+  "$pkgdir/usr/bin/minikube" completion bash | install -Dm644 /dev/stdin "$pkgdir/usr/share/bash-completion/completions/minikube"
+  "$pkgdir/usr/bin/minikube" completion zsh | install -Dm644 /dev/stdin "$pkgdir/usr/share/zsh/site-functions/_minikube"
+}
