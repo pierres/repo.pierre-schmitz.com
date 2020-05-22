@@ -19,7 +19,6 @@ source=("git+https://github.com/kubernetes/minikube.git#commit=${_minikube_commi
         'https://patch-diff.githubusercontent.com/raw/kubernetes/minikube/pull/8136.patch')
 md5sums=('SKIP'
          '310019f6432f3f2a471e22578dee26bb')
-changelog=CHANGELOG.md
 
 prepare() {
   rm -rf "$srcdir/src"
