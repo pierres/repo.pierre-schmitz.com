@@ -2,9 +2,8 @@
 # Contributor: Ivan Shapovalov <intelfx@intelfx.name>
 
 pkgname=minikube
-pkgver=1.10.1
-_minikube_commit=63ab801ac27e5742ae442ce36dff7877dcccb278
-pkgrel=1.1
+pkgver=1.11.0
+pkgrel=0.1
 pkgdesc="A tool that makes it easy to run Kubernetes locally"
 url="https://github.com/kubernetes/minikube"
 license=('Apache')
@@ -15,10 +14,10 @@ optdepends=(
 )
 makedepends=('git' 'go-pie' 'go-bindata')
 depends=('glibc')
-source=("git+https://github.com/kubernetes/minikube.git#commit=${_minikube_commit}"
+source=("minikube::git+https://github.com/kubernetes/minikube.git#tag=v${pkgver}"
         'https://patch-diff.githubusercontent.com/raw/kubernetes/minikube/pull/8136.patch')
 md5sums=('SKIP'
-         '310019f6432f3f2a471e22578dee26bb')
+         '03b4cc941f21fc7050c6d76efa84341c')
 
 prepare() {
   rm -rf "$srcdir/src"
