@@ -3,7 +3,7 @@
 
 pkgname=minikube
 pkgver=1.11.0
-pkgrel=0.1
+pkgrel=1.1
 pkgdesc="A tool that makes it easy to run Kubernetes locally"
 url="https://github.com/kubernetes/minikube"
 license=('Apache')
@@ -17,7 +17,7 @@ depends=('glibc')
 source=("minikube::git+https://github.com/kubernetes/minikube.git#tag=v${pkgver}"
         'https://patch-diff.githubusercontent.com/raw/kubernetes/minikube/pull/8136.patch')
 md5sums=('SKIP'
-         '03b4cc941f21fc7050c6d76efa84341c')
+         'b9f2a87de2f6c51aacf231cc17ddef75')
 
 prepare() {
   rm -rf "$srcdir/src"
