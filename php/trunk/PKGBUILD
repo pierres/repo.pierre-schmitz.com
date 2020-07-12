@@ -20,9 +20,8 @@ pkgname=('php'
          'php-sqlite'
          'php-tidy'
          'php-xsl')
-pkgver=8.0.0alpha119171
+pkgver=8.0.0alpha2
 pkgrel=1
-_branch=master
 arch=('x86_64')
 license=('PHP')
 url='https://www.php.net/'
@@ -30,11 +29,11 @@ makedepends=('apache' 'aspell' 'c-client' 'db' 'enchant' 'gd' 'gmp' 'icu' 'libso
              'postgresql-libs' 'sqlite' 'systemd' 'tidy' 'unixodbc' 'curl' 'libtool' 'postfix' 'freetds' 'pcre2' 'libnsl'
              'git' 're2c' 'oniguruma')
 checkdepends=('procps-ng')
-source=("${pkgbase}-${_branch}::git+https://github.com/php/php-src.git?#branch=${_branch}"
+source=("${pkgbase}-${pkgver}::git+https://github.com/php/php-src.git?#tag=php-${pkgver}"
         'apache.patch' 'apache.conf' 'php-fpm.patch' 'php-fpm.tmpfiles' 'php.ini.patch'
         'enchant-2.patch')
 sha256sums=('SKIP'
-            'b4ea038f2863801175d6c4e74c685913feecdd5be3d49aff7d9b3fa92d8c4159'
+            '702b163c66c65af92dcad8d79f41bda84bcd5d863235fcf1497c33a86db9e4ca'
             '4a2add00d93fa991ccdf6356090264c1059c79935642afff6e8d4a2107fa037e'
             '565a743a0a9d4775f8e22b70a455729b023cc90db06c0251adef6ebbe604d53a'
             '640dba0d960bfeaae9ad38d2826d3f6b5d6c175a4d3e16664eefff29141faad5'
@@ -43,14 +42,8 @@ sha256sums=('SKIP'
 validpgpkeys=('5A52880781F755608BF815FC910DEB46F53EA312'
               '42670A7FE4D0441C8E4632349E4FDC074A4EF02D')
 
-pkgver() {
-	cd ${srcdir}/${pkgbase}-${_branch}
-
-	echo "8.0.0alpha$(git rev-list origin/${_branch} --count)"
-}
-
 prepare() {
-	cd ${srcdir}/${pkgbase}-${_branch}
+	cd ${srcdir}/${pkgbase}-${pkgver}
 
 	patch -p0 -i ${srcdir}/apache.patch
 	patch -p0 -i ${srcdir}/php-fpm.patch
@@ -66,7 +59,7 @@ build() {
 	# http://site.icu-project.org/download/61#TOC-Migration-Issues
 	CPPFLAGS+=' -DU_USING_ICU_NAMESPACE=1'
 
-	local _phpconfig="--srcdir=../${pkgbase}-${_branch} \
+	local _phpconfig="--srcdir=../${pkgbase}-${pkgver} \
 		--config-cache \
 		--prefix=/usr \
 		--sbindir=/usr/bin \
@@ -140,7 +133,7 @@ build() {
 
 	mkdir ${srcdir}/build
 	cd ${srcdir}/build
-	ln -s ../${pkgbase}-${_branch}/configure
+	ln -s ../${pkgbase}-${pkgver}/configure
 	./configure ${_phpconfig} \
 		--enable-cgi \
 		--enable-fpm \
@@ -196,7 +189,7 @@ package_php() {
 
 	cd ${srcdir}/build
 	make -j1 INSTALL_ROOT=${pkgdir} install-{modules,cli,build,headers,programs,pharcmd}
-	install -D -m644 ${srcdir}/${pkgbase}-${_branch}/php.ini-production ${pkgdir}/etc/php/php.ini
+	install -D -m644 ${srcdir}/${pkgbase}-${pkgver}/php.ini-production ${pkgdir}/etc/php/php.ini
 	install -d -m755 ${pkgdir}/etc/php/conf.d/
 
 	# remove static modules
