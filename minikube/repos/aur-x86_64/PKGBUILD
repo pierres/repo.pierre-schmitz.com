@@ -2,8 +2,8 @@
 # Contributor: Ivan Shapovalov <intelfx@intelfx.name>
 
 pkgname=minikube
-pkgver=1.12.1
-pkgrel=1.1
+pkgver=1.13.0
+pkgrel=0.1
 pkgdesc="A tool that makes it easy to run Kubernetes locally"
 url="https://github.com/kubernetes/minikube"
 license=('Apache')
@@ -14,24 +14,18 @@ optdepends=(
 )
 makedepends=('git' 'go' 'go-bindata')
 depends=('glibc')
-source=("minikube::git+https://github.com/kubernetes/minikube.git#tag=v${pkgver}"
-        "minikube-docker-mount-${pkgver}-${pkgrel}.patch::https://patch-diff.githubusercontent.com/raw/kubernetes/minikube/pull/8136.patch")
-md5sums=('SKIP'
-         '4ddc489965df6769b43339a8acf9f8de')
+source=("git+https://github.com/kubernetes/minikube.git#tag=v${pkgver}")
+sha512sums=('SKIP')
 
 prepare() {
   rm -rf "$srcdir/src"
   mkdir -p "$srcdir/src/k8s.io"
   mv -T "$srcdir/minikube" "$srcdir/src/k8s.io/minikube"
-
-  cd $srcdir/src/k8s.io/minikube
-  patch -p1 -i $srcdir/minikube-docker-mount-${pkgver}-${pkgrel}.patch
 }
 
 build() {
   export GOPATH="$srcdir"
   cd "$GOPATH/src/k8s.io/minikube"
-
   export CGO_CPPFLAGS="${CPPFLAGS}"
   export CGO_CFLAGS="${CFLAGS}"
   export CGO_CXXFLAGS="${CXXFLAGS}"
