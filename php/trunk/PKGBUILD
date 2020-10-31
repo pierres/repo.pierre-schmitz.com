@@ -20,7 +20,7 @@ pkgname=('php'
 	'php-sqlite'
 	'php-tidy'
 	'php-xsl')
-pkgver=8.0.0rc2
+pkgver=8.0.0RC3
 pkgrel=1
 arch=('x86_64')
 license=('PHP')
@@ -29,7 +29,7 @@ makedepends=('apache' 'aspell' 'c-client' 'db' 'enchant' 'gd' 'gmp' 'icu' 'libso
 	'postgresql-libs' 'sqlite' 'systemd' 'tidy' 'unixodbc' 'curl' 'libtool' 'postfix' 'freetds' 'pcre2' 'libnsl'
 	'git' 're2c' 'oniguruma')
 checkdepends=('procps-ng')
-source=("${pkgbase}-${pkgver}::git+https://github.com/php/php-src.git?#tag=php-${pkgver}"
+source=("${pkgbase}-git::git+https://github.com/php/php-src.git?#tag=php-${pkgver}"
 	'apache.patch' 'apache.conf' 'php-fpm.patch' 'php-fpm.tmpfiles' 'php.ini.patch'
 	'enchant-2.patch')
 sha256sums=('SKIP'
