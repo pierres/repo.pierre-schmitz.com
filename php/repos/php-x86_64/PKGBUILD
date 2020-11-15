@@ -2,36 +2,36 @@
 
 pkgbase=php
 pkgname=('php'
-         'php-cgi'
-         'php-apache'
-         'php-fpm'
-         'php-embed'
-         'php-phpdbg'
-         'php-dblib'
-         'php-enchant'
-         'php-gd'
-         'php-imap'
-         'php-intl'
-         'php-sodium'
-         'php-odbc'
-         'php-pgsql'
-         'php-pspell'
-         'php-snmp'
-         'php-sqlite'
-         'php-tidy'
-         'php-xsl')
-pkgver=8.0.0beta4
+	'php-cgi'
+	'php-apache'
+	'php-fpm'
+	'php-embed'
+	'php-phpdbg'
+	'php-dblib'
+	'php-enchant'
+	'php-gd'
+	'php-imap'
+	'php-intl'
+	'php-sodium'
+	'php-odbc'
+	'php-pgsql'
+	'php-pspell'
+	'php-snmp'
+	'php-sqlite'
+	'php-tidy'
+	'php-xsl')
+pkgver=8.0.0RC4
 pkgrel=1
 arch=('x86_64')
 license=('PHP')
 url='https://www.php.net/'
 makedepends=('apache' 'aspell' 'c-client' 'db' 'enchant' 'gd' 'gmp' 'icu' 'libsodium' 'libxslt' 'libzip' 'net-snmp'
-             'postgresql-libs' 'sqlite' 'systemd' 'tidy' 'unixodbc' 'curl' 'libtool' 'postfix' 'freetds' 'pcre2' 'libnsl'
-             'git' 're2c' 'oniguruma')
+	'postgresql-libs' 'sqlite' 'systemd' 'tidy' 'unixodbc' 'curl' 'libtool' 'postfix' 'freetds' 'pcre2' 'libnsl'
+	'git' 're2c' 'oniguruma')
 checkdepends=('procps-ng')
 source=("${pkgbase}-${pkgver}::git+https://github.com/php/php-src.git?#tag=php-${pkgver}"
-        'apache.patch' 'apache.conf' 'php-fpm.patch' 'php-fpm.tmpfiles' 'php.ini.patch'
-        'enchant-2.patch')
+	'apache.patch' 'apache.conf' 'php-fpm.patch' 'php-fpm.tmpfiles' 'php.ini.patch'
+	'enchant-2.patch')
 sha256sums=('SKIP'
             '702b163c66c65af92dcad8d79f41bda84bcd5d863235fcf1497c33a86db9e4ca'
             '4a2add00d93fa991ccdf6356090264c1059c79935642afff6e8d4a2107fa037e'
@@ -40,7 +40,7 @@ sha256sums=('SKIP'
             'f4a01b5ef35801ab43d8b8fc70aec7a90bd6cfd96b79166c20e6adeee70e8078'
             'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855')
 validpgpkeys=('5A52880781F755608BF815FC910DEB46F53EA312'
-              '42670A7FE4D0441C8E4632349E4FDC074A4EF02D')
+	'42670A7FE4D0441C8E4632349E4FDC074A4EF02D')
 
 prepare() {
 	cd ${srcdir}/${pkgbase}-${pkgver}
@@ -53,6 +53,7 @@ prepare() {
 	./scripts/dev/genfiles
 
 	rm tests/output/stream_isatty_*.phpt
+	rm Zend/tests/arginfo_zpp_mismatch*.phpt
 }
 
 build() {
