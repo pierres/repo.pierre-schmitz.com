@@ -9,7 +9,7 @@
  ; On windows:
  ;extension_dir = "ext"
  
-@@ -913,50 +913,45 @@
+@@ -913,50 +913,44 @@
  ; deprecated in a future PHP major version. So, when it is possible, please
  ; move to the new ('extension=<ext>) syntax.
  ;
@@ -68,7 +68,6 @@
 +;extension=sysvsem
 +;extension=sysvshm
  ;extension=tidy
-+;extension=xmlrpc
  ;extension=xsl
 -
 -;zend_extension=opcache
