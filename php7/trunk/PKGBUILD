@@ -36,9 +36,9 @@ sha512sums=('3525f4fd4ea6d97ed75ed8360d2a851e8577c09247ae3c6eb7e7b43265ee418297d
             'SKIP'
             '284e3c0fe3ded0ff3e7d53f2769ea207b4591ef42abeff2d8604e87fe379929bd3b19ff294a729834f339a9da85ae7d4a7d8605890677222f78601b4f2b22247'
             'eccbe1a0c7b2757ab3c982c871cc591a66ad70f085aaa0d44f93cacacedc7b8fd21b8d0c66471327ff070db1bab1ab83a802f6fa190f33bdd74c134975e3910e'
-            '86ee6630bf0cac43bbf5a4b3918e63f32e01e74ac00845ebba2d122e14300bb47b41af17d88dfbf655b3a03966f5619b87b6f1ad8623e22482fe46be273309cb'
-            '824e9a0d10063283357d49a81ab49bf834afd24f098482bdbaa9ab60bbad2b0dea6f5879259b73717d437626b02fb4f2d3ef68b7bcbb26bee274a7b61144720f'
-            'a924bfece3d57286dce44f0173dd856184e7a1c1de5e880229c7dac0874efde52090af155932614f2594eebba118f8b89ac48e48d1161e7b3d8a95a93a24fe5d'
+            'bf43a99b464a873986954233e2df4841eeab21a6d359a777b7514a4fa34462c9f0fd85243086122ed50c766d5b60fb83f9f181a9b43ae1b527672a4f3b8d8eed'
+            '7248e9a93faebb86b156130b6ecd8c9733ae8dfa2789c738f9db5a2ab2daee294132b7d8a5a59c860e9e235fdc1bc6a9e9b8b410a23ccc5c6627297d834d3120'
+            '642e9f84d9d0df96e5d9bafcd3aed7aab3b4374e7917be98e9fa386919c64e9a27ac2daace99b4fcaa7256cca60a87d22893c2ef5383e5353926d8869fda376d'
             '5d7d44d692848fbb952e17e5bd6dffa79b764526e4940fbe0a5138ad62cb41abdb8c9bb8dd64cd1d0b488c74972bcf3f9c6d32a3bbeac90982fdf6321d3ec788')
 validpgpkeys=('5A52880781F755608BF815FC910DEB46F53EA312'
               '42670A7FE4D0441C8E4632349E4FDC074A4EF02D')
@@ -63,13 +63,18 @@ build() {
 		--config-cache \
 		--prefix=/usr \
 		--sbindir=/usr/bin \
-		--sysconfdir=/etc/php \
+		--sysconfdir=/etc/php7 \
 		--localstatedir=/var \
 		--with-layout=GNU \
-		--with-config-file-path=/etc/php \
-		--with-config-file-scan-dir=/etc/php/conf.d \
+		--with-config-file-path=/etc/php7 \
+		--with-config-file-scan-dir=/etc/php7/conf.d \
 		--disable-rpath \
 		--mandir=/usr/share/man \
+		--libdir=/usr/lib/php7 \
+		--datarootdir=/usr/share/php7 \
+		--datadir=/usr/share/php7 \
+		--program-suffix=7 \
+		--includedir=/usr/include/php7
 		"
 
 	local _phpextensions="\
@@ -128,7 +133,7 @@ build() {
 		--with-zlib \
 		"
 
-	EXTENSION_DIR=/usr/lib/php/modules
+	EXTENSION_DIR=/usr/lib/php7/modules
 	export EXTENSION_DIR
 
 	mkdir ${srcdir}/build
@@ -182,19 +187,19 @@ check() {
 package_php7() {
 	pkgdesc='A general-purpose scripting language that is especially suited to web development'
 	depends=('libxml2' 'curl' 'libzip' 'pcre2' 'argon2' 'oniguruma')
-	backup=('etc/php/php.ini')
+	backup=('etc/php7/php.ini')
 
 	cd ${srcdir}/build
 	make -j1 INSTALL_ROOT=${pkgdir} install-{modules,cli,build,headers,programs,pharcmd}
-	install -D -m644 ${srcdir}/php-${pkgver}/php.ini-production ${pkgdir}/etc/php/php.ini
-	install -d -m755 ${pkgdir}/etc/php/conf.d/
+	install -D -m644 ${srcdir}/php-${pkgver}/php.ini-production ${pkgdir}/etc/php7/php.ini
+	install -d -m755 ${pkgdir}/etc/php7/conf.d/
 
 	# remove static modules
-	rm -f ${pkgdir}/usr/lib/php/modules/*.a
+	rm -f ${pkgdir}/usr/lib/php7/modules/*.a
 	# remove modules provided by sub packages
-	rm -f ${pkgdir}/usr/lib/php/modules/{enchant,gd,imap,intl,sodium,odbc,pdo_dblib,pdo_odbc,pgsql,pdo_pgsql,pspell,snmp,sqlite3,pdo_sqlite,tidy,xsl}.so
+	rm -f ${pkgdir}/usr/lib/php7/modules/{enchant,gd,imap,intl,sodium,odbc,pdo_dblib,pdo_odbc,pgsql,pdo_pgsql,pspell,snmp,sqlite3,pdo_sqlite,tidy,xsl}.so
 	# remove empty directory
-	rmdir ${pkgdir}/usr/include/php/include
+	rmdir ${pkgdir}/usr/include/php7/php/include
 }
 
 package_php7-cgi() {
@@ -217,13 +222,13 @@ package_php7-apache() {
 package_php7-fpm() {
 	pkgdesc='FastCGI Process Manager for PHP'
 	depends=('php7' 'systemd')
-	backup=('etc/php/php-fpm.conf' 'etc/php/php-fpm.d/www.conf')
+	backup=('etc/php7/php-fpm.conf' 'etc/php7/php-fpm.d/www.conf')
 	options=('!emptydirs')
 
 	cd ${srcdir}/build
 	make -j1 INSTALL_ROOT=${pkgdir} install-fpm
-	install -D -m644 sapi/fpm/php-fpm.service ${pkgdir}/usr/lib/systemd/system/php-fpm.service
-	install -D -m644 ${srcdir}/php-fpm.tmpfiles ${pkgdir}/usr/lib/tmpfiles.d/php-fpm.conf
+	install -D -m644 sapi/fpm/php-fpm.service ${pkgdir}/usr/lib/systemd/system/php-fpm7.service
+	install -D -m644 ${srcdir}/php-fpm.tmpfiles ${pkgdir}/usr/lib/tmpfiles.d/php-fpm7.conf
 }
 
 package_php7-embed() {
@@ -248,92 +253,92 @@ package_php7-dblib() {
 	pkgdesc='dblib module for PHP'
 	depends=('php7' 'freetds')
 
-	install -D -m755 ${srcdir}/build/modules/pdo_dblib.so ${pkgdir}/usr/lib/php/modules/pdo_dblib.so
+	install -D -m755 ${srcdir}/build/modules/pdo_dblib.so ${pkgdir}/usr/lib/php7/modules/pdo_dblib.so
 }
 
 package_php7-enchant() {
 	pkgdesc='enchant module for PHP'
 	depends=('php7' 'enchant')
 
-	install -D -m755 ${srcdir}/build/modules/enchant.so ${pkgdir}/usr/lib/php/modules/enchant.so
+	install -D -m755 ${srcdir}/build/modules/enchant.so ${pkgdir}/usr/lib/php7/modules/enchant.so
 }
 
 package_php7-gd() {
 	pkgdesc='gd module for PHP'
 	depends=('php7' 'gd')
 
-	install -D -m755 ${srcdir}/build/modules/gd.so ${pkgdir}/usr/lib/php/modules/gd.so
+	install -D -m755 ${srcdir}/build/modules/gd.so ${pkgdir}/usr/lib/php7/modules/gd.so
 }
 
 package_php7-imap() {
 	pkgdesc='imap module for PHP'
 	depends=('php7' 'c-client' 'libxcrypt')
 
-	install -D -m755 ${srcdir}/build/modules/imap.so ${pkgdir}/usr/lib/php/modules/imap.so
+	install -D -m755 ${srcdir}/build/modules/imap.so ${pkgdir}/usr/lib/php7/modules/imap.so
 }
 
 package_php7-intl() {
 	pkgdesc='intl module for PHP'
 	depends=('php7' 'icu')
 
-	install -D -m755 ${srcdir}/build/modules/intl.so ${pkgdir}/usr/lib/php/modules/intl.so
+	install -D -m755 ${srcdir}/build/modules/intl.so ${pkgdir}/usr/lib/php7/modules/intl.so
 }
 
 package_php7-sodium() {
 	pkgdesc='sodium module for PHP'
 	depends=('php7' 'libsodium')
 
-	install -D -m755 ${srcdir}/build/modules/sodium.so ${pkgdir}/usr/lib/php/modules/sodium.so
+	install -D -m755 ${srcdir}/build/modules/sodium.so ${pkgdir}/usr/lib/php7/modules/sodium.so
 }
 
 package_php7-odbc() {
 	pkgdesc='ODBC modules for PHP'
 	depends=('php7' 'unixodbc')
 
-	install -D -m755 ${srcdir}/build/modules/odbc.so ${pkgdir}/usr/lib/php/modules/odbc.so
-	install -D -m755 ${srcdir}/build/modules/pdo_odbc.so ${pkgdir}/usr/lib/php/modules/pdo_odbc.so
+	install -D -m755 ${srcdir}/build/modules/odbc.so ${pkgdir}/usr/lib/php7/modules/odbc.so
+	install -D -m755 ${srcdir}/build/modules/pdo_odbc.so ${pkgdir}/usr/lib/php7/modules/pdo_odbc.so
 }
 
 package_php7-pgsql() {
 	pkgdesc='PostgreSQL modules for PHP'
 	depends=('php7' 'postgresql-libs')
 
-	install -D -m755 ${srcdir}/build/modules/pgsql.so ${pkgdir}/usr/lib/php/modules/pgsql.so
-	install -D -m755 ${srcdir}/build/modules/pdo_pgsql.so ${pkgdir}/usr/lib/php/modules/pdo_pgsql.so
+	install -D -m755 ${srcdir}/build/modules/pgsql.so ${pkgdir}/usr/lib/php7/modules/pgsql.so
+	install -D -m755 ${srcdir}/build/modules/pdo_pgsql.so ${pkgdir}/usr/lib/php7/modules/pdo_pgsql.so
 }
 
 package_php7-pspell() {
 	pkgdesc='pspell module for PHP'
 	depends=('php7' 'aspell')
 
-	install -D -m755 ${srcdir}/build/modules/pspell.so ${pkgdir}/usr/lib/php/modules/pspell.so
+	install -D -m755 ${srcdir}/build/modules/pspell.so ${pkgdir}/usr/lib/php7/modules/pspell.so
 }
 
 package_php7-snmp() {
 	pkgdesc='snmp module for PHP'
 	depends=('php7' 'net-snmp')
 
-	install -D -m755 ${srcdir}/build/modules/snmp.so ${pkgdir}/usr/lib/php/modules/snmp.so
+	install -D -m755 ${srcdir}/build/modules/snmp.so ${pkgdir}/usr/lib/php7/modules/snmp.so
 }
 
 package_php7-sqlite() {
 	pkgdesc='sqlite module for PHP'
 	depends=('php7' 'sqlite')
 
-	install -D -m755 ${srcdir}/build/modules/sqlite3.so ${pkgdir}/usr/lib/php/modules/sqlite3.so
-	install -D -m755 ${srcdir}/build/modules/pdo_sqlite.so ${pkgdir}/usr/lib/php/modules/pdo_sqlite.so
+	install -D -m755 ${srcdir}/build/modules/sqlite3.so ${pkgdir}/usr/lib/php7/modules/sqlite3.so
+	install -D -m755 ${srcdir}/build/modules/pdo_sqlite.so ${pkgdir}/usr/lib/php7/modules/pdo_sqlite.so
 }
 
 package_php7-tidy() {
 	pkgdesc='tidy module for PHP'
 	depends=('php7' 'tidy')
 
-	install -D -m755 ${srcdir}/build/modules/tidy.so ${pkgdir}/usr/lib/php/modules/tidy.so
+	install -D -m755 ${srcdir}/build/modules/tidy.so ${pkgdir}/usr/lib/php7/modules/tidy.so
 }
 
 package_php7-xsl() {
 	pkgdesc='xsl module for PHP'
 	depends=('php7' 'libxslt')
 
-	install -D -m755 ${srcdir}/build/modules/xsl.so ${pkgdir}/usr/lib/php/modules/xsl.so
+	install -D -m755 ${srcdir}/build/modules/xsl.so ${pkgdir}/usr/lib/php7/modules/xsl.so
 }
