@@ -36,15 +36,14 @@ build() {
 }
 
 check() {
+	export REPORT_EXIT_STATUS=1
+	export NO_INTERACTION=1
+	export SKIP_ONLINE_TESTS=1
+	export SKIP_SLOW_TESTS=1
+
 	for dir in $srcdir/apcu{,7}-$pkgver; do
 		pushd $dir
-
-		export REPORT_EXIT_STATUS=1
-		export NO_INTERACTION=1
-		export SKIP_ONLINE_TESTS=1
-		export SKIP_SLOW_TESTS=1
 		make test
-
 		popd
 	done
 }
