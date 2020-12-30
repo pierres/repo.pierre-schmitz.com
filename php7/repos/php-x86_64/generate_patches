@@ -61,4 +61,8 @@ diff -u php.ini-production.orig php.ini-production | filterdiff --clean --remove
 diff -u ext/enchant/config.m4.orig ext/enchant/config.m4 | filterdiff --clean --remove-timestamps > ../../enchant-2.patch
 diff -u ext/enchant/enchant.c.orig ext/enchant/enchant.c | filterdiff --clean --remove-timestamps >> ../../enchant-2.patch
 
+
+sed -i.orig 's/  \[php-config\],/  [php-config7],/g' scripts/phpize.m4
+diff -u scripts/phpize.m4.orig scripts/phpize.m4 | filterdiff --clean --remove-timestamps > ../../php7.patch
+
 popd

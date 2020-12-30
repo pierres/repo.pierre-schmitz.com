@@ -22,7 +22,7 @@ pkgname=('php7'
          'php7-tidy'
          'php7-xsl')
 pkgver=7.4.13
-pkgrel=2
+pkgrel=3
 arch=('x86_64')
 license=('PHP')
 url='https://www.php.net/'
@@ -32,7 +32,7 @@ makedepends=('apache' 'aspell' 'c-client' 'db' 'enchant' 'gd' 'gmp' 'icu' 'libso
 checkdepends=('procps-ng')
 source=("https://php.net/distributions/php-${pkgver}.tar.xz"{,.asc}
         'apache.patch' 'apache.conf' 'php-fpm.patch' 'php-fpm.tmpfiles' 'php.ini.patch'
-        'enchant-2.patch')
+        'enchant-2.patch' 'php7.patch')
 sha512sums=('3525f4fd4ea6d97ed75ed8360d2a851e8577c09247ae3c6eb7e7b43265ee418297d91c1022bf5bbb64d1eecdebbbc2e0f6d42b560f584a741b475db2c6897ea7'
             'SKIP'
             '284e3c0fe3ded0ff3e7d53f2769ea207b4591ef42abeff2d8604e87fe379929bd3b19ff294a729834f339a9da85ae7d4a7d8605890677222f78601b4f2b22247'
@@ -40,7 +40,8 @@ sha512sums=('3525f4fd4ea6d97ed75ed8360d2a851e8577c09247ae3c6eb7e7b43265ee418297d
             'bf43a99b464a873986954233e2df4841eeab21a6d359a777b7514a4fa34462c9f0fd85243086122ed50c766d5b60fb83f9f181a9b43ae1b527672a4f3b8d8eed'
             '7248e9a93faebb86b156130b6ecd8c9733ae8dfa2789c738f9db5a2ab2daee294132b7d8a5a59c860e9e235fdc1bc6a9e9b8b410a23ccc5c6627297d834d3120'
             '642e9f84d9d0df96e5d9bafcd3aed7aab3b4374e7917be98e9fa386919c64e9a27ac2daace99b4fcaa7256cca60a87d22893c2ef5383e5353926d8869fda376d'
-            '5d7d44d692848fbb952e17e5bd6dffa79b764526e4940fbe0a5138ad62cb41abdb8c9bb8dd64cd1d0b488c74972bcf3f9c6d32a3bbeac90982fdf6321d3ec788')
+            '5d7d44d692848fbb952e17e5bd6dffa79b764526e4940fbe0a5138ad62cb41abdb8c9bb8dd64cd1d0b488c74972bcf3f9c6d32a3bbeac90982fdf6321d3ec788'
+            'f8c197fb657958016340db87de3e3427cc692cccc791e88c650362ed89bfd3be6180e430e5c446d19566b7e66225f9fa8cbed46a0909c87d6e046e65135d3031')
 validpgpkeys=('5A52880781F755608BF815FC910DEB46F53EA312'
               '42670A7FE4D0441C8E4632349E4FDC074A4EF02D')
 
@@ -51,6 +52,7 @@ prepare() {
 	patch -p0 -i ${srcdir}/php-fpm.patch
 	patch -p0 -i ${srcdir}/php.ini.patch
 	patch -p0 -i ${srcdir}/enchant-2.patch
+	patch -p0 -i ${srcdir}/php7.patch
 	autoconf
 
 	rm tests/output/stream_isatty_*.phpt
@@ -201,8 +203,6 @@ package_php7() {
 	rm -f ${pkgdir}/usr/lib/php7/modules/{enchant,gd,imap,intl,sodium,odbc,pdo_dblib,pdo_odbc,pgsql,pdo_pgsql,pspell,snmp,sqlite3,pdo_sqlite,tidy,xsl}.so
 	# remove empty directory
 	rmdir ${pkgdir}/usr/include/php7/php/include
-	# fix phpize to use php-config7
-	sed -i 's/php-config/php-config7/g' ${pkgdir}/usr/lib/php7/build/phpize.m4
 }
 
 package_php7-cgi() {
