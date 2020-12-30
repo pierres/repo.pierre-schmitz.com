@@ -1,31 +1,18 @@
 # Maintainer: Pierre Schmitz <pierre@archlinux.de>
 
-pkgbase=php-apcu-bc
-pkgname=(php-apcu-bc php7-apcu-bc)
+pkgname=php7-apcu-bc
 pkgver=1.0.5
-pkgrel=4
+pkgrel=1
 arch=('x86_64')
 pkgdesc='APCu Backwards Compatibility Module'
 url='https://pecl.php.net/package/apcu_bc'
-makedepends=('php-apcu' 'php7-apcu')
+depends=('php7-apcu')
 license=('PHP')
 source=("https://pecl.php.net/get/apcu_bc-$pkgver.tgz")
 md5sums=('8aa7b1c8aa613c6bc720fe785b21037b')
 
-prepare() {
-	cd $srcdir/apcu_bc-$pkgver
-
-	cp -a $srcdir/apcu_bc-$pkgver $srcdir/apcu_bc7-$pkgver
-}
-
 build() {
 	cd $srcdir/apcu_bc-$pkgver
-
-	phpize
-	./configure --prefix=/usr
-	make
-
-	cd $srcdir/apcu_bc7-$pkgver
 
 	phpize7
 	./configure --prefix=/usr
@@ -33,30 +20,18 @@ build() {
 }
 
 check() {
+	cd $srcdir/apcu_bc-$pkgver
+
 	export REPORT_EXIT_STATUS=1
 	export NO_INTERACTION=1
 	export SKIP_ONLINE_TESTS=1
 	export SKIP_SLOW_TESTS=1
 
-	cd $srcdir/apcu_bc-$pkgver
-	php -n run-tests.php -n -P -d extension=apcu.so -d extension=modules/apc.so
-
-	cd $srcdir/apcu_bc7-$pkgver
 	php7 -n run-tests.php -n -P -d extension=apcu.so -d extension=modules/apc.so
 }
 
-package_php-apcu-bc() {
-	depends=(php)
-
+package() {
 	cd $srcdir/apcu_bc-$pkgver
-
-	make INSTALL_ROOT=$pkgdir install
-}
-
-package_php7-apcu-bc() {
-	depends=(php7)
-
-	cd $srcdir/apcu_bc7-$pkgver
 
 	make INSTALL_ROOT=$pkgdir install
 }
