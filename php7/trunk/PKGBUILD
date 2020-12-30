@@ -1,27 +1,27 @@
 # Maintainer: Pierre Schmitz <pierre@archlinux.de>
 
-pkgbase=php
-pkgname=('php'
-         'php-cgi'
-         'php-apache'
-         'php-fpm'
-         'php-embed'
-         'php-phpdbg'
-         'php-dblib'
-         'php-enchant'
-         'php-gd'
-         'php-imap'
-         'php-intl'
-         'php-sodium'
-         'php-odbc'
-         'php-pgsql'
-         'php-pspell'
-         'php-snmp'
-         'php-sqlite'
-         'php-tidy'
-         'php-xsl')
+pkgbase=php7
+pkgname=('php7'
+         'php7-cgi'
+         'php7-apache'
+         'php7-fpm'
+         'php7-embed'
+         'php7-phpdbg'
+         'php7-dblib'
+         'php7-enchant'
+         'php7-gd'
+         'php7-imap'
+         'php7-intl'
+         'php7-sodium'
+         'php7-odbc'
+         'php7-pgsql'
+         'php7-pspell'
+         'php7-snmp'
+         'php7-sqlite'
+         'php7-tidy'
+         'php7-xsl')
 pkgver=7.4.13
-pkgrel=2
+pkgrel=1
 arch=('x86_64')
 license=('PHP')
 url='https://www.php.net/'
@@ -29,7 +29,7 @@ makedepends=('apache' 'aspell' 'c-client' 'db' 'enchant' 'gd' 'gmp' 'icu' 'libso
              'postgresql-libs' 'sqlite' 'systemd' 'tidy' 'unixodbc' 'curl' 'libtool' 'postfix' 'freetds' 'pcre2' 'libnsl'
              'oniguruma')
 checkdepends=('procps-ng')
-source=("https://php.net/distributions/${pkgbase}-${pkgver}.tar.xz"{,.asc}
+source=("https://php.net/distributions/php-${pkgver}.tar.xz"{,.asc}
         'apache.patch' 'apache.conf' 'php-fpm.patch' 'php-fpm.tmpfiles' 'php.ini.patch'
         'enchant-2.patch')
 sha512sums=('3525f4fd4ea6d97ed75ed8360d2a851e8577c09247ae3c6eb7e7b43265ee418297d91c1022bf5bbb64d1eecdebbbc2e0f6d42b560f584a741b475db2c6897ea7'
@@ -44,7 +44,7 @@ validpgpkeys=('5A52880781F755608BF815FC910DEB46F53EA312'
               '42670A7FE4D0441C8E4632349E4FDC074A4EF02D')
 
 prepare() {
-	cd ${srcdir}/${pkgbase}-${pkgver}
+	cd ${srcdir}/php-${pkgver}
 
 	patch -p0 -i ${srcdir}/apache.patch
 	patch -p0 -i ${srcdir}/php-fpm.patch
@@ -59,7 +59,7 @@ build() {
 	# http://site.icu-project.org/download/61#TOC-Migration-Issues
 	CPPFLAGS+=' -DU_USING_ICU_NAMESPACE=1'
 
-	local _phpconfig="--srcdir=../${pkgbase}-${pkgver} \
+	local _phpconfig="--srcdir=../php-${pkgver} \
 		--config-cache \
 		--prefix=/usr \
 		--sbindir=/usr/bin \
@@ -133,7 +133,7 @@ build() {
 
 	mkdir ${srcdir}/build
 	cd ${srcdir}/build
-	ln -s ../${pkgbase}-${pkgver}/configure
+	ln -s ../php-${pkgver}/configure
 	./configure ${_phpconfig} \
 		--enable-cgi \
 		--enable-fpm \
@@ -179,17 +179,14 @@ check() {
 	make test
 }
 
-package_php() {
+package_php7() {
 	pkgdesc='A general-purpose scripting language that is especially suited to web development'
 	depends=('libxml2' 'curl' 'libzip' 'pcre2' 'argon2' 'oniguruma')
-	replaces=('php-ldap')
-	conflicts=('php-ldap')
-	provides=("php-ldap=${pkgver}")
 	backup=('etc/php/php.ini')
 
 	cd ${srcdir}/build
 	make -j1 INSTALL_ROOT=${pkgdir} install-{modules,cli,build,headers,programs,pharcmd}
-	install -D -m644 ${srcdir}/${pkgbase}-${pkgver}/php.ini-production ${pkgdir}/etc/php/php.ini
+	install -D -m644 ${srcdir}/php-${pkgver}/php.ini-production ${pkgdir}/etc/php/php.ini
 	install -d -m755 ${pkgdir}/etc/php/conf.d/
 
 	# remove static modules
@@ -200,26 +197,26 @@ package_php() {
 	rmdir ${pkgdir}/usr/include/php/include
 }
 
-package_php-cgi() {
+package_php7-cgi() {
 	pkgdesc='CGI and FCGI SAPI for PHP'
-	depends=('php')
+	depends=('php7')
 
 	cd ${srcdir}/build
 	make -j1 INSTALL_ROOT=${pkgdir} install-cgi
 }
 
-package_php-apache() {
+package_php7-apache() {
 	pkgdesc='Apache SAPI for PHP'
-	depends=('php' 'apache' 'libnsl')
+	depends=('php7' 'apache' 'libnsl')
 	backup=('etc/httpd/conf/extra/php7_module.conf')
 
 	install -D -m755 ${srcdir}/build-apache/libs/libphp7.so ${pkgdir}/usr/lib/httpd/modules/libphp7.so
 	install -D -m644 ${srcdir}/apache.conf ${pkgdir}/etc/httpd/conf/extra/php7_module.conf
 }
 
-package_php-fpm() {
+package_php7-fpm() {
 	pkgdesc='FastCGI Process Manager for PHP'
-	depends=('php' 'systemd')
+	depends=('php7' 'systemd')
 	backup=('etc/php/php-fpm.conf' 'etc/php/php-fpm.d/www.conf')
 	options=('!emptydirs')
 
@@ -229,114 +226,114 @@ package_php-fpm() {
 	install -D -m644 ${srcdir}/php-fpm.tmpfiles ${pkgdir}/usr/lib/tmpfiles.d/php-fpm.conf
 }
 
-package_php-embed() {
+package_php7-embed() {
 	pkgdesc='Embedded PHP SAPI library'
-	depends=('php' 'systemd-libs' 'libnsl' 'libxcrypt')
+	depends=('php7' 'systemd-libs' 'libnsl' 'libxcrypt')
 	options=('!emptydirs')
 
 	cd ${srcdir}/build
 	make -j1 INSTALL_ROOT=${pkgdir} PHP_SAPI=embed install-sapi
 }
 
-package_php-phpdbg() {
+package_php7-phpdbg() {
 	pkgdesc='Interactive PHP debugger'
-	depends=('php')
+	depends=('php7')
 	options=('!emptydirs')
 
 	cd ${srcdir}/build-phpdbg
 	make -j1 INSTALL_ROOT=${pkgdir} install-phpdbg
 }
 
-package_php-dblib() {
+package_php7-dblib() {
 	pkgdesc='dblib module for PHP'
-	depends=('php' 'freetds')
+	depends=('php7' 'freetds')
 
 	install -D -m755 ${srcdir}/build/modules/pdo_dblib.so ${pkgdir}/usr/lib/php/modules/pdo_dblib.so
 }
 
-package_php-enchant() {
+package_php7-enchant() {
 	pkgdesc='enchant module for PHP'
-	depends=('php' 'enchant')
+	depends=('php7' 'enchant')
 
 	install -D -m755 ${srcdir}/build/modules/enchant.so ${pkgdir}/usr/lib/php/modules/enchant.so
 }
 
-package_php-gd() {
+package_php7-gd() {
 	pkgdesc='gd module for PHP'
-	depends=('php' 'gd')
+	depends=('php7' 'gd')
 
 	install -D -m755 ${srcdir}/build/modules/gd.so ${pkgdir}/usr/lib/php/modules/gd.so
 }
 
-package_php-imap() {
+package_php7-imap() {
 	pkgdesc='imap module for PHP'
-	depends=('php' 'c-client' 'libxcrypt')
+	depends=('php7' 'c-client' 'libxcrypt')
 
 	install -D -m755 ${srcdir}/build/modules/imap.so ${pkgdir}/usr/lib/php/modules/imap.so
 }
 
-package_php-intl() {
+package_php7-intl() {
 	pkgdesc='intl module for PHP'
-	depends=('php' 'icu')
+	depends=('php7' 'icu')
 
 	install -D -m755 ${srcdir}/build/modules/intl.so ${pkgdir}/usr/lib/php/modules/intl.so
 }
 
-package_php-sodium() {
+package_php7-sodium() {
 	pkgdesc='sodium module for PHP'
-	depends=('php' 'libsodium')
+	depends=('php7' 'libsodium')
 
 	install -D -m755 ${srcdir}/build/modules/sodium.so ${pkgdir}/usr/lib/php/modules/sodium.so
 }
 
-package_php-odbc() {
+package_php7-odbc() {
 	pkgdesc='ODBC modules for PHP'
-	depends=('php' 'unixodbc')
+	depends=('php7' 'unixodbc')
 
 	install -D -m755 ${srcdir}/build/modules/odbc.so ${pkgdir}/usr/lib/php/modules/odbc.so
 	install -D -m755 ${srcdir}/build/modules/pdo_odbc.so ${pkgdir}/usr/lib/php/modules/pdo_odbc.so
 }
 
-package_php-pgsql() {
+package_php7-pgsql() {
 	pkgdesc='PostgreSQL modules for PHP'
-	depends=('php' 'postgresql-libs')
+	depends=('php7' 'postgresql-libs')
 
 	install -D -m755 ${srcdir}/build/modules/pgsql.so ${pkgdir}/usr/lib/php/modules/pgsql.so
 	install -D -m755 ${srcdir}/build/modules/pdo_pgsql.so ${pkgdir}/usr/lib/php/modules/pdo_pgsql.so
 }
 
-package_php-pspell() {
+package_php7-pspell() {
 	pkgdesc='pspell module for PHP'
-	depends=('php' 'aspell')
+	depends=('php7' 'aspell')
 
 	install -D -m755 ${srcdir}/build/modules/pspell.so ${pkgdir}/usr/lib/php/modules/pspell.so
 }
 
-package_php-snmp() {
+package_php7-snmp() {
 	pkgdesc='snmp module for PHP'
-	depends=('php' 'net-snmp')
+	depends=('php7' 'net-snmp')
 
 	install -D -m755 ${srcdir}/build/modules/snmp.so ${pkgdir}/usr/lib/php/modules/snmp.so
 }
 
-package_php-sqlite() {
+package_php7-sqlite() {
 	pkgdesc='sqlite module for PHP'
-	depends=('php' 'sqlite')
+	depends=('php7' 'sqlite')
 
 	install -D -m755 ${srcdir}/build/modules/sqlite3.so ${pkgdir}/usr/lib/php/modules/sqlite3.so
 	install -D -m755 ${srcdir}/build/modules/pdo_sqlite.so ${pkgdir}/usr/lib/php/modules/pdo_sqlite.so
 }
 
-package_php-tidy() {
+package_php7-tidy() {
 	pkgdesc='tidy module for PHP'
-	depends=('php' 'tidy')
+	depends=('php7' 'tidy')
 
 	install -D -m755 ${srcdir}/build/modules/tidy.so ${pkgdir}/usr/lib/php/modules/tidy.so
 }
 
-package_php-xsl() {
+package_php7-xsl() {
 	pkgdesc='xsl module for PHP'
-	depends=('php' 'libxslt')
+	depends=('php7' 'libxslt')
 
 	install -D -m755 ${srcdir}/build/modules/xsl.so ${pkgdir}/usr/lib/php/modules/xsl.so
 }
