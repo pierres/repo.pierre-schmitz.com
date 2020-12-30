@@ -203,8 +203,6 @@ package_php7() {
 	rm -f ${pkgdir}/usr/lib/php7/modules/{enchant,gd,imap,intl,sodium,odbc,pdo_dblib,pdo_odbc,pgsql,pdo_pgsql,pspell,snmp,sqlite3,pdo_sqlite,tidy,xsl}.so
 	# remove empty directory
 	rmdir ${pkgdir}/usr/include/php7/php/include
-	# fix phpize to use php-config7
-	sed -i 's/[php-config],/[php-config7],/g' ${pkgdir}/usr/lib/php7/build/phpize.m4
 }
 
 package_php7-cgi() {
