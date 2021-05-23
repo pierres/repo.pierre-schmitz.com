@@ -1,13 +1,13 @@
 # Maintainer: Pierre Schmitz <pierre@archlinux.de>
 
 pkgname=zshrc
-pkgver=3
+pkgver=4
 pkgrel=1
 pkgdesc='Usable ZSH configuration'
 arch=('any')
 url='https://github.com/pierres/zshrc'
 license=('GPL')
-depends=('zsh' 'zsh-completions' 'zsh-history-substring-search' 'zsh-theme-powerlevel9k')
+depends=('zsh' 'zsh-completions' 'zsh-history-substring-search' 'zsh-theme-powerlevel10k')
 makedepends=('git')
 source=('git+https://github.com/pierres/zshrc.git')
 md5sums=('SKIP')
