@@ -3,7 +3,7 @@
 pkgbase=ipu6-camera-bin
 pkgname=(intel-ipu6-camera-bin intel-ipu6ep-camera-bin)
 _pkgname=ipu6-camera-bins
-pkgver=r32.0797f74
+pkgver=r34.53b7a72
 pkgrel=1
 pkgdesc="Intel IPU6 camera binaries"
 arch=('x86_64')
