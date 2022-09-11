@@ -2,7 +2,7 @@
 
 pkgname=intel-ivsc-driver-dkms-git
 _pkgname=ivsc-driver
-pkgver=r25.b8c22f4
+pkgver=r27.1a3bb6e
 pkgrel=1
 pkgdesc="Intel Vision Sensing Controller driver (DKMS)"
 arch=('any')
