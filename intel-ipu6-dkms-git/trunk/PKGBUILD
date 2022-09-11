@@ -2,7 +2,7 @@
 
 pkgname=intel-ipu6-dkms-git
 _pkgname=ipu6-drivers
-pkgver=r45.d50e0f5
+pkgver=r49.2b8a592dc
 pkgrel=1
 pkgdesc="Intel IPU6 camera drivers (DKMS)"
 arch=('any')
