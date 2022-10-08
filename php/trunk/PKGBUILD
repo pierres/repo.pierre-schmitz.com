@@ -29,7 +29,7 @@ makedepends=('apache' 'aspell' 'c-client' 'db' 'gdbm' 'enchant' 'gd' 'gmp' 'icu'
              'postgresql-libs' 'sqlite' 'systemd' 'tidy' 'unixodbc' 'curl' 'libtool' 'postfix' 'freetds' 'pcre2' 'libnsl'
              'oniguruma')
 checkdepends=('procps-ng')
-options=('debug')
+options=('!debug')
 source=("https://downloads.php.net/~pierrick/${pkgbase}-${pkgver}.tar.xz"{,.asc}
         'apache.patch' 'apache.conf' 'php-fpm.patch' 'php-fpm.tmpfiles' 'php.ini.patch')
 sha256sums=('9965c3a339bf8f1e7d3dbaca8d8438285b6d9d09a01e1adaba6b357c5d8b458e'
