@@ -20,7 +20,7 @@ pkgname=('php'
          'php-sqlite'
          'php-tidy'
          'php-xsl')
-pkgver=8.1.11
+pkgver=8.2.0RC3
 pkgrel=1
 arch=('x86_64')
 license=('PHP')
@@ -29,18 +29,19 @@ makedepends=('apache' 'aspell' 'c-client' 'db' 'gdbm' 'enchant' 'gd' 'gmp' 'icu'
              'postgresql-libs' 'sqlite' 'systemd' 'tidy' 'unixodbc' 'curl' 'libtool' 'postfix' 'freetds' 'pcre2' 'libnsl'
              'oniguruma')
 checkdepends=('procps-ng')
-options=(debug)
-source=("https://php.net/distributions/${pkgbase}-${pkgver}.tar.xz"{,.asc}
+options=('debug')
+source=("https://downloads.php.net/~pierrick/${pkgbase}-${pkgver}.tar.xz"{,.asc}
         'apache.patch' 'apache.conf' 'php-fpm.patch' 'php-fpm.tmpfiles' 'php.ini.patch')
-sha256sums=('3005198d7303f87ab31bc30695de76e8ad62783f806b6ab9744da59fe41cc5bd'
+sha256sums=('9965c3a339bf8f1e7d3dbaca8d8438285b6d9d09a01e1adaba6b357c5d8b458e'
             'SKIP'
             '702b163c66c65af92dcad8d79f41bda84bcd5d863235fcf1497c33a86db9e4ca'
             '4a2add00d93fa991ccdf6356090264c1059c79935642afff6e8d4a2107fa037e'
-            'aa55fa4fc5c2b2493065bbd00cfe3c97a1b22b3dc7d34f8fd303de18cafe844f'
+            '69beb06f8eed1b9d61f1f2ad71b8d1026e0389b7f4cbedbf540ab84427c86d95'
             '640dba0d960bfeaae9ad38d2826d3f6b5d6c175a4d3e16664eefff29141faad5'
-            'b3b3385f1c36e272671c7db238b2a69896e11a82db90dafd74964f2eabbfa2f2')
-validpgpkeys=('F1F692238FBC1666E5A5CCD4199F9DFEF6FFBAFD'
-              '39B641343D8C104B2B146DC3F9C39DC0B9698544')
+            '47d36703914f9e26c33e06fab8aa66af918af8f06f4168db7d8c6b8104abc0d3')
+validpgpkeys=('1198C0117593497A5EC5C199286AF1F9897469DC'
+              '39B641343D8C104B2B146DC3F9C39DC0B9698544'
+              'E60913E4DF209907D8E30D96659A97C9CF2A795A')
 _interpreter=${pkgver%.*}
 
 prepare() {
@@ -105,11 +106,11 @@ build() {
 		--with-ldap-sasl \
 		--with-mhash \
 		--with-mysql-sock=/run/mysqld/mysqld.sock \
-		--with-mysqli=shared,mysqlnd \
+		--with-mysqli=shared \
 		--with-openssl \
 		--with-password-argon2 \
 		--with-pdo-dblib=shared,/usr \
-		--with-pdo-mysql=shared,mysqlnd \
+		--with-pdo-mysql=shared \
 		--with-pdo-odbc=shared,unixODBC,/usr \
 		--with-pdo-pgsql=shared \
 		--with-pdo-sqlite=shared \
