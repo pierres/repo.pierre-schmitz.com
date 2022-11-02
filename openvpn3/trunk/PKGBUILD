@@ -3,8 +3,8 @@
 
 _pkgname=openvpn3-linux
 pkgname=openvpn3
-pkgver=18_beta
-pkgrel=5.1
+pkgver=19_beta
+pkgrel=0.1
 pkgdesc='OpenVPN 3 Linux client'
 arch=('x86_64')
 url="https://github.com/OpenVPN/$_pkgname"
@@ -26,12 +26,10 @@ source=(
   'sysusers-openvpn3.conf'
   'tmpfiles-openvpn3.conf'
 )
-sha256sums=(
-  'SKIP'
-  'ec0b8e28ae77b4b074d3eb8a084626e6dcfc587a07bef5d53fe1c6e160c0fc01'
-  '045e914bb6fff5a082314dfc805bb511c9a80170619fa1e94a07825fa977c90a'
-  'addc47b54aa48ff83c1ed782aa9f471f26c5cc5cf11e194e0873e0cfd7f2667b'
-)
+sha256sums=('SKIP'
+            'ec0b8e28ae77b4b074d3eb8a084626e6dcfc587a07bef5d53fe1c6e160c0fc01'
+            '045e914bb6fff5a082314dfc805bb511c9a80170619fa1e94a07825fa977c90a'
+            'addc47b54aa48ff83c1ed782aa9f471f26c5cc5cf11e194e0873e0cfd7f2667b')
 
 build() {
   cd "$_pkgname"
