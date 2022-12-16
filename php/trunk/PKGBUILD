@@ -10,7 +10,6 @@ pkgname=('php'
          'php-dblib'
          'php-enchant'
          'php-gd'
-         'php-imap'
          'php-intl'
          'php-sodium'
          'php-odbc'
@@ -21,11 +20,11 @@ pkgname=('php'
          'php-tidy'
          'php-xsl')
 pkgver=8.2.0
-pkgrel=0.1
+pkgrel=0.2
 arch=('x86_64')
 license=('PHP')
 url='https://www.php.net/'
-makedepends=('apache' 'aspell' 'c-client' 'gdbm' 'enchant' 'gd' 'gmp' 'icu' 'libsodium' 'libxslt' 'libzip' 'net-snmp'
+makedepends=('apache' 'aspell' 'gdbm' 'enchant' 'gd' 'gmp' 'icu' 'libsodium' 'libxslt' 'libzip' 'net-snmp'
              'postgresql-libs' 'sqlite' 'systemd' 'tidy' 'unixodbc' 'curl' 'libtool' 'postfix' 'freetds' 'pcre2' 'libnsl'
              'oniguruma')
 checkdepends=('procps-ng')
@@ -98,8 +97,6 @@ build() {
 		--with-gettext=shared \
 		--with-gmp=shared \
 		--with-iconv=shared \
-		--with-imap-ssl \
-		--with-imap=shared \
 		--with-kerberos \
 		--with-ldap=shared \
 		--with-ldap-sasl \
@@ -180,9 +177,7 @@ check() {
 package_php() {
 	pkgdesc='A general-purpose scripting language that is especially suited to web development'
 	depends=('libxml2' 'curl' 'libzip' 'pcre2' 'argon2' 'oniguruma' 'gdbm')
-	replaces=('php-ldap')
-	conflicts=('php-ldap')
-	provides=("php-interpreter=$_interpreter" "php-ldap=${pkgver}")
+	provides=("php-interpreter=$_interpreter")
 	backup=('etc/php/php.ini')
 
 	cd "${srcdir}/build"
@@ -193,7 +188,7 @@ package_php() {
 	# remove static modules
 	rm -f "${pkgdir}/usr/lib/php/modules/"*.a
 	# remove modules provided by sub packages
-	rm -f "${pkgdir}/usr/lib/php/modules/"{enchant,gd,imap,intl,sodium,odbc,pdo_dblib,pdo_odbc,pgsql,pdo_pgsql,pspell,snmp,sqlite3,pdo_sqlite,tidy,xsl}.so
+	rm -f "${pkgdir}/usr/lib/php/modules/"{enchant,gd,intl,sodium,odbc,pdo_dblib,pdo_odbc,pgsql,pdo_pgsql,pspell,snmp,sqlite3,pdo_sqlite,tidy,xsl}.so
 	# remove empty directory
 	rmdir "${pkgdir}/usr/include/php/include"
 }
@@ -264,13 +259,6 @@ package_php-gd() {
 	depends=('php' 'gd')
 
 	install -D -m755 "${srcdir}/build/modules/gd.so" "${pkgdir}/usr/lib/php/modules/gd.so"
-}
-
-package_php-imap() {
-	pkgdesc='imap module for PHP'
-	depends=('php' 'c-client' 'libxcrypt')
-
-	install -D -m755 "${srcdir}/build/modules/imap.so" "${pkgdir}/usr/lib/php/modules/imap.so"
 }
 
 package_php-intl() {
