@@ -12,7 +12,7 @@ license=('MIT' 'BSD' 'ZLIB' 'GPL2' 'LGPL2.1' 'ZLIB' 'OFL' 'Apache' 'custom')
 depends=('mpg123' 'openal' 'sdl2')
 makedepends=('innoextract')
 options=('!strip' '!debug')
-source=("setup_ut_goty_2.0.0.5.exe"
+source=("file://./setup_ut_goty_2.0.0.5.exe"
         "${pkgname}-patch-${pkgver}.tar.bz2::https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v469c/OldUnreal-UTPatch469c-Linux-amd64.tar.bz2"
         "unreal-tournament.desktop")
 noextract=("${pkgname}-patch-${pkgver}.tar.bz2")
