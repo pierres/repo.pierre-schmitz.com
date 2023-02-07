@@ -2,7 +2,7 @@
 
 pkgname=zshrc
 pkgver=4
-pkgrel=1
+pkgrel=2
 pkgdesc='Usable ZSH configuration'
 arch=('any')
 url='https://github.com/pierres/zshrc'
