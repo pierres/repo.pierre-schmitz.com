@@ -1,0 +1,54 @@
+# Maintainer: Pierre Schmitz <pierre@archlinux.de>
+# based on https://aur.archlinux.org/packages/gog-unreal-tournament-goty
+
+pkgname=unreal-tournament
+pkgver=469c
+pkgrel=1
+pkgdesc="Unreal Tournament"
+arch=('x86_64')
+url="https://www.oldunreal.com/downloads/unrealtournament/"
+# https://github.com/OldUnreal/UnrealTournamentPatches/blob/master/LICENSE.md
+license=('MIT' 'BSD' 'ZLIB' 'GPL2' 'LGPL2.1' 'ZLIB' 'OFL' 'Apache' 'custom')
+depends=('mpg123' 'openal' 'sdl2')
+makedepends=('innoextract')
+options=('!strip' '!debug')
+source=("setup_ut_goty_2.0.0.5.exe"
+        "${pkgname}-patch-${pkgver}.tar.bz2::https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v469c/OldUnreal-UTPatch469c-Linux-amd64.tar.bz2"
+        "unreal-tournament.desktop")
+noextract=("${pkgname}-patch-${pkgver}.tar.bz2")
+sha256sums=('4cc257d54d97659c5062f2bf186d0a8c6959561d11e42d8fcf2eac07f1926803'
+            '4c99bde06d26b724f14471d374d4d6105dbdc98c56ec2a40af3fa541956eeed9'
+            '1a96b9f8f3cd05e70feeb151405d72140a8e094793f437d24227ed4da6adc499')
+
+# see https://github.com/OldUnreal/UnrealTournamentPatches#linux-installation
+prepare() {
+  innoextract --extract --exclude-temp "setup_ut_goty_2.0.0.5.exe"
+
+  tar --extract --file "${pkgname}-patch-${pkgver}.tar.bz2" --one-top-level=unreal
+
+  cp --recursive "app/Music" "app/Sounds" "app/Maps" "unreal/"
+  cp --no-clobber app/Textures/* "unreal/Textures/"
+  cp app/System/Unreal.ico "unreal/"
+
+  # Remove prebuilt libraries in favor of arch/AUR packages
+  rm \
+    "unreal/System64/libmpg123.so" \
+    "unreal/System64/libopenal.so.1" \
+    "unreal/System64/libSDL2-2.0.so.0"
+}
+
+package() {
+  # make destination directories
+  mkdir --parents "${pkgdir}/opt" 
+
+  # copy game files
+  cp --archive "unreal" "${pkgdir}/opt/${pkgname}"
+
+  # install desktop entry and license document
+  install -D --mode 644 \
+    "${pkgname}.desktop" \
+    "${pkgdir}/usr/share/applications/${pkgname}.desktop"
+  install -D --mode 644 \
+    "unreal/LICENSE.md" \
+    "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}
