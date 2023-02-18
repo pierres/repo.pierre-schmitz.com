@@ -1,0 +1,26 @@
+# Maintainer: Pierre Schmitz <pierre@archlinux.de>
+
+pkgname=steam-devices-git
+pkgver=VERSION
+pkgrel=1
+pkgdesc="List of devices Steam and SteamVR will want read/write permissions on. Useful when using the Flatpak version of Steam."
+arch=('any')
+url="https://github.com/ValveSoftware/steam-devices"
+license=('MIT')
+makedepends=('git')
+provides=("${pkgname%-git}")
+conflicts=("${pkgname%-git}" 'steam')
+source=('https://github.com/ValveSoftware/steam-devices.git')
+md5sums=('SKIP')
+
+pkgver() {
+	cd "$srcdir/${pkgname%-git}"
+
+	printf "%s" "$(git describe --long | sed 's/\([^-]*-\)g/r\1/;s/-/./g')"
+}
+
+package() {
+	cd "$srcdir/${pkgname%-git}"
+
+	install -Dm 644 *.rules "${pkgdir}/usr/lib/udev/rules.d/"
+}
