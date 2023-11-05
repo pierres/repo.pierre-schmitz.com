@@ -4,7 +4,7 @@
 pkgname=unreal-tournament
 _pkgver=469d-rc4
 pkgver="${_pkgver%-*}"
-pkgrel=1
+pkgrel=2
 pkgdesc="Unreal Tournament"
 arch=('x86_64')
 url="https://www.oldunreal.com/downloads/unrealtournament/"
