@@ -2,7 +2,7 @@
 # based on https://aur.archlinux.org/packages/gog-unreal-tournament-goty
 
 pkgname=unreal-tournament
-_pkgver=469d-rc4
+_pkgver=469d
 pkgver="${_pkgver%-*}"
 pkgrel=2
 pkgdesc="Unreal Tournament"
@@ -18,7 +18,7 @@ source=("file://./setup_ut_goty_2.0.0.5.exe"
         "unreal-tournament.desktop")
 noextract=("${pkgname}-patch-${_pkgver}.tar.bz2")
 sha256sums=('4cc257d54d97659c5062f2bf186d0a8c6959561d11e42d8fcf2eac07f1926803'
-            '8a7e6c9b1a350eb332ec86fd19079464455370018be79a9e2ff08f3dfd03a36a'
+            '6a81b35ae6a4c0dfce2f8fb152af16129776735aeb34dfc391f7c8daf0d51a3b'
             '1a96b9f8f3cd05e70feeb151405d72140a8e094793f437d24227ed4da6adc499')
 
 # see https://github.com/OldUnreal/UnrealTournamentPatches#linux-installation
