@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Unreal Tournament
+Path=/opt/unreal-tournament
+Exec=/opt/unreal-tournament/System64/ut-bin-amd64
+Terminal=false
+Icon=/opt/unreal-tournament/Unreal.ico
+Type=Application
+Categories=Game;
