@@ -10,6 +10,7 @@ url='https://github.com/OpenVPN/openvpn3-indicator'
 arch=('any')
 license=('AGPL')
 depends=('openvpn3' 'libayatana-appindicator' 'python-secretstorage' 'python-setproctitle')
+makedepends=('git' 'zip')
 source=("${_pkgname}::git+https://github.com/OpenVPN/${_pkgname}.git")
 sha256sums=('SKIP')
 
