@@ -1,0 +1,25 @@
+# Maintainer: Pierre Schmitz <pierre@archlinux.de>
+
+pkgname=fishrc
+pkgver=6
+pkgrel=1
+pkgdesc='Usable Fish shell configuration'
+arch=('any')
+url='https://github.com/pierres/fishrc'
+license=('GPL-3.0-or-later')
+depends=('fish' 'fish-tide')
+makedepends=('git' 'just')
+source=('git+https://github.com/pierres/fishrc.git')
+md5sums=('SKIP')
+
+pkgver() {
+	cd ${srcdir}/${pkgname}
+
+	git rev-list origin/main --count
+}
+
+package() {
+	cd ${srcdir}/${pkgname}
+
+	just install "${pkgdir}"
+}
