@@ -7,7 +7,7 @@ CARCH := arch()
 # List all available recipes
 [private]
 default:
-    @echo -e 'Configured for architecture \033[1m{{CARCH}}\033[0m on server \033[1m{{SERVER_URL}}\033[0m.\n'
+    @echo -e 'Configured for architecture \033[1m{{ CARCH }}\033[0m on server \033[1m{{ SERVER_URL }}\033[0m.\n'
     @just --list
 
 # Remove any untracked files, excluding released packages
@@ -71,9 +71,36 @@ create-from-aur package repository='aur':
     curl --fail --silent --show-error 'https://aur.archlinux.org/cgit/aur.git/snapshot/{{ package }}.tar.gz' -o "$tmpfile" || exit 1
 
     mkdir -p "src/{{ repository }}"
-    bsdtar xf "$tmpfile" --strip-components=1 --exclude='.SRCINFO' -C 'src/{{ repository }}/{{ package }}'
+    bsdtar xf "$tmpfile" --strip-components=1 --exclude='.SRCINFO' --exclude='.git*' -C 'src/{{ repository }}/{{ package }}'
 
     rm -f "$tmpfile"
+
+update-all-from-aur:
+    #!/usr/bin/env fish
+    for repo in src/*
+        for pkg in $repo/*
+            set -l pkg_name (path basename "$pkg")
+            set -l aur_version (curl --fail --silent --show-error "https://aur.archlinux.org/rpc/v5/info/$pkg_name" | jq --raw-output '.results[0].Version')
+
+            if test "$aur_version" = "null"
+                #echo "Package not found in the AUR: $pkg_name"
+                continue
+            end
+
+            pushd $pkg
+
+            set -l pkg_version (makepkg --printsrcinfo | string match -rg '^\s*pkg(?:ver|rel)\s*=\s*(.+)\s*$' | string join '-')
+
+            if test (vercmp $pkg_version $aur_version) -lt 0
+                echo "Updating package: $pkg_name from $pkg_version to $aur_version"
+                just update-from-aur
+            else
+                #echo "Package already up to date or newer: $pkg_name"
+            end
+
+            popd
+        end
+    end
 
 # Release package from current directory
 release:
@@ -84,7 +111,7 @@ release:
     end
 
     set -l repo (path basename (path resolve '{{ invocation_directory() }}/../'))
-    set -l dist_dir "dist/$repo/os/{{CARCH}}"
+    set -l dist_dir "dist/$repo/os/{{ CARCH }}"
 
     mkdir -p "$dist_dir"
 
@@ -126,7 +153,7 @@ release:
         --sign \
         --verify \
         --include-sigs \
-        "$dist_dir/$repo{{DB_EXT}}" \
+        "$dist_dir/$repo{{ DB_EXT }}" \
         $dist_files
 
 # Remover package from current directory; keeps the source directory
@@ -139,7 +166,7 @@ remove:
     end
 
     set -l repo (path basename (path resolve '{{ invocation_directory() }}/../'))
-    set -l dist_dir "dist/$repo/os/{{CARCH}}"
+    set -l dist_dir "dist/$repo/os/{{ CARCH }}"
 
     set -l dist_files
 
@@ -160,7 +187,7 @@ remove:
     repo-remove \
         --sign \
         --verify \
-        "$dist_dir/$repo{{DB_EXT}}" \
+        "$dist_dir/$repo{{ DB_EXT }}" \
         $pkg_names
 
     rm -f $dist_files{,.sig}

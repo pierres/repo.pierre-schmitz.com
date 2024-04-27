@@ -5,6 +5,7 @@ This is a repository of packages I maintain for my own machnies. It is self-cont
 * just
 * fish
 * devtools
+* jq
 
 ### Repository configuration
 ```ini
