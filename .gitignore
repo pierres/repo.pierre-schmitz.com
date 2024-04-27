@@ -1,6 +1,8 @@
 /.idea
 /.vscode
 
+/.env
+
 /dist/*
 !/dist/.gitkeep
 *-build.log
@@ -13,3 +15,4 @@ PKGBUILD-namcap.log
 *-prepare.log
 /src/*/*/pkg
 /src/*/*/src
+.SRCINFO
