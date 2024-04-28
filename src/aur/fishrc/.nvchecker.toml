@@ -1,0 +1,4 @@
+[fishrc]
+source = 'github'
+github = 'pierres/fishrc'
+use_max_tag = true

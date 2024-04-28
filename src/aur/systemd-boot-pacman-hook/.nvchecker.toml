@@ -1,0 +1,2 @@
+[systemd-boot-pacman-hook]
+source = 'aur'

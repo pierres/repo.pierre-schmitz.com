@@ -1,0 +1,5 @@
+[unreal-tournament]
+source = 'github'
+github = 'OldUnreal/UnrealTournamentPatches'
+use_latest_release = true
+prefix = 'v'

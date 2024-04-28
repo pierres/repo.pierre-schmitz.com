@@ -104,7 +104,7 @@ create-from-aur package repository='aur':
     curl --fail --silent --show-error 'https://aur.archlinux.org/cgit/aur.git/snapshot/{{ package }}.tar.gz' -o "$tmpfile" || exit 1
 
     mkdir -p "src/{{ repository }}"
-    bsdtar xf "$tmpfile" --strip-components=1 --exclude='.SRCINFO' --exclude='.git*' -C 'src/{{ repository }}/{{ package }}'
+    bsdtar xf "$tmpfile" --strip-components=1 --exclude='.SRCINFO' --exclude='.git*' --exclude='.nvchecker.toml' -C 'src/{{ repository }}/{{ package }}'
 
     rm -f "$tmpfile"
 

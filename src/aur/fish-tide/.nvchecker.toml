@@ -1,0 +1,5 @@
+[fish-tide]
+source = 'github'
+github = 'IlanCosman/tide'
+use_max_tag = true
+prefix = 'v'
