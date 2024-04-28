@@ -115,34 +115,6 @@ create-from-aur package repository='aur':
 
     rm -f "$tmpfile"
 
-# Update sources of all packages if newer versions are available from the AUR
-update-all-from-aur:
-    #!/usr/bin/env fish
-    for repo in src/*
-        for pkg in $repo/*
-            set -l pkg_name (path basename "$pkg")
-            set -l aur_version (curl --fail --silent --show-error "https://aur.archlinux.org/rpc/v5/info/$pkg_name" | jq --raw-output '.results[0].Version')
-
-            if test "$aur_version" = "null"
-                #echo "Package not found in the AUR: $pkg_name"
-                continue
-            end
-
-            pushd $pkg
-
-            set -l pkg_version (makepkg --printsrcinfo | string match -rg '^\s*pkg(?:ver|rel)\s*=\s*(.+)\s*$' | string join '-')
-
-            if test (vercmp $pkg_version $aur_version) -lt 0
-                echo "Updating package: $pkg_name from $pkg_version to $aur_version"
-                just update-from-aur
-            else
-                #echo "Package already up to date or newer: $pkg_name"
-            end
-
-            popd
-        end
-    end
-
 # Release package from current directory
 release:
     #!/usr/bin/env fish
