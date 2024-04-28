@@ -44,20 +44,24 @@ upload: (rsync 'dist' SERVER_URL '--delete-excluded')
 download: (rsync SERVER_URL 'dist')
 
 # Build pacakge from current directory
+[no-cd]
 build: && sign
-    pkgctl build -c "{{ invocation_directory() }}"
+    pkgctl build -c
 
 # Rebuild pacakge from current directory and increment its pkgrel
+[no-cd]
 rebuild: && sign
-    pkgctl rebuild -c "{{ invocation_directory() }}"
+    pkgctl rebuild -c
 
 # Update package from current directory to the given pkgver
+[no-cd]
 update pkgver: && sign
-    pkgctl build -c --pkgver="{{ pkgver }}" "{{ invocation_directory() }}"
+    pkgctl build -c --pkgver="{{ pkgver }}"
 
 # Run nvchecker for the package from current directory
+[no-cd]
 check-version:
-    pkgctl version check "{{ invocation_directory() }}"
+    pkgctl version check
 
 # Run nvchecker for all packages
 check-all-versions:
@@ -65,6 +69,7 @@ check-all-versions:
     pkgctl version check src/*/*
 
 # Sign package from current directory
+[no-cd]
 [private]
 sign:
     #!/usr/bin/env fish
@@ -79,7 +84,7 @@ sign:
         return 1
     end
 
-    set -l pkg_files (bash -c 'pushd {{ invocation_directory() }} >/dev/null && makepkg --packagelist')
+    set -l pkg_files (makepkg --packagelist)
 
     for pkg_file in $pkg_files
         set -l pkg_file_name (path basename $pkg_file)
@@ -118,21 +123,22 @@ create-from-aur package repository='aur':
     rm -f "$tmpfile"
 
 # Release package from current directory
+[no-cd]
 release:
     #!/usr/bin/env fish
-    if not test -f '{{ invocation_directory() }}/PKGBUILD'
+    if not test -f 'PKGBUILD'
         echo 'No PKGBUILD was found!'
         return 1
     end
 
-    set -l repo (path basename (path resolve '{{ invocation_directory() }}/../'))
-    set -l dist_dir "dist/$repo/os/{{ CARCH }}"
+    set -l repo (path basename (path resolve '../'))
+    set -l dist_dir (path resolve "{{ justfile_directory() }}/dist/$repo/os/{{ CARCH }}")
 
     mkdir -p "$dist_dir"
 
     set -l dist_files
 
-    set -l pkg_files (bash -c 'pushd {{ invocation_directory() }} >/dev/null && makepkg --packagelist')
+    set -l pkg_files (makepkg --packagelist)
 
     for pkg_file in $pkg_files
         set -l pkg_file_name (path basename $pkg_file)
@@ -173,20 +179,21 @@ release:
 
 # Remover package from current directory; keeps the source directory
 [confirm]
+[no-cd]
 remove:
     #!/usr/bin/env fish
-    if not test -f '{{ invocation_directory() }}/PKGBUILD'
+    if not test -f 'PKGBUILD'
         echo 'No PKGBUILD was found!'
         return 1
     end
 
-    set -l repo (path basename (path resolve '{{ invocation_directory() }}/../'))
-    set -l dist_dir "dist/$repo/os/{{ CARCH }}"
+    set -l repo (path basename (path resolve '../'))
+    set -l dist_dir (path resolve "{{ justfile_directory() }}/dist/$repo/os/{{ CARCH }}")
 
     set -l dist_files
 
-    set -l pkg_files (bash -c 'pushd {{ invocation_directory() }} >/dev/null && makepkg --packagelist')
-    set -l pkg_names (bash -c 'pushd {{ invocation_directory() }} >/dev/null && makepkg --printsrcinfo' | string match -rg '^\s*pkgname\s*=\s*(.+)\s*$')
+    set -l pkg_files (makepkg --packagelist)
+    set -l pkg_names (makepkg --printsrcinfo | string match -rg '^\s*pkgname\s*=\s*(.+)\s*$')
 
     for pkg_file in $pkg_files
         set -l pkg_file_name (path basename $pkg_file)
