@@ -55,6 +55,13 @@ rebuild: && sign
 update pkgver: && sign
     pkgctl build -c --pkgver="{{ pkgver }}" "{{ invocation_directory() }}"
 
+check-version:
+    pkgctl version check "{{ invocation_directory() }}"
+
+check-all-versions:
+    #!/usr/bin/env fish
+    pkgctl version check src/*/*
+
 # Sign package from current directory
 [private]
 sign:
