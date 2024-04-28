@@ -55,9 +55,11 @@ rebuild: && sign
 update pkgver: && sign
     pkgctl build -c --pkgver="{{ pkgver }}" "{{ invocation_directory() }}"
 
+# Run nvchecker for the package from current directory
 check-version:
     pkgctl version check "{{ invocation_directory() }}"
 
+# Run nvchecker for all packages
 check-all-versions:
     #!/usr/bin/env fish
     pkgctl version check src/*/*
