@@ -89,7 +89,7 @@ sign:
     for pkg_file in $pkg_files
         set -l pkg_file_name (path basename $pkg_file)
 
-        if string match -- '*-debug-*' "$pkg_file_name"
+        if string match -q -- '*-debug-*' "$pkg_file_name"
             echo "Skipping debug package $pkg_file_name"
             continue
         end
@@ -143,7 +143,7 @@ release:
     for pkg_file in $pkg_files
         set -l pkg_file_name (path basename $pkg_file)
 
-        if string match -- '*-debug-*' "$pkg_file_name"
+        if string match -q -- '*-debug-*' "$pkg_file_name"
             echo "Skipping debug package $pkg_file_name"
             continue
         end
@@ -177,7 +177,7 @@ release:
         "$dist_dir/$repo{{ DB_EXT }}" \
         $dist_files
 
-# Remover package from current directory; keeps the source directory
+# Remove package from current directory; keeps the source directory
 [confirm]
 [no-cd]
 remove:
@@ -198,7 +198,7 @@ remove:
     for pkg_file in $pkg_files
         set -l pkg_file_name (path basename $pkg_file)
 
-        if string match -- '*-debug-*' "$pkg_file_name"
+        if string match -q -- '*-debug-*' "$pkg_file_name"
             echo "Skipping debug package $pkg_file_name"
             continue
         end
