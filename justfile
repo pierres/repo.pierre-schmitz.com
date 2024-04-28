@@ -44,16 +44,49 @@ upload: (rsync 'dist' SERVER_URL '--delete-excluded')
 download: (rsync SERVER_URL 'dist')
 
 # Build pacakge from current directory
-build:
+build: && sign
     pkgctl build -c "{{ invocation_directory() }}"
 
 # Rebuild pacakge from current directory and increment its pkgrel
-rebuild:
+rebuild: && sign
     pkgctl rebuild -c "{{ invocation_directory() }}"
 
 # Update package from current directory to the given pkgver
-update pkgver:
+update pkgver: && sign
     pkgctl build -c --pkgver="{{ pkgver }}" "{{ invocation_directory() }}"
+
+# Sign package from current directory
+[private]
+sign:
+    #!/usr/bin/env fish
+    if not test -f "$HOME/.makepkg.conf"
+        echo '~/.makepg.conf not found'
+        return 1
+    end
+
+    set -l gpg_key (bash -c 'source ~/.makepkg.conf && echo $GPGKEY')
+    if test (string length "$gpg_key") -lt 10
+        echo "No valid GPG key: $gpg_key"
+        return 1
+    end
+
+    set -l pkg_files (bash -c 'pushd {{ invocation_directory() }} >/dev/null && makepkg --packagelist')
+
+    for pkg_file in $pkg_files
+        set -l pkg_file_name (path basename $pkg_file)
+
+        if string match -- '*-debug-*' "$pkg_file_name"
+            echo "Skipping debug package $pkg_file_name"
+            continue
+        end
+
+        if not test -f "$pkg_file"
+            echo "package file $pkg_file_name not found"
+            return 1
+        end
+
+        gpg --detach-sign --use-agent --no-armor -u "$gpg_key" "$pkg_file"
+    end
 
 # Update package from current directory with the newest release from the AUR
 update-from-aur:
@@ -75,6 +108,7 @@ create-from-aur package repository='aur':
 
     rm -f "$tmpfile"
 
+# Update sources of all packages if newer versions are available from the AUR
 update-all-from-aur:
     #!/usr/bin/env fish
     for repo in src/*
