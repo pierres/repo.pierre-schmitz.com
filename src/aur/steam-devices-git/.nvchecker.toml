@@ -1,4 +1,0 @@
-[steam-devices-git]
-source = 'github'
-github = 'ValveSoftware/steam-devices'
-use_max_tag = true

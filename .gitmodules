@@ -1,0 +1,3 @@
+[submodule "src/aur/steam-devices-git"]
+	path = src/aur/steam-devices-git
+	url = ssh://aur@aur.archlinux.org/steam-devices-git.git
