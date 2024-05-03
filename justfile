@@ -118,10 +118,12 @@ create-from-aur package repository='aur':
 
     curl --fail --silent --show-error 'https://aur.archlinux.org/cgit/aur.git/snapshot/{{ package }}.tar.gz' -o "$tmpfile" || exit 1
 
-    mkdir -p "src/{{ repository }}"
+    mkdir -p "src/{{ repository }}/{{ package }}"
     bsdtar xf "$tmpfile" --strip-components=1 --exclude='.SRCINFO' --exclude='.git*' --exclude='.nvchecker.toml' -C 'src/{{ repository }}/{{ package }}'
 
     rm -f "$tmpfile"
+
+    echo -e "[{{ package }}]\nsource = 'aur'" > "src/{{ repository }}/{{ package }}/.nvchecker.toml"
 
 # Release package from current directory
 [no-cd]
