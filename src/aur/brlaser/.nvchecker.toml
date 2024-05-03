@@ -1,0 +1,5 @@
+[brlaser]
+source = 'github'
+github = 'Owl-Maintain/brlaser'
+use_max_tag = true
+prefix = 'v'

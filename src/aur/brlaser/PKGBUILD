@@ -1,0 +1,34 @@
+# Contributor: Colin Arnott <colin@urandom.co.uk>
+pkgname="brlaser"
+pkgver=6.2.6
+pkgrel=1
+pkgdesc="Brother laser printer driver"
+arch=('x86_64')
+url="https://github.com/Owl-Maintain/brlaser"
+license=('GPL-2.0-only')
+depends=('cups')
+makedepends=('git' 'cmake')
+conflicts=("${pkgname}-git")
+replaces=("${pkgname}-git")
+source=("$pkgname::git+$url#tag=v${pkgver}")
+sha512sums=('SKIP')
+
+prepare() {
+	cd $pkgname
+	cmake .
+}
+
+build() {
+	cd $pkgname
+	make
+}
+
+check() {
+	cd $pkgname
+	make -k check
+}
+
+package() {
+	cd $pkgname
+	make DESTDIR="$pkgdir/" install
+}
