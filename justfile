@@ -47,17 +47,7 @@ download: (rsync SERVER_URL 'dist')
 # Build pacakge from current directory
 [no-cd]
 build: && sign
-    pkgctl build -c
-
-# Rebuild pacakge from current directory and increment its pkgrel
-[no-cd]
-rebuild: && sign
-    pkgctl rebuild -c
-
-# Update package from current directory to the given pkgver
-[no-cd]
-update pkgver: && sign
-    pkgctl build -c --pkgver="{{ pkgver }}"
+    aur-x86_64-build -c
 
 # Run nvchecker for the package from current directory
 [no-cd]

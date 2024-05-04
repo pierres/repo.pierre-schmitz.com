@@ -1,0 +1,23 @@
+# Maintainer: Pierre Schmitz <pierre@archlinux.de>
+
+pkgname=devtools-config
+pkgver=1.0.0
+pkgrel=1
+pkgdesc='Configuration files for my custom repository'
+arch=('any')
+url='https://github.com/pierres/repo.pierre-schmitz.com'
+license=('GPL-3.0-or-later')
+depends=('devtools')
+
+package() {
+	cd ${srcdir}
+
+    cp -a /usr/share/devtools/pacman.conf.d/extra.conf aur.conf
+    for repo in aur aur-restricted; do
+        echo -e "\n[$repo]\nSigLevel = Required\nServer = file:///home/pierre/dev/repo.pierre-schmitz.com/dist/\$repo/os/\$arch" >> aur.conf
+    done
+    install -D -m644 aur.conf -t "${pkgdir}/usr/share/devtools/pacman.conf.d"
+
+    install -d -m755 "${pkgdir}/usr/bin"
+    ln -s archbuild "${pkgdir}/usr/bin/aur-x86_64-build"
+}
