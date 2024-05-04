@@ -1,0 +1,27 @@
+# Maintainer: Pierre Schmitz <pierre@archlinux.de>
+
+pkgname=gdbuspp
+pkgver=0.0.124.f6cb449
+pkgrel=1
+pkgdesc='GDBus++ :: glib2 D-Bus C++ interface'
+arch=('x86_64')
+url='https://codeberg.org/OpenVPN/gdbuspp.git'
+license=('AGPL-3.0-only')
+depends=('glib2')
+makedepends=('git' 'meson')
+source=("${pkgname}::git+${url}")
+sha256sums=('SKIP')
+
+pkgver() {
+    cd "$pkgname"
+    printf "0.0.%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short=7 HEAD)"
+}
+
+build() {
+    arch-meson $pkgname build
+    meson compile -C build
+}
+
+package() {
+    meson install -C build --destdir "$pkgdir"
+}

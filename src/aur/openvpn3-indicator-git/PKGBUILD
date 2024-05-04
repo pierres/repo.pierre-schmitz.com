@@ -3,7 +3,7 @@
 _pkgname='openvpn3-indicator'
 pkgname="${_pkgname}-git"
 pkgver=r53.a00ecaa
-pkgrel=1
+pkgrel=1.1
 pkgdesc='Simple GTK indicator GUI for OpenVPN 3 Linux'
 
 url='https://github.com/OpenVPN/openvpn3-indicator'
