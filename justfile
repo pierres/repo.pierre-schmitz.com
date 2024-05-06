@@ -46,7 +46,7 @@ download: (rsync SERVER_URL 'dist')
 
 # Build pacakge from current directory
 [no-cd]
-build: && sign
+build:
     #!/usr/bin/env fish
     if not test -f 'PKGBUILD'
         echo 'No PKGBUILD was found!'
@@ -132,7 +132,7 @@ create-from-aur package repository='aur':
 
 # Release package from current directory
 [no-cd]
-release:
+release: sign
     #!/usr/bin/env fish
     if not test -f 'PKGBUILD'
         echo 'No PKGBUILD was found!'
