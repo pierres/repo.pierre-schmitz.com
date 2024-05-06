@@ -47,11 +47,21 @@ download: (rsync SERVER_URL 'dist')
 # Build pacakge from current directory
 [no-cd]
 build: && sign
+    #!/usr/bin/env fish
+    if not test -f 'PKGBUILD'
+        echo 'No PKGBUILD was found!'
+        return 1
+    end
     aur-x86_64-build -c
 
 # Run nvchecker for the package from current directory
 [no-cd]
 check-version:
+    #!/usr/bin/env fish
+    if not test -f 'PKGBUILD'
+        echo 'No PKGBUILD was found!'
+        return 1
+    end
     pkgctl version check
 
 # Run nvchecker for all packages
@@ -64,6 +74,11 @@ check-all-versions:
 [private]
 sign:
     #!/usr/bin/env fish
+    if not test -f 'PKGBUILD'
+        echo 'No PKGBUILD was found!'
+        return 1
+    end
+
     if not test -f "$HOME/.makepkg.conf"
         echo '~/.makepg.conf not found'
         return 1
