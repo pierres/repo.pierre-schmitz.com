@@ -1,3 +1,6 @@
 [submodule "src/aur/steam-devices-git"]
 	path = src/aur/steam-devices-git
 	url = ssh://aur@aur.archlinux.org/steam-devices-git.git
+[submodule "src/aur/proton-mail-export"]
+	path = src/aur/proton-mail-export
+	url = ssh://aur@aur.archlinux.org/proton-mail-export.git
