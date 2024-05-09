@@ -52,7 +52,12 @@ build:
         echo 'No PKGBUILD was found!' >&2
         return 1
     end
+
     aur-x86_64-build -c
+
+    if test -f .SRCINFO
+        makepkg --printsrcinfo > .SRCINFO
+    end
 
 # Run nvchecker for the package from current directory
 [no-cd]
