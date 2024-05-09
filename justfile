@@ -49,7 +49,7 @@ download: (rsync SERVER_URL 'dist')
 build:
     #!/usr/bin/env fish
     if not test -f 'PKGBUILD'
-        echo 'No PKGBUILD was found!'
+        echo 'No PKGBUILD was found!' >&2
         return 1
     end
     aur-x86_64-build -c
@@ -59,7 +59,7 @@ build:
 check-version:
     #!/usr/bin/env fish
     if not test -f 'PKGBUILD'
-        echo 'No PKGBUILD was found!'
+        echo 'No PKGBUILD was found!' >&2
         return 1
     end
     pkgctl version check
@@ -75,18 +75,18 @@ check-all-versions:
 sign:
     #!/usr/bin/env fish
     if not test -f 'PKGBUILD'
-        echo 'No PKGBUILD was found!'
+        echo 'No PKGBUILD was found!' >&2
         return 1
     end
 
     if not test -f "$HOME/.makepkg.conf"
-        echo '~/.makepg.conf not found'
+        echo '~/.makepg.conf not found' >&2
         return 1
     end
 
     set -l gpg_key (bash -c 'source ~/.makepkg.conf && echo $GPGKEY')
     if test (string length "$gpg_key") -lt 10
-        echo "No valid GPG key: $gpg_key"
+        echo "No valid GPG key: $gpg_key" >&2
         return 1
     end
 
@@ -101,7 +101,7 @@ sign:
         end
 
         if not test -f "$pkg_file"
-            echo "package file $pkg_file_name not found"
+            echo "package file $pkg_file_name not found" >&2
             return 1
         end
 
@@ -135,7 +135,7 @@ create-from-aur package repository='aur':
 release: sign
     #!/usr/bin/env fish
     if not test -f 'PKGBUILD'
-        echo 'No PKGBUILD was found!'
+        echo 'No PKGBUILD was found!' >&2
         return 1
     end
 
@@ -157,12 +157,12 @@ release: sign
         end
 
         if not test -f "$pkg_file"
-            echo "package file $pkg_file_name not found"
+            echo "package file $pkg_file_name not found" >&2
             return 1
         end
 
         if not test -f "$pkg_file".sig
-            echo "package signature file $pkg_file_name.sig not found"
+            echo "package signature file $pkg_file_name.sig not found" >&2
             return 1
         end
 
@@ -191,7 +191,7 @@ release: sign
 remove:
     #!/usr/bin/env fish
     if not test -f 'PKGBUILD'
-        echo 'No PKGBUILD was found!'
+        echo 'No PKGBUILD was found!' >&2
         return 1
     end
 
