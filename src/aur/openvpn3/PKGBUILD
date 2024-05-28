@@ -3,7 +3,7 @@
 
 _pkgname=openvpn3-linux
 pkgname=openvpn3
-pkgver=21.0.169.g389c445
+pkgver=21.0.287.g8a13d1b
 pkgrel=1
 pkgdesc='OpenVPN 3 Linux client'
 arch=('x86_64' 'aarch64')
@@ -21,7 +21,7 @@ makedepends=(
   'autoconf-archive' 'git' 'python-docutils' 'python-jinja' 'bash' 'meson' 'pcre2' 'xz' 'libffi' 'zlib'
 )
 source=(
-  "git+https://codeberg.org/OpenVPN/openvpn3-linux.git#branch=dev/gdbuspp-migration"
+  "git+https://codeberg.org/OpenVPN/openvpn3-linux.git"
   'openvpn3.rule'
   'openvpn3.install'
   'sysusers-openvpn3.conf'
@@ -40,23 +40,11 @@ prepare() {
   cd "$_pkgname"
   git submodule init
   git submodule update
+
   meson subprojects download
 }
 
 build() {
-  cd "$_pkgname"
-  git checkout master
-  git submodule init
-  git submodule update
-  ./bootstrap.sh
-  ./configure \
-    --prefix=/usr --sbindir=/usr/bin --sysconfdir=/etc --localstatedir=/var \
-    --enable-bash-completion
-  make
-  git checkout -
-  git submodule init
-  git submodule update
-
   cd "$srcdir"
   # see https://github.com/OpenVPN/openvpn3-linux/issues/171#issuecomment-1858487477
   arch-meson $_pkgname build -Ddco=disabled -Dselinux_policy=disabled
@@ -64,15 +52,6 @@ build() {
 }
 
 package() {
-  cd "$_pkgname"
-  git checkout master
-  git submodule init
-  git submodule update
-  make DESTDIR="$pkgdir" install
-  git checkout -
-  git submodule init
-  git submodule update
-
   cd "$srcdir"
   meson install -C build --destdir "$pkgdir"
 
