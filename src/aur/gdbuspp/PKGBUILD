@@ -1,7 +1,7 @@
 # Maintainer: Pierre Schmitz <pierre@archlinux.de>
 
 pkgname=gdbuspp
-pkgver=0.0.139.2bdab81
+pkgver=0.0.142.7d80f55
 pkgrel=1
 pkgdesc='GDBus++ :: glib2 D-Bus C++ interface'
 arch=('x86_64')
