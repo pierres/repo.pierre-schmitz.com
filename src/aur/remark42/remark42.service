@@ -9,7 +9,7 @@ EnvironmentFile=-/var/lib/remark42/remark42.conf
 WorkingDirectory=/var/lib/remark42
 Restart=always
 RestartSec=5
-ExecStart=/usr/bin/remark42
+ExecStart=/usr/bin/remark42 server
 
 CapabilityBoundingSet=
 LockPersonality=true
@@ -24,15 +24,17 @@ ProtectKernelLogs=true
 ProtectKernelModules=true
 ProtectKernelTunables=true
 ProtectProc=invisible
-ProtectSystem=full
+ProtectSystem=strict
+MemoryDenyWriteExecute=true
+ReadWritePaths=/var/lib/remark42
 RemoveIPC=true
-RestrictAddressFamilies=AF_INET AF_INET6 AF_NETLINK AF_UNIX
+RestrictAddressFamilies=AF_INET AF_INET6
 RestrictNamespaces=true
 RestrictRealtime=true
 RestrictSUIDSGID=true
 SystemCallArchitectures=native
 SystemCallFilter=@system-service
-SystemCallFilter=~@privileged @resources
+SystemCallFilter=~@privileged
 
 [Install]
 WantedBy=multi-user.target
