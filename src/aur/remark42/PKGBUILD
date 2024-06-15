@@ -11,7 +11,7 @@ source=("https://github.com/umputun/remark42/releases/download/v${pkgver}/remark
         'remark42.service' 'sysusers' 'tmpfiles')
 options=('!debug')
 sha256sums=('544e4aa7b3722306e5b0cfecaeec48503c213e7125577bf65c73c9c8257d8e0f'
-            '6a8624e92fd9a18b01f4bfadc44ec8d7ecd2ad15c1bb57b8d4719b19c9838264'
+            '1f7078bfb9b915c19107579bb5a4567fae205860f9f369d53475d5105c6b47e6'
             '9da50fa0d2c0b5ce9e69807b2471509f14f7d89bf8267307827a98c1ef9700db'
             '21d8d2a7d38c601e44c75e51668765a1d33dd6369cc3cc3a34b48e50b22c698c')
 
