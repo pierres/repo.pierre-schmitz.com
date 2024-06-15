@@ -1,0 +1,38 @@
+[Unit]
+Description=Privacy-focused lightweight commenting engine
+After=network.target
+
+[Service]
+User=remark42
+Group=remark42
+EnvironmentFile=-/var/lib/remark42/remark42.conf
+WorkingDirectory=/var/lib/remark42
+Restart=always
+RestartSec=5
+ExecStart=/usr/bin/remark42
+
+CapabilityBoundingSet=
+LockPersonality=true
+NoNewPrivileges=true
+PrivateDevices=true
+PrivateTmp=true
+ProtectClock=true
+ProtectControlGroups=true
+ProtectHome=true
+ProtectHostname=true
+ProtectKernelLogs=true
+ProtectKernelModules=true
+ProtectKernelTunables=true
+ProtectProc=invisible
+ProtectSystem=full
+RemoveIPC=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_NETLINK AF_UNIX
+RestrictNamespaces=true
+RestrictRealtime=true
+RestrictSUIDSGID=true
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+SystemCallFilter=~@privileged @resources
+
+[Install]
+WantedBy=multi-user.target

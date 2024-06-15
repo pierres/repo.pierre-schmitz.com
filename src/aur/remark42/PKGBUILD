@@ -1,0 +1,25 @@
+# Maintainer: Pierre Schmitz <pierre@archlinux.de>
+
+pkgname=remark42
+pkgver=1.13.0
+pkgrel=1
+pkgdesc='Privacy-focused lightweight commenting engine'
+arch=('x86_64')
+url='https://remark42.com/'
+license=('MIT')
+source=("https://github.com/umputun/remark42/releases/download/v${pkgver}/remark42.linux-amd64.tar.gz"
+        'remark42.service' 'sysusers')
+options=('!debug')
+sha256sums=('544e4aa7b3722306e5b0cfecaeec48503c213e7125577bf65c73c9c8257d8e0f'
+            '6a8624e92fd9a18b01f4bfadc44ec8d7ecd2ad15c1bb57b8d4719b19c9838264'
+            '9da50fa0d2c0b5ce9e69807b2471509f14f7d89bf8267307827a98c1ef9700db')
+
+package() {
+	cd ${srcdir}
+
+    install -D -m755 remark42.linux-amd64 "${pkgdir}/usr/bin/remark42"
+    install -D -m644 remark42.service "${pkgdir}/usr/lib/systemd/system/remark42.service"
+    install -D -m644 sysusers "${pkgdir}/usr/lib/sysusers.d/remark42.conf"
+
+    install -D -m644 LICENSE -t "${pkgdir}/usr/share/licenses/${pkgname}"
+}

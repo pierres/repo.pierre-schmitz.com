@@ -1,0 +1,5 @@
+[remark42]
+source = 'github'
+github = 'umputun/remark42'
+use_latest_release = true
+prefix = 'v'
