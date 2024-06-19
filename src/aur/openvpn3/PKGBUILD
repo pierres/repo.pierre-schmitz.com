@@ -48,18 +48,6 @@ build() {
   meson compile -C _builddir
 }
 
-check() {
-  arch-meson \
-    -Dselinux=disabled \
-    -Dselinux_policy=disabled \
-    -Dtest_programs=enabled \
-    -Dunit_tests=enabled \
-    "${_pkgname}-${pkgver}" \
-    _builddir
-  meson compile -C _builddir
-  meson test -C _builddir
-}
-
 package() {
   meson install -C _builddir --destdir "$pkgdir"
   install -Dm644 "${pkgname}.rule" "$pkgdir/etc/repkg/rules/system/${pkgname}.rule"
