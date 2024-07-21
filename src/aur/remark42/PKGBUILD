@@ -1,8 +1,8 @@
 # Maintainer: Pierre Schmitz <pierre@archlinux.de>
 
 pkgname=remark42
-pkgver=1.13.0
-pkgrel=3
+pkgver=1.13.1
+pkgrel=1
 pkgdesc='Privacy-focused lightweight commenting engine'
 arch=('x86_64')
 url='https://remark42.com/'
