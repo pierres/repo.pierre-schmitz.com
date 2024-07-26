@@ -1,2 +1,3 @@
 [dosbox-staging]
 source = 'aur'
+prefix = '1:'
