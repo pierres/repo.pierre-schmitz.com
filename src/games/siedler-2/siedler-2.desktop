@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Die Siedler 2
+Exec=/usr/bin/siedler-2
+Terminal=false
+Icon=/usr/share/siedler-2/siedler-2.ico
+Type=Application
+Categories=Game;

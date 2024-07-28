@@ -1,0 +1,33 @@
+# Maintainer: Pierre Schmitz <pierre@archlinux.de>
+
+pkgname=siedler-2
+pkgver=1.51
+pkgrel=1
+pkgdesc="Ein Aufbaustrategiespiel von Blue Byte."
+arch=('any')
+url="https://www.gog.com/de/game/the_settlers_2_gold_edition"
+license=('custom')
+depends=('dosbox-staging' 'bash' 'soundfont-fluid')
+makedepends=('innoextract' 'imagemagick')
+options=('!strip' '!debug')
+source=("file://./setup_the_settlers_2_gold_1.5.1_(german)_(30319).exe"
+        "${pkgname}.sh" "${pkgname}.desktop" "dosbox.conf")
+sha256sums=('313fe3ab08e20f4ad4067967dbb9fa807053abb74389e9e211b627c9987faff6'
+            '1f471c440dbdbf3d87bd5b0d33d49f7d07a3cee57f066a517f2aea5f391dbec8'
+            'bf227916810b7ae4d32d81e8abc16569fd0d2f964c4c115e364087d384d6a770'
+            '5abba5e77e673dc3078a268fec3504dd58a99f9b466d6267176768ead2325ea2')
+
+package() {
+    mkdir -p "$pkgdir/usr/share/${pkgname}"
+
+    pushd "$pkgdir/usr/share/${pkgname}"
+    innoextract --extract --exclude-temp "$srcdir/setup_the_settlers_2_gold_1.5.1_(german)_(30319).exe"
+    mv __support/save/SAVE .
+    magick app/goggame-*.ico -compress none "${pkgname}.ico"
+    rm -rf __redist __support app commonappdata DOSBOX goggame-*
+    popd
+
+    install -D --mode 755 "$srcdir/${pkgname}.sh" "${pkgdir}/usr/bin/${pkgname}"
+    install -D --mode 644 "$srcdir/dosbox.conf" "${pkgdir}/usr/share/${pkgname}/dosbox.conf"
+    install -D --mode 644 "$srcdir/${pkgname}.desktop" "${pkgdir}/usr/share/applications/${pkgname}.desktop"
+}
