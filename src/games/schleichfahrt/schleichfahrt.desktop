@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Schleichfahrt
+Exec=/usr/bin/schleichfahrt
+Terminal=false
+Icon=/usr/share/schleichfahrt/schleichfahrt.ico
+Type=Application
+Categories=Game;
