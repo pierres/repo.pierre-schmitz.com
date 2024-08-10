@@ -13,7 +13,7 @@ default:
 # Remove any untracked files, excluding released packages
 [confirm]
 clean:
-    git clean -ffdqx -e /.idea -e /.vscode -e /dist -e /.env
+    git clean -ffdqx -e /.idea -e /.vscode -e /dist -e /.env -e *.cue -e *.img -e *.exe
     git submodule foreach git clean -ffdqx
 
 # Synchronize two directories

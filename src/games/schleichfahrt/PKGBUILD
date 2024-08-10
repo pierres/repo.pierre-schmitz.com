@@ -2,22 +2,22 @@
 
 pkgname=schleichfahrt
 pkgver=1.120
-pkgrel=1
-pkgdesc="Eine dreidimensionale Echtzeit-U-Boot-Simulation, die 1996 von Blue Byte als PC-Computerspiel veröffentlicht wurde."
+pkgrel=2
+pkgdesc="Ein spannendes Spiel, in dem ein futuristisches U-Boot in einer post-apokalyptischen Unterwasserwelt gegen feindliche Kräfte kämpft."
 arch=('any')
-url="https://www.gog.com/de/game/archimedean_dynasty"
+url="https://web.archive.org/web/20040808052843/http://www.bluebyte.net/ger/products/schleichfahrt/index.htm"
 license=('custom')
 depends=('dosbox-staging' 'bash')
 makedepends=('innoextract')
 options=('!strip' '!debug')
 source=("file://./setup_archimedean_dynasty_german_2.0.0.4.exe"
-        "http://falconfly.3dfx.pl/downloads/patch-sf_3dfx.exe"
+        "https://archive.org/download/FTP.BLUEBYTE.COM.2004.03/FTP.BLUEBYTE.COM.2004.03.zip"
         "${pkgname}.sh" "${pkgname}.desktop" "dosbox.conf")
 sha256sums=('c59efdeeca79bef8e1e5ac9e3207acd2f5b61ecb8eccc20321fa53962b392233'
-            '8f42c4058e47e6c5163110200056119ccf12fd76cfbec7f82859467c34df6fc6'
+            '1aec5103e00dbdfa7858e6d0f624a469f0b6a8cd5110b5d8dd33da6f2fd2872d'
             '1c516ae7929189b52803d6abe3cf718743fbc219918065a788179df10dfacba8'
             '4b22bbed7f1b45139bc88fa1679101a7ec96ce8498a195d8abc64160bc182bc5'
-            'd250a5f217f916153b0b2e544000d2cebf6b9b457e7229e90996b5c57f68242f')
+            '118ec221a8177df329e0c69de51caf77e30e7731deb10bb497ac0dcb40fbda08')
 
 package() {
     mkdir -p "$pkgdir/usr/share/${pkgname}"
@@ -27,7 +27,7 @@ package() {
     mv app/* .
     mv goggame-*.ico "${pkgname}.ico"
     rm -rf app __support commonappdata DOSBOX goggame* *.dll *.conf webcache.zip VRUSH
-    bsdtar xf "$srcdir/patch-sf_3dfx.exe" GLIDE2X.OVL
+    bsdtar xf "$srcdir/updates/ger/schleichfahrt/sf_3dfx.exe" GLIDE2X.OVL
     popd
 
     install -D --mode 755 "$srcdir/${pkgname}.sh" "${pkgdir}/usr/bin/${pkgname}"
