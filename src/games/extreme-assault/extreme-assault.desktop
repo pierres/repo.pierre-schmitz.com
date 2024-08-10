@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Extreme Assault
+Exec=/usr/bin/extreme-assault
+Terminal=false
+Icon=/usr/share/extreme-assault/EXTREME.ICO
+Type=Application
+Categories=Game;

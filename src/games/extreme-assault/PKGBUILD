@@ -1,0 +1,71 @@
+# Maintainer: Pierre Schmitz <pierre@archlinux.de>
+
+pkgname=extreme-assault
+pkgver=1.2.3
+pkgrel=1
+pkgdesc="Ein actiongeladenes Spiel, in dem ein futuristischer Hubschrauber gegen außerirdische Invasoren kämpft."
+arch=('any')
+url="https://web.archive.org/web/20040614101032/http://www.bluebyte.net/ger/products/extreme-assault/index.htm"
+license=('custom')
+depends=('dosbox-staging' 'bash' 'soundfont-fluid')
+makedepends=('xorg-server-xvfb' 'util-linux')
+options=('!strip' '!debug')
+source=("file://./${pkgname}".{cue,img}
+        "https://archive.org/download/FTP.BLUEBYTE.COM.2004.03/FTP.BLUEBYTE.COM.2004.03.zip"
+        dosbox{,-{install{,-addons},setsound,start,update-{110,120,121,122,123}}}.conf
+        "${pkgname}.sh" "${pkgname}.desktop")
+sha256sums=('1fff573eadf38d5219e6250c7b93ddbc6cda72176c18701b403ce132ef4b45b0'
+            'debcb20d8f11a8221ff16c2838a8063e6c80a3e353442aba842950bfe9201d68'
+            '1aec5103e00dbdfa7858e6d0f624a469f0b6a8cd5110b5d8dd33da6f2fd2872d'
+            '38844277fd36c909028bb7fc896003de59a66ccd3e858b9a16e3ef110244fc79'
+            '5d48ef55b428f5a97b79b81a301d8aee181b30f6452c3d47ae40d9879f35c76b'
+            '096d3c29d07055475a4928a989be6ee68a86107cb62a9f788bd514d961d2598a'
+            '43954a52a1eb9456655cd31c365d5b740c98fcb4bec7b66ff1920b96529edd0e'
+            '9a995ed4eae9a8efda9dae4b0cad8a4f1281b3b29888b5d7bde31d9832fd5f36'
+            '5a5ed467725922a5f25bfd0d37c412830cd7f8d0b54ff55d31ebdb0b735d1dfc'
+            '4bc72eea635bfb98a42719c5e358ed5340f205c51cfff7eeb1d220e4bcd7369e'
+            '42ee9dcc071d09194de1e005614af1a1e5d279c1ed1296ce1a583ca6900f8343'
+            '1e19e310b8b19b0ad65fb07fa2b6d8d9fe499efc0c65953d81b2a995e54aae0e'
+            '25735f92b9df8f2c5d7f70a51637efd6b0f24f8e6f954a5a016dd183b6f26119'
+            'dcf4b6926d5e4fee56b2101e7168b59e917ab4d1751dd0c30cbdb0a6146d500c'
+            'bc4e0edc911f25107ae29bb4742befe2cfb377631741eeb571d068af20c932d6')
+
+package() {
+    mkdir -p "$pkgdir/usr/share/${pkgname}/patches"
+
+    cp "$srcdir/updates/ger/extreme-assault/"*/xa_*.exe "$pkgdir/usr/share/${pkgname}/patches"
+    cp "$srcdir/updates/ger/extreme-assault/"*.exe "$pkgdir/usr/share/${pkgname}/patches"
+    cp "$srcdir/${pkgname}".{cue,img} "$pkgdir/usr/share/${pkgname}"
+    cp "$srcdir"/dosbox*.conf "$pkgdir/usr/share/${pkgname}"
+
+    pushd "$pkgdir/usr/share/${pkgname}"
+        Xvfb :12356 &
+        xpid=$!
+        export DISPLAY=:12356
+
+        dosbox --noprimaryconf --conf dosbox-install.conf
+        mv BLUEBYTE/EXTREME/* .
+        rmdir BLUEBYTE/EXTREME BLUEBYTE
+
+        dosbox --noprimaryconf --conf dosbox-install-addons.conf
+        dosbox --noprimaryconf --conf dosbox-setsound.conf
+        dosbox --noprimaryconf --conf dosbox-update-110.conf
+        dosbox --noprimaryconf --conf dosbox-update-120.conf
+        dosbox --noprimaryconf --conf dosbox-update-121.conf
+        dosbox --noprimaryconf --conf dosbox-update-122.conf
+        dosbox --noprimaryconf --conf dosbox-update-123.conf
+
+        kill $xpid
+
+        sed -re 's/^MUSIC=.*/MUSIC=CD_AUDIO/g' -i INIT.CFG
+    popd
+
+    chown -R root:root "$pkgdir/usr/share/${pkgname}"
+
+    rm -rf "$pkgdir/usr/share/${pkgname}/patches"
+    cat "$pkgdir/usr/share/${pkgname}/dosbox-start.conf" >> "$pkgdir/usr/share/${pkgname}/dosbox.conf"
+    rm -f "$pkgdir/usr/share/${pkgname}"/dosbox-*.conf
+
+    install -D --mode 755 "$srcdir/${pkgname}.sh" "${pkgdir}/usr/bin/${pkgname}"
+    install -D --mode 644 "$srcdir/${pkgname}.desktop" "${pkgdir}/usr/share/applications/${pkgname}.desktop"
+}
