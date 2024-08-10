@@ -1,0 +1,51 @@
+# Maintainer: Pierre Schmitz <pierre@archlinux.de>
+
+pkgname=bleifuss-rally
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="Ein Rennspiel, das von Milestone 1997 entwickelt wurde"
+arch=('any')
+url="https://de.wikipedia.org/wiki/Bleifuss_Rally"
+license=('custom')
+depends=('dosbox-staging' 'bash')
+makedepends=('xorg-server-xvfb' 'util-linux')
+options=('!strip' '!debug')
+source=("file://./${pkgname}".{cue,img}
+        "http://tdfx.de/dload/patch/br3dfx.zip"
+        dosbox{,-install,-start}.conf
+        "${pkgname}.sh" "${pkgname}.desktop")
+sha256sums=('bf8f1d2684911fdfbc12609f1284fbd62c098cf5a0fbd39b4f50abb92769a7c2'
+            '0e9e26c2e905528b98537d3fb72c4dfa2929d9972ab9d671a39b61352d3d76bb'
+            '1bcd5b28cb37b9363099b78efd9463b08f81396bcae5bde2310e5cfb2b7c402c'
+            'b03678a5cc61d5ff9dfb6adcfb23f27ad9cd1104739f6c00e4a0cf07d977aa4a'
+            'd2cd3ca693a596ff88567a6d9e280bf32212ead3f1dd43ae80ff0a9807b06de2'
+            '6a81cbafbf50bd65b5f041ff10c2954d33648e9f72d54c5647ec5675fc461228'
+            '7e9270f7af0c0ac7006110e306ba3d0691607818a7c57b6440fe77e28404889e'
+            '4bf26b452b17ecb2491c361f8216f34d14912f6373597a6c41b5435590545237')
+
+package() {
+    mkdir -p "$pkgdir/usr/share/${pkgname}"
+
+    cp "$srcdir/${pkgname}".{cue,img} "$pkgdir/usr/share/${pkgname}"
+    cp "$srcdir"/dosbox*.conf "$pkgdir/usr/share/${pkgname}"
+
+    pushd "$pkgdir/usr/share/${pkgname}"
+        Xvfb :12356 &
+        xpid=$!
+        export DISPLAY=:12356
+
+        dosbox --noprimaryconf --conf dosbox-install.conf
+
+        kill $xpid
+
+        cp "$srcdir/Strt3fx.exe" STRT3FX.EXE
+    popd
+
+    chown -R root:root "$pkgdir/usr/share/${pkgname}"
+
+    cat "$pkgdir/usr/share/${pkgname}/dosbox-start.conf" >> "$pkgdir/usr/share/${pkgname}/dosbox.conf"
+    rm -f "$pkgdir/usr/share/${pkgname}"/dosbox-*.conf
+
+    install -D --mode 755 "$srcdir/${pkgname}.sh" "${pkgdir}/usr/bin/${pkgname}"
+    install -D --mode 644 "$srcdir/${pkgname}.desktop" "${pkgdir}/usr/share/applications/${pkgname}.desktop"
+}
