@@ -2,5 +2,6 @@
 Name=Bleifuss Rally
 Exec=/usr/bin/bleifuss-rally
 Terminal=false
+Icon=/usr/share/bleifuss-rally/CONFIG/BR.ICO
 Type=Application
 Categories=Game;

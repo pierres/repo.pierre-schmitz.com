@@ -2,7 +2,7 @@
 
 pkgname=bleifuss-rally
 pkgver=1.0.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Ein Rennspiel, das von Milestone 1997 entwickelt wurde"
 arch=('any')
 url="https://de.wikipedia.org/wiki/Bleifuss_Rally"
@@ -21,7 +21,7 @@ sha256sums=('bf8f1d2684911fdfbc12609f1284fbd62c098cf5a0fbd39b4f50abb92769a7c2'
             'd2cd3ca693a596ff88567a6d9e280bf32212ead3f1dd43ae80ff0a9807b06de2'
             '6a81cbafbf50bd65b5f041ff10c2954d33648e9f72d54c5647ec5675fc461228'
             '7e9270f7af0c0ac7006110e306ba3d0691607818a7c57b6440fe77e28404889e'
-            '4bf26b452b17ecb2491c361f8216f34d14912f6373597a6c41b5435590545237')
+            'f5a02c6bb01dba883d9aaf5167e21bddb915bac2bf9f9abdbc1f9e8950901b1f')
 
 package() {
     mkdir -p "$pkgdir/usr/share/${pkgname}"
