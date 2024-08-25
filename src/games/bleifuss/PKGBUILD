@@ -1,0 +1,49 @@
+# Maintainer: Pierre Schmitz <pierre@archlinux.de>
+
+pkgname=bleifuss
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="Ein Rennspiel, das von Milestone 1995 entwickelt wurde"
+arch=('any')
+url="https://de.wikipedia.org/wiki/Bleifuss"
+license=('custom')
+depends=('dosbox-staging' 'bash')
+makedepends=('xorg-server-xvfb' 'util-linux')
+options=('!strip' '!debug')
+source=("file://./${pkgname}".{cue,bin}
+        dosbox{,-install,-start,-setup}.conf
+        "${pkgname}.sh" "${pkgname}-setup.sh" "${pkgname}.desktop")
+sha256sums=('d3a0287d3a4e5b943007d1105f93a2fa0d46fa5a8bb3c71769e2e4249a54998a'
+            'ab8d2407471bf2840e01872330bd3a78797b6fb5394c0a17d3a049d1d3c8a393'
+            'e13f82042d4e53321acacbb579bc5c3b6c5daab0a4cb27474d7d6d15e57dd407'
+            'c0246956f5a2feb3bff53ec7ea57bd3884c1dc59b87bedf7f5d0635ca2194f49'
+            'b7d3bb1a1a4ab120999cb23ae48e0dd3e62fe4fe05eec222225328ce9e7653d0'
+            '86e44bf31fff2c7c7738b8bb0e961fb86e6217b9e3290f787dc4ea6293920d7b'
+            'ff1cb31b8b69d35354a7aad651f7050f215a35b0a7d52ad871171812400cbc11'
+            'd54b07fe9d81149bda9baeb8250b8fffa386894aee4e205d53f6883e71fd3167'
+            '5a54c91e7c2c42a6ef5828254ea79c077d42fe9aa2c593728d999bb2c98cfec0')
+
+package() {
+    mkdir -p "$pkgdir/usr/share/${pkgname}"
+
+    cp "$srcdir/${pkgname}".{cue,bin} "$pkgdir/usr/share/${pkgname}"
+    cp "$srcdir"/dosbox*.conf "$pkgdir/usr/share/${pkgname}"
+
+    pushd "$pkgdir/usr/share/${pkgname}"
+        Xvfb :12356 &
+        xpid=$!
+        export DISPLAY=:12356
+
+        dosbox --noprimaryconf --conf dosbox-install.conf
+
+        kill $xpid
+    popd
+
+    chown -R root:root "$pkgdir/usr/share/${pkgname}"
+
+    rm -f "$pkgdir/usr/share/${pkgname}"/dosbox-install.conf
+
+    install -D --mode 755 "$srcdir/${pkgname}.sh" "${pkgdir}/usr/bin/${pkgname}"
+    install -D --mode 755 "$srcdir/${pkgname}-setup.sh" "${pkgdir}/usr/bin/${pkgname}-setup"
+    install -D --mode 644 "$srcdir/${pkgname}.desktop" "${pkgdir}/usr/share/applications/${pkgname}.desktop"
+}

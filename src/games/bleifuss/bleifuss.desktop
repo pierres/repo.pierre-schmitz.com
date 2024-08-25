@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=Bleifuss
+Exec=/usr/bin/bleifuss
+Terminal=false
+Icon=/usr/share/bleifuss/CONFIG/BLEIFUSS.ICO
+Type=Application
+Categories=Game;
+Actions=Setup;
+
+[Desktop Action Setup]
+Exec=/usr/bin/bleifuss-setup
+Name=Setup
+Icon=/usr/share/bleifuss/CONFIG/SETUP.ICO
