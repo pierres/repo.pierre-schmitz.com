@@ -1,0 +1,61 @@
+# Maintainer: Pierre Schmitz <pierre@archlinux.de>
+
+pkgname=bleifuss-2
+pkgver=1.11
+pkgrel=1
+pkgdesc="Ein Rennspiel, das von Milestone 1996 entwickelt wurde"
+arch=('any')
+url="https://de.wikipedia.org/wiki/Bleifuss_Rally"
+license=('custom')
+depends=('dosbox-staging' 'bash')
+makedepends=('xorg-server-xvfb' 'util-linux' 'unzip')
+options=('!strip' '!debug')
+source=("file://./${pkgname}".{cue,bin}
+        "file://./blei2.zip"
+        "file://./b2_3dfx.zip"
+        dosbox{,-install,-start,-update,-update-3dfx,-setup,-start-3dfx}.conf
+        "${pkgname}.sh" "${pkgname}-3dfx.sh" "${pkgname}-setup.sh" "${pkgname}.desktop")
+sha256sums=('d6b87b5ef85534b7893e741116eebfdb4cd336bab17edd7c34e6d3aac4ae0c71'
+            'b1e475a2efd4b6f3105c43e38ea04caa4eda580295ccffd7b1230d1a5ea53e67'
+            '67713ff07a3b196e2cccece5c999504107ec88eb58f25b470474c89846a4c895'
+            '383f623bfcc9807791d1a43e27ac817458305114d4d565a7c76ec85063607a05'
+            'b9c5b2967d5cd3e931b479e370a1ef9249f28b8dba3acdc473b73ad44faeda96'
+            'f2661ad5716653e3a106853488f338379f77e56815756b47f2dafee859b90aba'
+            'd06da4a2f04686a156c7f9f1bdb2fd512a526a75499295c55287f83861f47767'
+            '91f5bc91fd982fc9817dcf72e530bf52fdf6455dbdb1141c66709a476c10ffba'
+            '8f9b21b74ec9d24983431edfec2ec146f1bdb9f2cf602dbea40f85765d19ec40'
+            '815f63522b182639a23cfca3e9af54825e2882bc5a3a3b0f1767095ea1b1eeef'
+            '4650f48a923b8e564db04e6808eb40c029f6b1f3cc3d63e831b41d7f13bb879e'
+            '25994798f7a49773fe99bab569e9d17d8e09955193c91e3d17d6099822d47e76'
+            'e339d92a63b9f1722d232cc8a17671346d8ae8a7a736843106de1d5140eadbb3'
+            '5da97c3432a2d5ba53198c149f4e5a78d4d819d4594ba805ebbcefb4f0747f5a'
+            'fd202af4422109f344b12173bbb80e5df579c513e48b4d2e71442e1d72fdb424')
+
+package() {
+    mkdir -p "$pkgdir/usr/share/${pkgname}"
+
+    cp "$srcdir/${pkgname}".{cue,bin} "$pkgdir/usr/share/${pkgname}"
+    cp "$srcdir"/dosbox*.conf "$pkgdir/usr/share/${pkgname}"
+
+    pushd "$pkgdir/usr/share/${pkgname}"
+        Xvfb :12356 &
+        xpid=$!
+        export DISPLAY=:12356
+
+        dosbox --noprimaryconf --conf dosbox-install.conf
+        dosbox --noprimaryconf --conf dosbox-update.conf
+        dosbox --noprimaryconf --conf dosbox-update-3dfx.conf
+
+        kill $xpid
+    popd
+
+    chown -R root:root "$pkgdir/usr/share/${pkgname}"
+
+    rm -f "$pkgdir/usr/share/${pkgname}"/dosbox-update*.conf
+    rm -f "$pkgdir/usr/share/${pkgname}"/dosbox-install.conf
+
+    install -D --mode 755 "$srcdir/${pkgname}.sh" "${pkgdir}/usr/bin/${pkgname}"
+    install -D --mode 755 "$srcdir/${pkgname}-3dfx.sh" "${pkgdir}/usr/bin/${pkgname}-3dfx"
+    install -D --mode 755 "$srcdir/${pkgname}-setup.sh" "${pkgdir}/usr/bin/${pkgname}-setup"
+    install -D --mode 644 "$srcdir/${pkgname}.desktop" "${pkgdir}/usr/share/applications/${pkgname}.desktop"
+}

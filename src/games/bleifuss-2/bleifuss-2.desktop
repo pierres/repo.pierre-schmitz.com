@@ -1,0 +1,17 @@
+[Desktop Entry]
+Name=Bleifuss 2
+Exec=/usr/bin/bleifuss-2
+Terminal=false
+Icon=/usr/share/bleifuss-2/CONFIG/S2.ICO
+Type=Application
+Categories=Game;
+Actions=3dfx;Setup;
+
+[Desktop Action 3dfx]
+Exec=/usr/bin/bleifuss-2-3dfx
+Name=3dfx
+
+[Desktop Action Setup]
+Exec=/usr/bin/bleifuss-2-setup
+Name=Setup
+Icon=/usr/share/bleifuss-2/CONFIG/SETUP.ICO
