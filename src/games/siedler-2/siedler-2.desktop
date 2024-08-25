@@ -5,3 +5,8 @@ Terminal=false
 Icon=/usr/share/siedler-2/siedler-2.ico
 Type=Application
 Categories=Game;
+Actions=Editor;
+
+[Desktop Action Editor]
+Exec=/usr/bin/siedler-2-editor
+Name=Editor
