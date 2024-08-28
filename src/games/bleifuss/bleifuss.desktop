@@ -5,9 +5,17 @@ Terminal=false
 Icon=/usr/share/bleifuss/CONFIG/BLEIFUSS.ICO
 Type=Application
 Categories=Game;
-Actions=Setup;
+Actions=Setup;Server;Client;
 
 [Desktop Action Setup]
 Exec=/usr/bin/bleifuss-setup
 Name=Setup
 Icon=/usr/share/bleifuss/CONFIG/SETUP.ICO
+
+[Desktop Action Server]
+Exec=/usr/bin/bleifuss-network-server
+Name=Network Server
+
+[Desktop Action Client]
+Exec=/usr/bin/bleifuss-network-client
+Name=Network Client

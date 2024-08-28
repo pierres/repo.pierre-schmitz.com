@@ -2,7 +2,7 @@
 
 pkgname=bleifuss
 pkgver=1.0.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Ein Rennspiel, das von Milestone 1995 entwickelt wurde"
 arch=('any')
 url="https://de.wikipedia.org/wiki/Bleifuss"
@@ -11,17 +11,24 @@ depends=('dosbox-staging' 'bash')
 makedepends=('xorg-server-xvfb' 'util-linux')
 options=('!strip' '!debug')
 source=("file://./${pkgname}".{cue,bin}
-        dosbox{,-install,-start,-setup}.conf
-        "${pkgname}.sh" "${pkgname}-setup.sh" "${pkgname}.desktop")
+        "https://archive.org/download/strings-v2.5/STRING25.ZIP"
+        dosbox{,-install,-start,-setup,-network-server,-network-client}.conf
+        "${pkgname}.sh" "${pkgname}-setup.sh" "${pkgname}-network-server.sh" "${pkgname}-network-client.sh"
+        "${pkgname}.desktop")
 sha256sums=('d3a0287d3a4e5b943007d1105f93a2fa0d46fa5a8bb3c71769e2e4249a54998a'
             'ab8d2407471bf2840e01872330bd3a78797b6fb5394c0a17d3a049d1d3c8a393'
-            'e13f82042d4e53321acacbb579bc5c3b6c5daab0a4cb27474d7d6d15e57dd407'
-            'c0246956f5a2feb3bff53ec7ea57bd3884c1dc59b87bedf7f5d0635ca2194f49'
+            '7fe87d3e38ab7ffb3528485c93aaece46d10a7536d72917b8d2807cffb44474b'
+            'a39ed953ddfc95af2931e458c987074836c39d118f1671eae250688a4cf1e8e1'
+            '71753b6ae3e5d01eb4b854e18ff565fd1ce71c76647ff0b822875ce0557e3a15'
             'b7d3bb1a1a4ab120999cb23ae48e0dd3e62fe4fe05eec222225328ce9e7653d0'
-            '86e44bf31fff2c7c7738b8bb0e961fb86e6217b9e3290f787dc4ea6293920d7b'
+            'd0514866516831aa998262c054825f95ea95a6734f8090a03900f6d16067b660'
+            'fe308e744f05a252dec433dae8ebd5f6b53adc11616590f4a01ac3766e5fafc9'
+            '572570e8dc9f3e5431cded3f79c1419ecc833e584666330b7408cbde13a93cba'
             'ff1cb31b8b69d35354a7aad651f7050f215a35b0a7d52ad871171812400cbc11'
             'd54b07fe9d81149bda9baeb8250b8fffa386894aee4e205d53f6883e71fd3167'
-            '5a54c91e7c2c42a6ef5828254ea79c077d42fe9aa2c593728d999bb2c98cfec0')
+            'cde1bab512524315107cead43cb3584574f73aab4c47bf7c8a897076796d429d'
+            '64715130ad252ac5c5537855a5b264aa47312c6b3e265a13b42571446df6a854'
+            '44a926f8c26fcbad099682533771c01de1b046548c64aed2a3adbf1a169a04fd')
 
 package() {
     mkdir -p "$pkgdir/usr/share/${pkgname}"
@@ -37,6 +44,7 @@ package() {
         dosbox --noprimaryconf --conf dosbox-install.conf
 
         kill $xpid
+        cp "$srcdir/STRINGS.COM" .
     popd
 
     chown -R root:root "$pkgdir/usr/share/${pkgname}"
@@ -45,5 +53,8 @@ package() {
 
     install -D --mode 755 "$srcdir/${pkgname}.sh" "${pkgdir}/usr/bin/${pkgname}"
     install -D --mode 755 "$srcdir/${pkgname}-setup.sh" "${pkgdir}/usr/bin/${pkgname}-setup"
+    install -D --mode 755 "$srcdir/${pkgname}-network-server.sh" "${pkgdir}/usr/bin/${pkgname}-network-server"
+    install -D --mode 755 "$srcdir/${pkgname}-network-client.sh" "${pkgdir}/usr/bin/${pkgname}-network-client"
+
     install -D --mode 644 "$srcdir/${pkgname}.desktop" "${pkgdir}/usr/share/applications/${pkgname}.desktop"
 }
