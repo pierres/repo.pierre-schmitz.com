@@ -5,7 +5,7 @@ Terminal=false
 Icon=/usr/share/bleifuss-2/CONFIG/S2.ICO
 Type=Application
 Categories=Game;
-Actions=3dfx;Setup;
+Actions=3dfx;Setup;Server;Client;
 
 [Desktop Action 3dfx]
 Exec=/usr/bin/bleifuss-2-3dfx
@@ -15,3 +15,11 @@ Name=3dfx
 Exec=/usr/bin/bleifuss-2-setup
 Name=Setup
 Icon=/usr/share/bleifuss-2/CONFIG/SETUP.ICO
+
+[Desktop Action Server]
+Exec=/usr/bin/bleifuss-2-network-server
+Name=Network Server
+
+[Desktop Action Client]
+Exec=/usr/bin/bleifuss-2-network-client
+Name=Network Client

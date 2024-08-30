@@ -2,7 +2,7 @@
 
 pkgname=bleifuss-2
 pkgver=1.11
-pkgrel=1
+pkgrel=2
 pkgdesc="Ein Rennspiel, das von Milestone 1996 entwickelt wurde"
 arch=('any')
 url="https://de.wikipedia.org/wiki/Bleifuss_2"
@@ -11,25 +11,32 @@ depends=('dosbox-staging' 'bash')
 makedepends=('xorg-server-xvfb' 'util-linux' 'unzip')
 options=('!strip' '!debug')
 source=("file://./${pkgname}".{cue,bin}
+        "https://archive.org/download/strings-v2.5/STRING25.ZIP"
         "file://./blei2.zip"
         "file://./b2_3dfx.zip"
-        dosbox{,-install,-start,-update,-update-3dfx,-setup,-start-3dfx}.conf
-        "${pkgname}.sh" "${pkgname}-3dfx.sh" "${pkgname}-setup.sh" "${pkgname}.desktop")
+        dosbox{,-install,-start,-update,-update-3dfx,-setup,-start-3dfx,-network-server,-network-client}.conf
+        "${pkgname}.sh" "${pkgname}-3dfx.sh" "${pkgname}-setup.sh" "${pkgname}-network-server.sh" "${pkgname}-network-client.sh"
+        "${pkgname}.desktop")
 sha256sums=('d6b87b5ef85534b7893e741116eebfdb4cd336bab17edd7c34e6d3aac4ae0c71'
             'b1e475a2efd4b6f3105c43e38ea04caa4eda580295ccffd7b1230d1a5ea53e67'
+            '7fe87d3e38ab7ffb3528485c93aaece46d10a7536d72917b8d2807cffb44474b'
             '67713ff07a3b196e2cccece5c999504107ec88eb58f25b470474c89846a4c895'
             '383f623bfcc9807791d1a43e27ac817458305114d4d565a7c76ec85063607a05'
-            'b9c5b2967d5cd3e931b479e370a1ef9249f28b8dba3acdc473b73ad44faeda96'
-            'f2661ad5716653e3a106853488f338379f77e56815756b47f2dafee859b90aba'
+            '73f05a130bfe96f0c5bc81ff4979fa46fe6f7310c6e45235517190403b29da5b'
+            'e392e0714c792601afbbb575435e10756d309532c4ee991692e8e1b440e9e726'
             'd06da4a2f04686a156c7f9f1bdb2fd512a526a75499295c55287f83861f47767'
-            '91f5bc91fd982fc9817dcf72e530bf52fdf6455dbdb1141c66709a476c10ffba'
-            '8f9b21b74ec9d24983431edfec2ec146f1bdb9f2cf602dbea40f85765d19ec40'
-            '815f63522b182639a23cfca3e9af54825e2882bc5a3a3b0f1767095ea1b1eeef'
+            '635b4f113692fdbaa1b79f132130997f3d6a02e3685326737cea6b066db8fb65'
+            'a4d2dbed2140c721e88bf5d3217a725adc19882a66b17402d12e0ac31183ee66'
+            '7f8b6d15c7b95606242486a2bd7efb6cfc9206a044025e371b6a07501ded5b90'
             '4650f48a923b8e564db04e6808eb40c029f6b1f3cc3d63e831b41d7f13bb879e'
+            'a5c2d1f22615b2f69845d8f0c9167cc25f98aea52c91dbb535db4f65ba02aa21'
+            'b95e36f6be7b1834530e486b27148a536a64583342bab193bf19b2444aa8239b'
             '25994798f7a49773fe99bab569e9d17d8e09955193c91e3d17d6099822d47e76'
             'e339d92a63b9f1722d232cc8a17671346d8ae8a7a736843106de1d5140eadbb3'
             '5da97c3432a2d5ba53198c149f4e5a78d4d819d4594ba805ebbcefb4f0747f5a'
-            'fd202af4422109f344b12173bbb80e5df579c513e48b4d2e71442e1d72fdb424')
+            '5fa49c2dea28be6f402c67878c83f0cc98e8f0652dbb2c9d724084ccd03d1a40'
+            'd8ccd4b4e4fe468b6c267f5c631b1e604a38d6207d7b62428ed744a71bb86c80'
+            '712d0c11bbb11d758828e2c2033b11929595b37929ebd4471e684d0abc21c995')
 
 package() {
     mkdir -p "$pkgdir/usr/share/${pkgname}"
@@ -47,6 +54,7 @@ package() {
         dosbox --noprimaryconf --conf dosbox-update-3dfx.conf
 
         kill $xpid
+        cp "$srcdir/STRINGS.COM" .
     popd
 
     chown -R root:root "$pkgdir/usr/share/${pkgname}"
@@ -57,5 +65,8 @@ package() {
     install -D --mode 755 "$srcdir/${pkgname}.sh" "${pkgdir}/usr/bin/${pkgname}"
     install -D --mode 755 "$srcdir/${pkgname}-3dfx.sh" "${pkgdir}/usr/bin/${pkgname}-3dfx"
     install -D --mode 755 "$srcdir/${pkgname}-setup.sh" "${pkgdir}/usr/bin/${pkgname}-setup"
+    install -D --mode 755 "$srcdir/${pkgname}-network-server.sh" "${pkgdir}/usr/bin/${pkgname}-network-server"
+    install -D --mode 755 "$srcdir/${pkgname}-network-client.sh" "${pkgdir}/usr/bin/${pkgname}-network-client"
+
     install -D --mode 644 "$srcdir/${pkgname}.desktop" "${pkgdir}/usr/share/applications/${pkgname}.desktop"
 }
