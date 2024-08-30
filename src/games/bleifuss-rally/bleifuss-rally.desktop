@@ -5,3 +5,17 @@ Terminal=false
 Icon=/usr/share/bleifuss-rally/CONFIG/BR.ICO
 Type=Application
 Categories=Game;
+Actions=Setup;Server;Client;
+
+[Desktop Action Setup]
+Exec=/usr/bin/bleifuss-rally-setup
+Name=Setup
+Icon=/usr/share/bleifuss-rally/CONFIG/SETUP.ICO
+
+[Desktop Action Server]
+Exec=/usr/bin/bleifuss-rally-network-server
+Name=Network Server
+
+[Desktop Action Client]
+Exec=/usr/bin/bleifuss-rally-network-client
+Name=Network Client
