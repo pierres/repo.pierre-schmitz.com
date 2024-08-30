@@ -2,7 +2,7 @@
 
 pkgname=bleifuss
 pkgver=1.0.0
-pkgrel=2
+pkgrel=3
 pkgdesc="Ein Rennspiel, das von Milestone 1995 entwickelt wurde"
 arch=('any')
 url="https://de.wikipedia.org/wiki/Bleifuss"
@@ -18,10 +18,10 @@ source=("file://./${pkgname}".{cue,bin}
 sha256sums=('d3a0287d3a4e5b943007d1105f93a2fa0d46fa5a8bb3c71769e2e4249a54998a'
             'ab8d2407471bf2840e01872330bd3a78797b6fb5394c0a17d3a049d1d3c8a393'
             '7fe87d3e38ab7ffb3528485c93aaece46d10a7536d72917b8d2807cffb44474b'
-            'a39ed953ddfc95af2931e458c987074836c39d118f1671eae250688a4cf1e8e1'
-            '71753b6ae3e5d01eb4b854e18ff565fd1ce71c76647ff0b822875ce0557e3a15'
+            '627cc185a6fec3b0c398064d7a87c9bd7dcad85acf514cf6a4522223e0669da7'
+            'c23a33fc4ee2330240be44874e5bc9bed03519c750128aed2122971f7b02e3e2'
             'b7d3bb1a1a4ab120999cb23ae48e0dd3e62fe4fe05eec222225328ce9e7653d0'
-            'd0514866516831aa998262c054825f95ea95a6734f8090a03900f6d16067b660'
+            'a5eb4b1515ff0fab63a24c494a707f97ef743c37aa19d4d37f455dbba0764878'
             'fe308e744f05a252dec433dae8ebd5f6b53adc11616590f4a01ac3766e5fafc9'
             '572570e8dc9f3e5431cded3f79c1419ecc833e584666330b7408cbde13a93cba'
             'ff1cb31b8b69d35354a7aad651f7050f215a35b0a7d52ad871171812400cbc11'
