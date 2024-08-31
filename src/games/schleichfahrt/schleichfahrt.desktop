@@ -2,6 +2,19 @@
 Name=Schleichfahrt
 Exec=/usr/bin/schleichfahrt
 Terminal=false
-Icon=/usr/share/schleichfahrt/schleichfahrt.ico
+Icon=/usr/share/schleichfahrt/BB.ICO
 Type=Application
 Categories=Game;
+Actions=3dfx;D4G;Setup;
+
+[Desktop Action 3dfx]
+Exec=/usr/bin/schleichfahrt-3dfx
+Name=3dfx
+
+[Desktop Action D4G]
+Exec=/usr/bin/schleichfahrt-d4g
+Name=D4G
+
+[Desktop Action Setup]
+Exec=/usr/bin/schleichfahrt-setup
+Name=Setup

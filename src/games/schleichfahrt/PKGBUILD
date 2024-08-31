@@ -2,35 +2,64 @@
 
 pkgname=schleichfahrt
 pkgver=1.120
-pkgrel=2
+pkgrel=3
 pkgdesc="Ein spannendes Spiel, in dem ein futuristisches U-Boot in einer post-apokalyptischen Unterwasserwelt gegen feindliche Kräfte kämpft."
 arch=('any')
 url="https://web.archive.org/web/20040808052843/http://www.bluebyte.net/ger/products/schleichfahrt/index.htm"
 license=('custom')
 depends=('dosbox-staging' 'bash')
-makedepends=('innoextract')
+makedepends=('xorg-server-xvfb' 'util-linux' 'unzip')
 options=('!strip' '!debug')
-source=("file://./setup_archimedean_dynasty_german_2.0.0.4.exe"
+source=("file://./${pkgname}".{cue,bin}
         "https://archive.org/download/FTP.BLUEBYTE.COM.2004.03/FTP.BLUEBYTE.COM.2004.03.zip"
-        "${pkgname}.sh" "${pkgname}.desktop" "dosbox.conf")
-sha256sums=('c59efdeeca79bef8e1e5ac9e3207acd2f5b61ecb8eccc20321fa53962b392233'
+        dosbox{,-{install,start,setup,start-3dfx,start-d4g}}.conf
+        "${pkgname}.sh" "${pkgname}-3dfx.sh" "${pkgname}-setup.sh" "${pkgname}-d4g.sh"
+        "${pkgname}.desktop")
+sha256sums=('a9091346b53242003b0b9d4180f7f30d9be71f3db53ca5f0464d17cc6bc7f402'
+            'ff18ed78f8dfcd86444b8408ff6c55eeda2ed7bc048dfcd1f7af41a448befc94'
             '1aec5103e00dbdfa7858e6d0f624a469f0b6a8cd5110b5d8dd33da6f2fd2872d'
-            '1c516ae7929189b52803d6abe3cf718743fbc219918065a788179df10dfacba8'
-            '4b22bbed7f1b45139bc88fa1679101a7ec96ce8498a195d8abc64160bc182bc5'
-            '118ec221a8177df329e0c69de51caf77e30e7731deb10bb497ac0dcb40fbda08')
+            '39079fa71d0fdc67b71b5c40e989c853a7cb37cb03d7d473c8493347fa77570c'
+            'c7f9dcc10bde9a926596e0437d4ed01fd112df939dac0f851537b69c9362f7da'
+            'a188d48fdd7f605df2eb2a3e527cb0f3a0f01e6678664bdde5aab752753e27b7'
+            'b741e81468d5bdb03153374d854f1783406c8c1d09b1a3a4075506d667e0bef8'
+            'fccdde0179c8da50b544879a54d5fc248efc2679f3bd25842ecd5ec00afe4cdb'
+            'd222f5891ea69d51cd1b0bb3826503171c5d6a6c6bec1eb566280c9849eb6568'
+            '41a8ebe71236ee620f5421e1cfdf50ebc34e5537167355d16e0caa926245bfe2'
+            '08eb2d3fff04619b09fc9cc7b3e4b32041c1383fad0a7b1d87f975497235a30a'
+            '0b79e0088ff1e6c1e96df5785b4702af305ab0276b9ab19f58f5df1a6fc75870'
+            'c6da2a0c65bf3877885e0e25a1031eb29b9ff7b4680b615e21cd75024625b4cc'
+            '4f6977010636ee91d7b8b5044c6a00a9db5dd0f764ce014fe9c44aad816a7946')
 
 package() {
     mkdir -p "$pkgdir/usr/share/${pkgname}"
 
+    cp "$srcdir/${pkgname}".{cue,bin} "$pkgdir/usr/share/${pkgname}"
+    cp "$srcdir"/dosbox*.conf "$pkgdir/usr/share/${pkgname}"
+
     pushd "$pkgdir/usr/share/${pkgname}"
-    innoextract --extract --exclude-temp "$srcdir/setup_archimedean_dynasty_german_2.0.0.4.exe"
-    mv app/* .
-    mv goggame-*.ico "${pkgname}.ico"
-    rm -rf app __support commonappdata DOSBOX goggame* *.dll *.conf webcache.zip VRUSH
-    bsdtar xf "$srcdir/updates/ger/schleichfahrt/sf_3dfx.exe" GLIDE2X.OVL
+        Xvfb :12356 &
+        xpid=$!
+        export DISPLAY=:12356
+
+        dosbox --noprimaryconf --conf dosbox-install.conf
+        mv BLUEBYTE/SF/* .
+        rmdir BLUEBYTE/SF BLUEBYTE
+
+        bsdtar xf "$srcdir/updates/ger/schleichfahrt/sfup120.exe"
+        bsdtar xf "$srcdir/updates/ger/schleichfahrt/sf_3dfx.exe"
+        rm -rf VRUSH
+
+        kill $xpid
     popd
 
+    chown -R root:root "$pkgdir/usr/share/${pkgname}"
+
+    rm -f "$pkgdir/usr/share/${pkgname}"/dosbox-install.conf
+
     install -D --mode 755 "$srcdir/${pkgname}.sh" "${pkgdir}/usr/bin/${pkgname}"
-    install -D --mode 644 "$srcdir/dosbox.conf" "${pkgdir}/usr/share/${pkgname}/dosbox.conf"
+    install -D --mode 755 "$srcdir/${pkgname}-3dfx.sh" "${pkgdir}/usr/bin/${pkgname}-3dfx"
+    install -D --mode 755 "$srcdir/${pkgname}-d4g.sh" "${pkgdir}/usr/bin/${pkgname}-d4g"
+    install -D --mode 755 "$srcdir/${pkgname}-setup.sh" "${pkgdir}/usr/bin/${pkgname}-setup"
+
     install -D --mode 644 "$srcdir/${pkgname}.desktop" "${pkgdir}/usr/share/applications/${pkgname}.desktop"
 }
