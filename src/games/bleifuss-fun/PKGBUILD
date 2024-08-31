@@ -1,0 +1,68 @@
+# Maintainer: Pierre Schmitz <pierre@archlinux.de>
+
+pkgname=bleifuss-fun
+pkgver=6.56
+pkgrel=1
+pkgdesc="Ein Rennspiel, das von Milestone 1998 entwickelt wurde"
+arch=('any')
+url="https://de.wikipedia.org/wiki/Bleifuss_fun"
+license=('custom')
+depends=('dosbox-staging' 'bash')
+makedepends=('xorg-server-xvfb' 'util-linux' 'unzip')
+options=('!strip' '!debug')
+source=("file://./${pkgname}".{cue,bin}
+        "file://./blei_win.zip"
+        "file://./ble3dfx3.zip"
+        "file://./ble3dfx2.zip"
+        "https://archive.org/download/strings-v2.5/STRING25.ZIP"
+        dosbox{,-install,-start,-network-server,-network-client}.conf
+        "${pkgname}.sh" "${pkgname}-network-server.sh" "${pkgname}-network-client.sh"
+        "${pkgname}.desktop")
+sha256sums=('0c53776a94c6dc902f36723d05d2ba7b6125a4f3553f4cd85ed1cf1e7fec51ba'
+            '8f249e1951e6f424a2543955ec5f7f2a0457823f752b89c8f1ad3929ec952360'
+            'e98f2072b9d2af85c3db51e8f0dec162079fb059da9faf76630b948a8a0d2248'
+            '035d4ba99c1a4480c5f7a427fe46068d324a71d8d6fcbf62056d91ca3a09f605'
+            'a81a31f5c835b3051d94df088179a5e4b1bf48e99ef65df227d71ff91438cd4d'
+            '7fe87d3e38ab7ffb3528485c93aaece46d10a7536d72917b8d2807cffb44474b'
+            'c2055896fd42e508742b396d48f113a5f6e4f33a92675960fab2d95b7864c755'
+            '78ab477de9f497ae0c6b8f536327c71e3ab8852a6ebbbf7fce0b8811b43401fb'
+            'f42bcca05b0233d03b5e0e4f2ba8940b7f1f8eed02b0be1c7ecc3e1082161eaa'
+            'b4bf354d71df825a79202ff3cd114693d683f8a9ab093804688bf260c46c975b'
+            '2b6c8dbdb0e4271693f19a0797245f763505de0211a48a8cf946025036ebc29a'
+            '70214e4f2a4fff46fcfd0ab9dbe5b086107571857b4109bc9f96bee0e6d4b2f1'
+            '1858e62b0558b8b83aed0027881a7afc228acdf9513d824f602d70882cc91a57'
+            '39dd09f0917be6b4aef2ecf9c72cd1a427c881fb74b0bdaebe6085aeabbf1309'
+            'd46852ebc128882d29dc9364e5375ada4aef4482a9bb07989add64ac48a4b708')
+
+package() {
+    mkdir -p "$pkgdir/usr/share/${pkgname}"
+
+    cp "$srcdir/${pkgname}".{cue,bin} "$pkgdir/usr/share/${pkgname}"
+    cp "$srcdir"/dosbox*.conf "$pkgdir/usr/share/${pkgname}"
+
+    pushd "$pkgdir/usr/share/${pkgname}"
+        Xvfb :12356 &
+        xpid=$!
+        export DISPLAY=:12356
+
+        dosbox --noprimaryconf --conf dosbox-install.conf
+
+        bsdtar xf "$srcdir/blei_win.zip"
+        bsdtar xf "$srcdir/ble3dfx3.zip"
+        bsdtar xf "$srcdir/ble3dfx2.zip"
+
+        kill $xpid
+
+        cp "$srcdir/STRINGS.COM" .
+    popd
+
+    chown -R root:root "$pkgdir/usr/share/${pkgname}"
+
+    rm -f "$pkgdir/usr/share/${pkgname}"/dosbox-install.conf
+
+    install -D --mode 755 "$srcdir/${pkgname}.sh" "${pkgdir}/usr/bin/${pkgname}"
+    install -D --mode 755 "$srcdir/${pkgname}-network-server.sh" "${pkgdir}/usr/bin/${pkgname}-network-server"
+    install -D --mode 755 "$srcdir/${pkgname}-network-client.sh" "${pkgdir}/usr/bin/${pkgname}-network-client"
+
+    install -D --mode 644 "$srcdir/${pkgname}.desktop" "${pkgdir}/usr/share/applications/${pkgname}.desktop"
+}

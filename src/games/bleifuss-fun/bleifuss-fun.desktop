@@ -1,0 +1,15 @@
+[Desktop Entry]
+Name=Bleifuss Fun
+Exec=/usr/bin/bleifuss-fun
+Terminal=false
+Type=Application
+Categories=Game;
+Actions=Server;Client;
+
+[Desktop Action Server]
+Exec=/usr/bin/bleifuss-fun-network-server
+Name=Network Server
+
+[Desktop Action Client]
+Exec=/usr/bin/bleifuss-fun-network-client
+Name=Network Client
