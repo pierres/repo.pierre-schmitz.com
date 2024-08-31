@@ -2,7 +2,7 @@
 
 pkgname=extreme-assault
 pkgver=1.2.3
-pkgrel=1
+pkgrel=2
 pkgdesc="Ein actiongeladenes Spiel, in dem ein futuristischer Hubschrauber gegen außerirdische Invasoren kämpft."
 arch=('any')
 url="https://web.archive.org/web/20040614101032/http://www.bluebyte.net/ger/products/extreme-assault/index.htm"
@@ -10,32 +10,43 @@ license=('custom')
 depends=('dosbox-staging' 'bash' 'soundfont-fluid')
 makedepends=('xorg-server-xvfb' 'util-linux')
 options=('!strip' '!debug')
-source=("file://./${pkgname}".{cue,img}
+source=("file://./${pkgname}".{cue,bin}
         "https://archive.org/download/FTP.BLUEBYTE.COM.2004.03/FTP.BLUEBYTE.COM.2004.03.zip"
-        dosbox{,-{install{,-addons},setsound,start,update-{110,120,121,122,123}}}.conf
-        "${pkgname}.sh" "${pkgname}.desktop")
-sha256sums=('1fff573eadf38d5219e6250c7b93ddbc6cda72176c18701b403ce132ef4b45b0'
-            'debcb20d8f11a8221ff16c2838a8063e6c80a3e353442aba842950bfe9201d68'
+        "https://archive.org/download/strings-v2.5/STRING25.ZIP"
+        dosbox{,-{install{,-addons},setsound,start,update-{110,120,121,122,123}},-setup,-start-3dfx,-network-server,-network-client}.conf
+        "${pkgname}.sh" "${pkgname}-3dfx.sh" "${pkgname}-setup.sh" "${pkgname}-network-server.sh" "${pkgname}-network-client.sh"
+        "${pkgname}.desktop")
+sha256sums=('73c37cf15e236dbfd637d70a7ed3e9efa50362668f948ca1ee8bf14a1a83d569'
+            'e65885ebc4acde029a9c4e5f70a18c063655bd6c8df728bfd3124cc4c04258f6'
             '1aec5103e00dbdfa7858e6d0f624a469f0b6a8cd5110b5d8dd33da6f2fd2872d'
-            '38844277fd36c909028bb7fc896003de59a66ccd3e858b9a16e3ef110244fc79'
+            '7fe87d3e38ab7ffb3528485c93aaece46d10a7536d72917b8d2807cffb44474b'
+            '4ea0bdf871d758f79663b48c30709f184e536f0f6e2cfe3f56d7dd1bc3635fca'
             '5d48ef55b428f5a97b79b81a301d8aee181b30f6452c3d47ae40d9879f35c76b'
             '096d3c29d07055475a4928a989be6ee68a86107cb62a9f788bd514d961d2598a'
             '43954a52a1eb9456655cd31c365d5b740c98fcb4bec7b66ff1920b96529edd0e'
-            '9a995ed4eae9a8efda9dae4b0cad8a4f1281b3b29888b5d7bde31d9832fd5f36'
+            'cd07166067e1d8f24491df79232b4ff90867dd22de5aa75e7a36a6572f6e1555'
             '5a5ed467725922a5f25bfd0d37c412830cd7f8d0b54ff55d31ebdb0b735d1dfc'
             '4bc72eea635bfb98a42719c5e358ed5340f205c51cfff7eeb1d220e4bcd7369e'
             '42ee9dcc071d09194de1e005614af1a1e5d279c1ed1296ce1a583ca6900f8343'
             '1e19e310b8b19b0ad65fb07fa2b6d8d9fe499efc0c65953d81b2a995e54aae0e'
             '25735f92b9df8f2c5d7f70a51637efd6b0f24f8e6f954a5a016dd183b6f26119'
-            'dcf4b6926d5e4fee56b2101e7168b59e917ab4d1751dd0c30cbdb0a6146d500c'
-            'bc4e0edc911f25107ae29bb4742befe2cfb377631741eeb571d068af20c932d6')
+            '0ff274005e005989948dbb1c201c0c8a22770fd5e2fc3fcd77f41493233334b3'
+            '9a995ed4eae9a8efda9dae4b0cad8a4f1281b3b29888b5d7bde31d9832fd5f36'
+            'e1d646a459481c6ba4f47201330392160f9632f7b7ec085f23a6fc6e02f3ac12'
+            '795cc64d4d421757c77a2043ea68e83c3b6e6be99b49436f8e4775a1593a132b'
+            '2a5c501749e34da2407260e5289e34752d4020aeefce36ae7dda2cff46314b18'
+            'bfde84488813e11b290fff1ca4e2cd8400aac82e0e4076366d9aa367d030a658'
+            '86a3ea1bc6e39de2e49babd5929bc2131d4b6e038e24d85dd94f670d39be459a'
+            '070a6686d87cee7dd77566c04cc0149d55b02d7ef79cb95b83a66086897f9e3b'
+            'b14218f79f6933a2505220e0b1f91f02b33d2f82f4466fda8d9733de0eb1ec6e'
+            '5013359ff4f20e504ae149dca05a20ee34e77b028208ecb0e4717b1747c8d0fd')
 
 package() {
     mkdir -p "$pkgdir/usr/share/${pkgname}/patches"
 
     cp "$srcdir/updates/ger/extreme-assault/"*/xa_*.exe "$pkgdir/usr/share/${pkgname}/patches"
     cp "$srcdir/updates/ger/extreme-assault/"*.exe "$pkgdir/usr/share/${pkgname}/patches"
-    cp "$srcdir/${pkgname}".{cue,img} "$pkgdir/usr/share/${pkgname}"
+    cp "$srcdir/${pkgname}".{cue,bin} "$pkgdir/usr/share/${pkgname}"
     cp "$srcdir"/dosbox*.conf "$pkgdir/usr/share/${pkgname}"
 
     pushd "$pkgdir/usr/share/${pkgname}"
@@ -58,14 +69,22 @@ package() {
         kill $xpid
 
         sed -re 's/^MUSIC=.*/MUSIC=CD_AUDIO/g' -i INIT.CFG
+
+        cp "$srcdir/STRINGS.COM" .
     popd
 
     chown -R root:root "$pkgdir/usr/share/${pkgname}"
 
     rm -rf "$pkgdir/usr/share/${pkgname}/patches"
-    cat "$pkgdir/usr/share/${pkgname}/dosbox-start.conf" >> "$pkgdir/usr/share/${pkgname}/dosbox.conf"
-    rm -f "$pkgdir/usr/share/${pkgname}"/dosbox-*.conf
+
+    rm -f "$pkgdir/usr/share/${pkgname}"/dosbox-update*.conf
+    rm -f "$pkgdir/usr/share/${pkgname}"/dosbox-install*.conf
 
     install -D --mode 755 "$srcdir/${pkgname}.sh" "${pkgdir}/usr/bin/${pkgname}"
+    install -D --mode 755 "$srcdir/${pkgname}-3dfx.sh" "${pkgdir}/usr/bin/${pkgname}-3dfx"
+    install -D --mode 755 "$srcdir/${pkgname}-setup.sh" "${pkgdir}/usr/bin/${pkgname}-setup"
+    install -D --mode 755 "$srcdir/${pkgname}-network-server.sh" "${pkgdir}/usr/bin/${pkgname}-network-server"
+    install -D --mode 755 "$srcdir/${pkgname}-network-client.sh" "${pkgdir}/usr/bin/${pkgname}-network-client"
+
     install -D --mode 644 "$srcdir/${pkgname}.desktop" "${pkgdir}/usr/share/applications/${pkgname}.desktop"
 }

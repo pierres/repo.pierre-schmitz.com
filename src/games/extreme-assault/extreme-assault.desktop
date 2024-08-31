@@ -5,3 +5,20 @@ Terminal=false
 Icon=/usr/share/extreme-assault/EXTREME.ICO
 Type=Application
 Categories=Game;
+Actions=3dfx;Setup;Server;Client;
+
+[Desktop Action 3dfx]
+Exec=/usr/bin/extreme-assault-3dfx
+Name=3dfx
+
+[Desktop Action Setup]
+Exec=/usr/bin/extreme-assault-setup
+Name=Setup
+
+[Desktop Action Server]
+Exec=/usr/bin/extreme-assault-network-server
+Name=Network Server
+
+[Desktop Action Client]
+Exec=/usr/bin/extreme-assault-network-client
+Name=Network Client
