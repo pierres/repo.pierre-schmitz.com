@@ -20,8 +20,9 @@ source=("file://./${pkgname}".{cue,bin}
 sha256sums=('a9091346b53242003b0b9d4180f7f30d9be71f3db53ca5f0464d17cc6bc7f402'
             'ff18ed78f8dfcd86444b8408ff6c55eeda2ed7bc048dfcd1f7af41a448befc94'
             '1aec5103e00dbdfa7858e6d0f624a469f0b6a8cd5110b5d8dd33da6f2fd2872d'
+            '85f6b7a1e28a58bed69b8c28ae915c71bf71ad993842a5fde9dcc72b84b2ce1c'
             '39079fa71d0fdc67b71b5c40e989c853a7cb37cb03d7d473c8493347fa77570c'
-            'c7f9dcc10bde9a926596e0437d4ed01fd112df939dac0f851537b69c9362f7da'
+            '8859b0a478786494a2484ee271776bafbdc3273f650c9497aad14d8ab1ebcc94'
             'a188d48fdd7f605df2eb2a3e527cb0f3a0f01e6678664bdde5aab752753e27b7'
             'b741e81468d5bdb03153374d854f1783406c8c1d09b1a3a4075506d667e0bef8'
             'fccdde0179c8da50b544879a54d5fc248efc2679f3bd25842ecd5ec00afe4cdb'
@@ -30,7 +31,7 @@ sha256sums=('a9091346b53242003b0b9d4180f7f30d9be71f3db53ca5f0464d17cc6bc7f402'
             '08eb2d3fff04619b09fc9cc7b3e4b32041c1383fad0a7b1d87f975497235a30a'
             '0b79e0088ff1e6c1e96df5785b4702af305ab0276b9ab19f58f5df1a6fc75870'
             'c6da2a0c65bf3877885e0e25a1031eb29b9ff7b4680b615e21cd75024625b4cc'
-            '4f6977010636ee91d7b8b5044c6a00a9db5dd0f764ce014fe9c44aad816a7946')
+            '637527199cd3fa9cf64e29128f488f890db5cf38fb1eea7268465a01632c253c')
 
 package() {
     mkdir -p "$pkgdir/usr/share/${pkgname}"
@@ -55,6 +56,8 @@ package() {
     popd
 
     chown -R root:root "$pkgdir/usr/share/${pkgname}"
+    find "$pkgdir/usr/share/${pkgname}" -type f -exec chmod 0644 {} \;
+    find "$pkgdir/usr/share/${pkgname}" -type d -exec chmod 0755 {} \;
 
     rm -f "$pkgdir/usr/share/${pkgname}"/dosbox-install.conf
 
