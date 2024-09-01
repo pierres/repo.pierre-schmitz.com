@@ -2,16 +2,18 @@
 
 pkgname=schleichfahrt
 pkgver=1.120
-pkgrel=3
+pkgrel=4
 pkgdesc="Ein spannendes Spiel, in dem ein futuristisches U-Boot in einer post-apokalyptischen Unterwasserwelt gegen feindliche Kräfte kämpft."
 arch=('any')
 url="https://web.archive.org/web/20040808052843/http://www.bluebyte.net/ger/products/schleichfahrt/index.htm"
 license=('custom')
 depends=('dosbox-staging' 'bash')
-makedepends=('xorg-server-xvfb' 'util-linux' 'unzip')
+makedepends=('xorg-server-xvfb' 'util-linux')
 options=('!strip' '!debug')
 source=("file://./${pkgname}".{cue,bin}
         "https://archive.org/download/FTP.BLUEBYTE.COM.2004.03/FTP.BLUEBYTE.COM.2004.03.zip"
+        # https://jealousjellyfish.de/viewtopic.php?p=11082#p11082
+        "logo.svg"
         dosbox{,-{install,start,setup,start-3dfx,start-d4g}}.conf
         "${pkgname}.sh" "${pkgname}-3dfx.sh" "${pkgname}-setup.sh" "${pkgname}-d4g.sh"
         "${pkgname}.desktop")
@@ -61,5 +63,6 @@ package() {
     install -D --mode 755 "$srcdir/${pkgname}-d4g.sh" "${pkgdir}/usr/bin/${pkgname}-d4g"
     install -D --mode 755 "$srcdir/${pkgname}-setup.sh" "${pkgdir}/usr/bin/${pkgname}-setup"
 
+    install -D --mode 644 "$srcdir/logo.svg" "${pkgdir}/usr/share/${pkgname}/logo.svg"
     install -D --mode 644 "$srcdir/${pkgname}.desktop" "${pkgdir}/usr/share/applications/${pkgname}.desktop"
 }
