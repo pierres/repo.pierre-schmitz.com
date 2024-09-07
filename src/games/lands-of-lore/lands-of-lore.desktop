@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Lands of Lore
+Exec=scummvm -p /usr/share/lands-of-lore --fullscreen --stretch-mode=pixel-perfect --no-filtering --music-driver=fluidsynth --language=en --aspect-ratio --soundfont=/usr/share/soundfonts/FluidR3_GM.sf2 lol
+Icon=/usr/share/lands-of-lore/LANDS.ICO
+Terminal=false
+Type=Application
+Categories=Game;

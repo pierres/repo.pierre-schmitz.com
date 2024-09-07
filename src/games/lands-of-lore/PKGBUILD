@@ -2,15 +2,17 @@
 
 pkgname=lands-of-lore
 pkgver=1.0.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Lands of Lore: The Throne of Chaos"
 arch=('any')
 url="https://en.wikipedia.org/wiki/Lands_of_Lore:_The_Throne_of_Chaos"
 license=('custom')
-depends=('scummvm')
+depends=('scummvm' 'soundfont-fluid')
 options=('!strip' '!debug')
-source=("file://./${pkgname}.iso")
-sha256sums=('9d660783c84bbd67a6c9de207a3a8ca139b1366093af1f158718ca5cfafd8a32')
+source=("file://./${pkgname}.iso"
+        "${pkgname}.desktop")
+sha256sums=('9d660783c84bbd67a6c9de207a3a8ca139b1366093af1f158718ca5cfafd8a32'
+            'ca39b444c490617babb7fb4d23194b3114eebfbb4ceaaea754b9bbd5bfb948ad')
 
 prepare() {
     cd "$srcdir"
@@ -19,8 +21,12 @@ prepare() {
 
 package() {
     mkdir -p "$pkgdir/usr/share/${pkgname}"
-    cp -a "$srcdir/DATA/"{FILEDATA.FDT,*.PAK,*.TLK,ENG,FRE,GER} "$pkgdir/usr/share/${pkgname}"
+
+    cp -a "$srcdir/DATA/"{FILEDATA.FDT,*.PAK,*.TLK,ENG,FRE,GER,HARDRIVE/LANDS.ICO} "$pkgdir/usr/share/${pkgname}"
+
     chown -R root:root "$pkgdir/usr/share/${pkgname}"
     find "$pkgdir/usr/share/${pkgname}" -type f -exec chmod 0644 {} \;
     find "$pkgdir/usr/share/${pkgname}" -type d -exec chmod 0755 {} \;
+
+    install -Dm644 "$srcdir/${pkgname}.desktop" "$pkgdir/usr/share/applications/${pkgname}.desktop"
 }
