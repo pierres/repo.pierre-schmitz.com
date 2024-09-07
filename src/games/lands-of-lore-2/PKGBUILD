@@ -1,0 +1,64 @@
+# Maintainer: Pierre Schmitz <pierre@archlinux.de>
+
+pkgname=lands-of-lore-2
+pkgver=1.30
+pkgrel=1
+pkgdesc="Lands of Lore: Guardians of Destiny"
+arch=('any')
+url="https://en.wikipedia.org/wiki/Lands_of_Lore:_Guardians_of_Destiny"
+license=('custom')
+depends=('dosbox-staging' 'bash' 'soundfont-fluid')
+makedepends=('innoextract')
+options=('!strip' '!debug')
+source=("file://./setup_lands_of_lore2_2.1.0.17.exe"
+        "https://archive.org/download/FTP.BLUEBYTE.COM.2004.03/FTP.BLUEBYTE.COM.2004.03.zip"
+        "dosbox.conf" "dosbox-start.conf"
+        "${pkgname}.sh"
+        "${pkgname}.desktop")
+sha256sums=('5d48f692c5ac0abb71c9cbdc26e98fa4a33bdc0d64c99fbf3f29028df62efac8'
+            '1aec5103e00dbdfa7858e6d0f624a469f0b6a8cd5110b5d8dd33da6f2fd2872d'
+            'ba8cc499b5d30b531b1d19d69762d14eede6b08dc9969697fdabd399039baa5a'
+            'a14e19c4b8e679ef88805ebe3035d20581e88a039ee9b0fa1170f082f61f2342'
+            '83c4b542e4082aee6cc29157775bc07d75daa53a8ee8c6b74b94f6fc319b4b32'
+            '50db72f541857554c819ec37e67794b4eb4039b52b07612fcd2d3f8332c458f9')
+
+prepare() {
+    bsdtar xf "$srcdir/updates/ger/schleichfahrt/sf_3dfx.exe"
+}
+
+package() {
+    mkdir -p "$pkgdir/usr/share/${pkgname}"
+
+    pushd "$pkgdir/usr/share/${pkgname}"
+        innoextract --extract --exclude-temp "$srcdir/setup_lands_of_lore2_2.1.0.17.exe"
+        mv app/* .
+        mv __support/save/SAVEGAME .
+        mv goggame-*.ico "${pkgname}.ico"
+
+        rm -rf __support app commonappdata DOSBOX goggame-* *.dll *.DLL webcache.zip _*.EXE dosbox*.conf
+
+        cp "${srcdir}/GLIDE2X.OVL" .
+
+        sed -e 's/Audio_Channels=4/Audio_Channels=16/' \
+            -e 's/Audio_Music_Type=Midi/Audio_Music_Type=Digital/' \
+            -e 's/Acceleration_Toggle=Off/Acceleration_Toggle=On/' \
+            -i OPTIONS.INI
+
+        sed -e 's/DeviceName=Sound Blaster ASP\/16/DeviceName=MPU-401/' \
+            -e 's/DeviceID=0xa009/DeviceID=0xa001/' \
+            -e 's/DevicePort=0x388/DevicePort=0x330/' \
+            -e 's/RAM=26/RAM=64/' \
+            -i LOLSETUP.INI
+    popd
+
+    chown -R root:root "$pkgdir/usr/share/${pkgname}"
+    find "$pkgdir/usr/share/${pkgname}" -type f -exec chmod 0644 {} \;
+    find "$pkgdir/usr/share/${pkgname}" -type d -exec chmod 0755 {} \;
+
+    install -D --mode 644 "$srcdir/dosbox.conf" "${pkgdir}/usr/share/${pkgname}/dosbox.conf"
+
+    install -D --mode 755 "$srcdir/${pkgname}.sh" "${pkgdir}/usr/bin/${pkgname}"
+    install -D --mode 644 "$srcdir/dosbox-start.conf" "${pkgdir}/usr/share/${pkgname}/dosbox-start.conf"
+
+    install -D --mode 644 "$srcdir/${pkgname}.desktop" "${pkgdir}/usr/share/applications/${pkgname}.desktop"
+}

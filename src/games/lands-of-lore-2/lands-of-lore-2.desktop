@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Lands of Lore 2
+Exec=/usr/bin/lands-of-lore-2
+Terminal=false
+Icon=/usr/share/lands-of-lore-2/lands-of-lore-2.ico
+Type=Application
+Categories=Game;
