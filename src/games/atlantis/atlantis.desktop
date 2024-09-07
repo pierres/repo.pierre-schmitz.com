@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Indiana Jones and the Fate of Atlantis
+Exec=scummvm -p /usr/share/atlantis --fullscreen --stretch-mode=pixel-perfect --no-filtering --music-driver=mt32 --language=en --aspect-ratio scumm:atlantis
+Icon=/usr/share/atlantis/atlantis.ico
+Terminal=false
+Type=Application
+Categories=Game;

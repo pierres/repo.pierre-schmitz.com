@@ -1,0 +1,38 @@
+# Maintainer: Pierre Schmitz <pierre@archlinux.de>
+
+pkgname=atlantis
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="Indiana Jones and the Fate of Atlantis"
+arch=('any')
+url="https://en.wikipedia.org/wiki/Indiana_Jones_and_the_Fate_of_Atlantis"
+license=('custom')
+depends=('scummvm')
+makedepends=('innoextract' 'imagemagick')
+options=('!strip' '!debug')
+source=("file://./setup_indiana_jones_and_the_fate_of_atlantis_1.0_(20270).exe"
+        "file://./CM32L_CONTROL.ROM" "file://./CM32L_PCM.ROM"
+        "${pkgname}.desktop")
+sha256sums=('78d819c7f79a22a205a0971c701965d48845ad726660a72e80c85619e448dbc8'
+            '08d68695e5bff6bbcbb751d6e4453db9f5ead0b5f41e86480798a04376dfe090'
+            '0dc50190bb7ea3fb212c970346b771a511772b528801e7eda6d27efda8c40698'
+            '695f6759f146d3a526bfcc15e93a03dff6b402c96e663d80f6dc5abac9ae86cf')
+
+prepare() {
+    innoextract --extract --exclude-temp "${srcdir}/setup_indiana_jones_and_the_fate_of_atlantis_1.0_(20270).exe"
+}
+
+package() {
+    mkdir -p "$pkgdir/usr/share/${pkgname}"
+
+    cp "${srcdir}"/{MONSTER.SOU,ATLANTIS.00{0,1}} "$pkgdir/usr/share/${pkgname}"
+    cp "${srcdir}/"*.ROM "$pkgdir/usr/share/${pkgname}"
+
+    magick "${srcdir}/app/"goggame-*.ico -compress none "$pkgdir/usr/share/${pkgname}/${pkgname}.ico"
+
+    chown -R root:root "$pkgdir/usr/share/${pkgname}"
+    find "$pkgdir/usr/share/${pkgname}" -type f -exec chmod 0644 {} \;
+    find "$pkgdir/usr/share/${pkgname}" -type d -exec chmod 0755 {} \;
+
+    install -Dm644 "$srcdir/${pkgname}.desktop" "$pkgdir/usr/share/applications/${pkgname}.desktop"
+}
