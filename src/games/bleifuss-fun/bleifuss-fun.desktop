@@ -2,5 +2,6 @@
 Name=Bleifuss Fun
 Exec=/usr/bin/bleifuss-fun
 Terminal=false
+Icon=/usr/share/bleifuss-fun/bleifuss-fun.ico
 Type=Application
 Categories=Game;
