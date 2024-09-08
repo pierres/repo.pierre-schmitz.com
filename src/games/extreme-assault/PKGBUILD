@@ -2,7 +2,7 @@
 
 pkgname=extreme-assault
 pkgver=1.2.3
-pkgrel=2
+pkgrel=3
 pkgdesc="Ein actiongeladenes Spiel, in dem ein futuristischer Hubschrauber gegen außerirdische Invasoren kämpft."
 arch=('any')
 url="https://web.archive.org/web/20040614101032/http://www.bluebyte.net/ger/products/extreme-assault/index.htm"
@@ -20,16 +20,16 @@ sha256sums=('73c37cf15e236dbfd637d70a7ed3e9efa50362668f948ca1ee8bf14a1a83d569'
             'e65885ebc4acde029a9c4e5f70a18c063655bd6c8df728bfd3124cc4c04258f6'
             '1aec5103e00dbdfa7858e6d0f624a469f0b6a8cd5110b5d8dd33da6f2fd2872d'
             '7fe87d3e38ab7ffb3528485c93aaece46d10a7536d72917b8d2807cffb44474b'
-            '4ea0bdf871d758f79663b48c30709f184e536f0f6e2cfe3f56d7dd1bc3635fca'
-            '5d48ef55b428f5a97b79b81a301d8aee181b30f6452c3d47ae40d9879f35c76b'
-            '096d3c29d07055475a4928a989be6ee68a86107cb62a9f788bd514d961d2598a'
+            '28b492792036259fe213bac7522d9ece085b8d05ce11ec025dcea93dd6898461'
+            '74d60d359d1ecb1726fd6700bca3e89a3ae57f62e719c4926353b210738e5ffc'
+            '9572ab2fc6bc13e763573440596e2157df3ae5a28138385cb7aa451cb5ff700b'
             '43954a52a1eb9456655cd31c365d5b740c98fcb4bec7b66ff1920b96529edd0e'
             'cd07166067e1d8f24491df79232b4ff90867dd22de5aa75e7a36a6572f6e1555'
-            '5a5ed467725922a5f25bfd0d37c412830cd7f8d0b54ff55d31ebdb0b735d1dfc'
-            '4bc72eea635bfb98a42719c5e358ed5340f205c51cfff7eeb1d220e4bcd7369e'
-            '42ee9dcc071d09194de1e005614af1a1e5d279c1ed1296ce1a583ca6900f8343'
-            '1e19e310b8b19b0ad65fb07fa2b6d8d9fe499efc0c65953d81b2a995e54aae0e'
-            '25735f92b9df8f2c5d7f70a51637efd6b0f24f8e6f954a5a016dd183b6f26119'
+            'ef2e45583a809abd12ea5ff1db5bb5a5764c1ce45427f83e86951b0fcce67f0c'
+            '5bc1fd9643ec3927e3cffb39cd0f0cae429a62d93771eb4b3332264ab7c47a6d'
+            '3b3faa98a987d5461f95555a69246b728430880b482bcfe7a721b615cdeafafc'
+            '3ca0d39b9328eaf9b30661beff0a58ef108f077bcbb3989ae5dce487cdd7ff17'
+            'c4cc9e324a579fabbed9fd8058a982d48f9cf763a6d43729763929793fedc71c'
             '0ff274005e005989948dbb1c201c0c8a22770fd5e2fc3fcd77f41493233334b3'
             '9a995ed4eae9a8efda9dae4b0cad8a4f1281b3b29888b5d7bde31d9832fd5f36'
             'e1d646a459481c6ba4f47201330392160f9632f7b7ec085f23a6fc6e02f3ac12'
@@ -54,17 +54,17 @@ package() {
         xpid=$!
         export DISPLAY=:12356
 
-        dosbox --noprimaryconf --conf dosbox-install.conf
+        dosbox --noprimaryconf --conf dosbox-install.conf --set output=texture --set texture_renderer=software
         mv BLUEBYTE/EXTREME/* .
         rmdir BLUEBYTE/EXTREME BLUEBYTE
 
-        dosbox --noprimaryconf --conf dosbox-install-addons.conf
-        dosbox --noprimaryconf --conf dosbox-setsound.conf
-        dosbox --noprimaryconf --conf dosbox-update-110.conf
-        dosbox --noprimaryconf --conf dosbox-update-120.conf
-        dosbox --noprimaryconf --conf dosbox-update-121.conf
-        dosbox --noprimaryconf --conf dosbox-update-122.conf
-        dosbox --noprimaryconf --conf dosbox-update-123.conf
+        dosbox --noprimaryconf --conf dosbox-install-addons.conf --set output=texture --set texture_renderer=software
+        dosbox --noprimaryconf --conf dosbox-setsound.conf --set output=texture --set texture_renderer=software
+        dosbox --noprimaryconf --conf dosbox-update-110.conf --set output=texture --set texture_renderer=software
+        dosbox --noprimaryconf --conf dosbox-update-120.conf --set output=texture --set texture_renderer=software
+        dosbox --noprimaryconf --conf dosbox-update-121.conf --set output=texture --set texture_renderer=software
+        dosbox --noprimaryconf --conf dosbox-update-122.conf --set output=texture --set texture_renderer=software
+        dosbox --noprimaryconf --conf dosbox-update-123.conf --set output=texture --set texture_renderer=software
 
         kill $xpid
 
@@ -74,6 +74,8 @@ package() {
     popd
 
     chown -R root:root "$pkgdir/usr/share/${pkgname}"
+    find "$pkgdir/usr/share/${pkgname}" -type f -exec chmod 0644 {} \;
+    find "$pkgdir/usr/share/${pkgname}" -type d -exec chmod 0755 {} \;
 
     rm -rf "$pkgdir/usr/share/${pkgname}/patches"
 
