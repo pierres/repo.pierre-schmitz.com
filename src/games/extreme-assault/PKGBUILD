@@ -2,7 +2,7 @@
 
 pkgname=extreme-assault
 pkgver=1.2.3
-pkgrel=3
+pkgrel=4
 pkgdesc="Ein actiongeladenes Spiel, in dem ein futuristischer Hubschrauber gegen außerirdische Invasoren kämpft."
 arch=('any')
 url="https://web.archive.org/web/20040614101032/http://www.bluebyte.net/ger/products/extreme-assault/index.htm"
@@ -20,7 +20,7 @@ sha256sums=('73c37cf15e236dbfd637d70a7ed3e9efa50362668f948ca1ee8bf14a1a83d569'
             'e65885ebc4acde029a9c4e5f70a18c063655bd6c8df728bfd3124cc4c04258f6'
             '1aec5103e00dbdfa7858e6d0f624a469f0b6a8cd5110b5d8dd33da6f2fd2872d'
             '7fe87d3e38ab7ffb3528485c93aaece46d10a7536d72917b8d2807cffb44474b'
-            '28b492792036259fe213bac7522d9ece085b8d05ce11ec025dcea93dd6898461'
+            'b2db4595b3def7f3146592ad2f46e156e3854924f2c6eac925ee8fff8a2a3276'
             '74d60d359d1ecb1726fd6700bca3e89a3ae57f62e719c4926353b210738e5ffc'
             '9572ab2fc6bc13e763573440596e2157df3ae5a28138385cb7aa451cb5ff700b'
             '43954a52a1eb9456655cd31c365d5b740c98fcb4bec7b66ff1920b96529edd0e'
