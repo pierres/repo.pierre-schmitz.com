@@ -2,7 +2,7 @@
 
 pkgname=bleifuss
 pkgver=1.0.0
-pkgrel=4
+pkgrel=5
 pkgdesc="Ein Rennspiel, das von Milestone 1995 entwickelt wurde"
 arch=('any')
 url="https://de.wikipedia.org/wiki/Bleifuss"
@@ -18,7 +18,7 @@ source=("file://./${pkgname}".{cue,bin}
 sha256sums=('d3a0287d3a4e5b943007d1105f93a2fa0d46fa5a8bb3c71769e2e4249a54998a'
             'ab8d2407471bf2840e01872330bd3a78797b6fb5394c0a17d3a049d1d3c8a393'
             '7fe87d3e38ab7ffb3528485c93aaece46d10a7536d72917b8d2807cffb44474b'
-            '43e972ee400da84509a16122c5bd9118afeb6a782aae8c88df3ddee5acd24449'
+            'ad0df1568ab0d04be5be0c18c879cac14e956712558c2a06ee2df193193b773a'
             'c23a33fc4ee2330240be44874e5bc9bed03519c750128aed2122971f7b02e3e2'
             'b7d3bb1a1a4ab120999cb23ae48e0dd3e62fe4fe05eec222225328ce9e7653d0'
             'a5eb4b1515ff0fab63a24c494a707f97ef743c37aa19d4d37f455dbba0764878'
@@ -41,13 +41,15 @@ package() {
         xpid=$!
         export DISPLAY=:12356
 
-        dosbox --noprimaryconf --conf dosbox-install.conf
+        dosbox --noprimaryconf --conf dosbox-install.conf --set output=texture --set texture_renderer=software
 
         kill $xpid
         cp "$srcdir/STRINGS.COM" .
     popd
 
     chown -R root:root "$pkgdir/usr/share/${pkgname}"
+    find "$pkgdir/usr/share/${pkgname}" -type f -exec chmod 0644 {} \;
+    find "$pkgdir/usr/share/${pkgname}" -type d -exec chmod 0755 {} \;
 
     rm -f "$pkgdir/usr/share/${pkgname}"/dosbox-install.conf
 
