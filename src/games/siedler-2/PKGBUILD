@@ -2,7 +2,7 @@
 
 pkgname=siedler-2
 pkgver=1.51
-pkgrel=6
+pkgrel=7
 pkgdesc="Ein Aufbaustrategiespiel von Blue Byte."
 arch=('any')
 url="https://www.gog.com/de/game/the_settlers_2_gold_edition"
@@ -33,6 +33,10 @@ package() {
     rm -rf __redist __support app commonappdata DOSBOX goggame-*
     mkdir WORLDS
     popd
+
+    chown -R root:root "$pkgdir/usr/share/${pkgname}"
+    find "$pkgdir/usr/share/${pkgname}" -type f -exec chmod 0644 {} \;
+    find "$pkgdir/usr/share/${pkgname}" -type d -exec chmod 0755 {} \;
 
     install -D --mode 644 "$srcdir/dosbox.conf" "${pkgdir}/usr/share/${pkgname}/dosbox.conf"
 
