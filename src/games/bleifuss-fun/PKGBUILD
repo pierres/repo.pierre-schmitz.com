@@ -2,7 +2,7 @@
 
 pkgname=bleifuss-fun
 pkgver=6.56
-pkgrel=3
+pkgrel=4
 pkgdesc="Ein Rennspiel, das von Milestone 1998 entwickelt wurde"
 arch=('any')
 url="https://de.wikipedia.org/wiki/Bleifuss_fun"
@@ -22,7 +22,7 @@ sha256sums=('0c53776a94c6dc902f36723d05d2ba7b6125a4f3553f4cd85ed1cf1e7fec51ba'
             'e98f2072b9d2af85c3db51e8f0dec162079fb059da9faf76630b948a8a0d2248'
             '035d4ba99c1a4480c5f7a427fe46068d324a71d8d6fcbf62056d91ca3a09f605'
             'a81a31f5c835b3051d94df088179a5e4b1bf48e99ef65df227d71ff91438cd4d'
-            'c2055896fd42e508742b396d48f113a5f6e4f33a92675960fab2d95b7864c755'
+            'd3ce522ea03fe301422e9a6777399f0f48309a4bb5984bbedc9151cbb23d66ce'
             '78ab477de9f497ae0c6b8f536327c71e3ab8852a6ebbbf7fce0b8811b43401fb'
             'f42bcca05b0233d03b5e0e4f2ba8940b7f1f8eed02b0be1c7ecc3e1082161eaa'
             '70214e4f2a4fff46fcfd0ab9dbe5b086107571857b4109bc9f96bee0e6d4b2f1'
