@@ -2,7 +2,7 @@
 
 pkgname=siedler-2
 pkgver=1.51
-pkgrel=5
+pkgrel=6
 pkgdesc="Ein Aufbaustrategiespiel von Blue Byte."
 arch=('any')
 url="https://www.gog.com/de/game/the_settlers_2_gold_edition"
@@ -11,14 +11,16 @@ depends=('dosbox-staging' 'bash' 'soundfont-fluid')
 makedepends=('innoextract' 'imagemagick')
 options=('!strip' '!debug')
 source=("file://./setup_the_settlers_2_gold_1.5.1_(german)_(30319).exe"
-        "${pkgname}.sh" "${pkgname}.desktop" "dosbox.conf" "dosbox-s2.conf"
-        "${pkgname}-editor.sh" "dosbox-s2edit.conf")
+        "${pkgname}.sh" "${pkgname}.desktop" "dosbox.conf" "dosbox-s2.conf" "dosbox-s2-split-screen.conf"
+        "${pkgname}-editor.sh" "${pkgname}-split-screen.sh" "dosbox-s2edit.conf")
 sha256sums=('313fe3ab08e20f4ad4067967dbb9fa807053abb74389e9e211b627c9987faff6'
             '2992af0a7ac1e5f3ff0616c64725deed13982a84a160996f24eed144b3430874'
-            'f71fbd03267c57db0549b0a7b1f157f2a654eb7c86690b63f425d59be003d67d'
-            'f866330e64dbe8630e5d2e5b8a3923c1627bed67d82eb48ed6e1f160cb9e8e09'
+            '5df458d7262beb723ae14236d6eb87c361cf2b5c2c96a587fcb9d6734ca5041d'
+            '2197d9c861c5cbe0cb8e6a8ea0e0d57438406669af6d1b02dbbbc04e358ed82b'
             '19cd9e6ac51463f6aaea2d785510a27f7a2770d3ad97439eced7b2436ccc9da5'
+            'fccd2a7f4fa8baa00ac6895c2110cffcd3236907d3304fabac96f7ceee95e84d'
             '7dceb8107bb0c915220b6a283a8f1fc2639dfa1fc2a39efbbef1e91d02ccce69'
+            '551ed46a3500ddb0b1b9bf0c19786d9fc165d0fb09302390059fce76f6f01d72'
             '9bb7000a713c29919a4f9c1ec551a7bd94de8f42d1a6ad23ae6bcfc47dfa9442')
 
 package() {
@@ -36,6 +38,9 @@ package() {
 
     install -D --mode 755 "$srcdir/${pkgname}.sh" "${pkgdir}/usr/bin/${pkgname}"
     install -D --mode 644 "$srcdir/dosbox-s2.conf" "${pkgdir}/usr/share/${pkgname}/dosbox-s2.conf"
+
+    install -D --mode 755 "$srcdir/${pkgname}-split-screen.sh" "${pkgdir}/usr/bin/${pkgname}-split-screen"
+    install -D --mode 644 "$srcdir/dosbox-s2-split-screen.conf" "${pkgdir}/usr/share/${pkgname}/dosbox-s2-split-screen.conf"
 
     install -D --mode 755 "$srcdir/${pkgname}-editor.sh" "${pkgdir}/usr/bin/${pkgname}-editor"
     install -D --mode 644 "$srcdir/dosbox-s2edit.conf" "${pkgdir}/usr/share/${pkgname}/dosbox-s2edit.conf"
