@@ -2,7 +2,7 @@
 
 pkgname=bleifuss-rally
 pkgver=1.0.0
-pkgrel=3
+pkgrel=4
 pkgdesc="Ein Rennspiel, das von Milestone 1997 entwickelt wurde"
 arch=('any')
 url="https://de.wikipedia.org/wiki/Bleifuss_Rally"
@@ -18,10 +18,10 @@ source=("file://./${pkgname}".{cue,bin}
 sha256sums=('1394d63f3a1c934cdb14be1d141b4f9163bc6cc955ae336730c39d3a5103487f'
             '2a7db1d2216d9d6f9d39b5f91422a9e9cee0284445d85111b63242ddafa966c4'
             '1bcd5b28cb37b9363099b78efd9463b08f81396bcae5bde2310e5cfb2b7c402c'
-            'c2055896fd42e508742b396d48f113a5f6e4f33a92675960fab2d95b7864c755'
-            'd2cd3ca693a596ff88567a6d9e280bf32212ead3f1dd43ae80ff0a9807b06de2'
+            'c60a49591b08edfea4854143919a3779841c8457e52c0440a03bbe5c421424e5'
+            '4953fb44b0fc1c8810dbf7ca4d84a337f0c5fe2a9fe71be2dbb67d0e56d0c255'
             'd8db2668a6cc372194893ae0e6f01988a85f54f38d58935fbfca1678d986fbc3'
-            'c403288e9811e8f4bdca03210149487a9b79eb331be9590e44d39c35b0201884'
+            '3064687fad46c9789169540c30f17fb9def95205865591efa0a339751ed894c1'
             '881d8464f5d3529f0ce15303110ffa933435a830c50ab11ed5e25c4b808ee39c'
             '017aae89177069fcbdb3c0011260a9457f2df4da4306361847007b7c77b9fcef'
             '98a8524d26679fb03031b4864235a3b4611eb2f6ec5e5afd40ebb744e086231b'
@@ -41,7 +41,7 @@ package() {
         xpid=$!
         export DISPLAY=:12356
 
-        dosbox --noprimaryconf --conf dosbox-install.conf
+        dosbox --noprimaryconf --conf dosbox-install.conf --set output=texture --set texture_renderer=software
 
         kill $xpid
 
@@ -49,6 +49,8 @@ package() {
     popd
 
     chown -R root:root "$pkgdir/usr/share/${pkgname}"
+    find "$pkgdir/usr/share/${pkgname}" -type f -exec chmod 0644 {} \;
+    find "$pkgdir/usr/share/${pkgname}" -type d -exec chmod 0755 {} \;
 
     rm -f "$pkgdir/usr/share/${pkgname}"/dosbox-update*.conf
     rm -f "$pkgdir/usr/share/${pkgname}"/dosbox-install.conf
