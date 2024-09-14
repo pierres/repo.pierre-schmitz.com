@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=The Dig
+Exec=scummvm -p /usr/share/the-dig --fullscreen --stretch-mode=pixel-perfect --no-filtering --language=en --aspect-ratio scumm:dig
+Icon=/usr/share/the-dig/the-dig.ico
+Terminal=false
+Type=Application
+Categories=Game;

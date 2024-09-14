@@ -1,0 +1,35 @@
+# Maintainer: Pierre Schmitz <pierre@archlinux.de>
+
+pkgname=the-dig
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="The Dig"
+arch=('any')
+url="https://en.wikipedia.org/wiki/The_Dig_(video_game)"
+license=('custom')
+depends=('scummvm')
+makedepends=('innoextract' 'imagemagick')
+options=('!strip' '!debug')
+source=("file://./setup_the_dig_1.0_(20270)"{.exe,-1.bin}
+        "${pkgname}.desktop")
+sha256sums=('ed9b366936e551095c8af8ca0990368488c974b957a704dc42c0b8430e010428'
+            'f8cb7e9816785b056d75b917507a3dc3115286c5a612b6e9829100564b877c54'
+            '0ec8e71f492a4f3b2470783630232092d36c5d3f72b54ce1d588626d9ae970df')
+
+prepare() {
+    innoextract --extract --exclude-temp "${srcdir}/setup_the_dig_1.0_(20270).exe"
+}
+
+package() {
+    mkdir -p "$pkgdir/usr/share/${pkgname}"
+
+    cp -a "${srcdir}"/{VIDEO,DIG.LA0,DIG.LA1,DIGMUSIC.BUN,DIGVOICE.BUN} "$pkgdir/usr/share/${pkgname}"
+
+    magick "${srcdir}/app/"goggame-*.ico -compress none "$pkgdir/usr/share/${pkgname}/${pkgname}.ico"
+
+    chown -R root:root "$pkgdir/usr/share/${pkgname}"
+    find "$pkgdir/usr/share/${pkgname}" -type f -exec chmod 0644 {} \;
+    find "$pkgdir/usr/share/${pkgname}" -type d -exec chmod 0755 {} \;
+
+    install -Dm644 "$srcdir/${pkgname}.desktop" "$pkgdir/usr/share/applications/${pkgname}.desktop"
+}
