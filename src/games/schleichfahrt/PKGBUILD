@@ -2,7 +2,7 @@
 
 pkgname=schleichfahrt
 pkgver=1.120
-pkgrel=5
+pkgrel=6
 pkgdesc="Ein spannendes Spiel, in dem ein futuristisches U-Boot in einer post-apokalyptischen Unterwasserwelt gegen feindliche Kräfte kämpft."
 arch=('any')
 url="https://web.archive.org/web/20040808052843/http://www.bluebyte.net/ger/products/schleichfahrt/index.htm"
@@ -21,7 +21,7 @@ sha256sums=('a9091346b53242003b0b9d4180f7f30d9be71f3db53ca5f0464d17cc6bc7f402'
             'ff18ed78f8dfcd86444b8408ff6c55eeda2ed7bc048dfcd1f7af41a448befc94'
             '1aec5103e00dbdfa7858e6d0f624a469f0b6a8cd5110b5d8dd33da6f2fd2872d'
             '85f6b7a1e28a58bed69b8c28ae915c71bf71ad993842a5fde9dcc72b84b2ce1c'
-            '2a10eb3dedf91a6786a0068d57d1c8443d64de13e52dfbd50933cff69f58e3d4'
+            '6f31d2eaa0dc43ce9be3b0d48ce3adb6cd698adc71c1940e4fc6becba9568ab8'
             '483503a5fc967e2bcfdb5ef547c1a393f446ad1d2c9adea19abe92bb49f7ee75'
             'a188d48fdd7f605df2eb2a3e527cb0f3a0f01e6678664bdde5aab752753e27b7'
             'b741e81468d5bdb03153374d854f1783406c8c1d09b1a3a4075506d667e0bef8'

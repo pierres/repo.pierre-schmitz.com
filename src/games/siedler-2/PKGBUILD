@@ -2,7 +2,7 @@
 
 pkgname=siedler-2
 pkgver=1.51
-pkgrel=7
+pkgrel=8
 pkgdesc="Ein Aufbaustrategiespiel von Blue Byte."
 arch=('any')
 url="https://www.gog.com/de/game/the_settlers_2_gold_edition"
@@ -16,7 +16,7 @@ source=("file://./setup_the_settlers_2_gold_1.5.1_(german)_(30319).exe"
 sha256sums=('313fe3ab08e20f4ad4067967dbb9fa807053abb74389e9e211b627c9987faff6'
             '2992af0a7ac1e5f3ff0616c64725deed13982a84a160996f24eed144b3430874'
             '5df458d7262beb723ae14236d6eb87c361cf2b5c2c96a587fcb9d6734ca5041d'
-            '2197d9c861c5cbe0cb8e6a8ea0e0d57438406669af6d1b02dbbbc04e358ed82b'
+            '7cda9c5896a6ee8169aefdf71ed1edac9d29b4ef10ef0b9fc06d83233ee230eb'
             '19cd9e6ac51463f6aaea2d785510a27f7a2770d3ad97439eced7b2436ccc9da5'
             'fccd2a7f4fa8baa00ac6895c2110cffcd3236907d3304fabac96f7ceee95e84d'
             '7dceb8107bb0c915220b6a283a8f1fc2639dfa1fc2a39efbbef1e91d02ccce69'
