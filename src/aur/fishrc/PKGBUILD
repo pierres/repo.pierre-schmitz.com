@@ -1,7 +1,7 @@
 # Maintainer: Pierre Schmitz <pierre@archlinux.de>
 
 pkgname=fishrc
-pkgver=1.5.0
+pkgver=1.6.0
 pkgrel=1
 pkgdesc='Usable Fish shell configuration'
 arch=('any')
@@ -10,7 +10,7 @@ license=('GPL-3.0-or-later')
 depends=('fish' 'fish-tide')
 makedepends=('git' 'just')
 source=("git+https://github.com/pierres/fishrc.git#tag=${pkgver}")
-sha256sums=('d98db8a75d39b41926481c117433b6551541effe565b0373d6215b1014edaef2')
+sha256sums=('74bfdbf3fe028b3b97200103ed0eaea0edcc8ad19df75a827158caf43439b3c7')
 
 check() {
 	cd ${srcdir}/${pkgname}
