@@ -2,9 +2,9 @@
 # Contributer: Wouter Wijsman <wwijsman@live.nl>
 
 pkgname=dosbox-staging
-_pkgver=0.82.0-rc1
+_pkgver=0.82.0
 pkgver=${_pkgver//-/}
-pkgrel=1
+pkgrel=0.1
 epoch=1
 pkgdesc="DOS/x86 emulator focusing on ease of use. Based on DOSBox"
 arch=('any')
@@ -16,7 +16,7 @@ makedepends=('meson' 'ninja' 'gcc' 'gzip' 'git')
 provides=("dosbox")
 conflicts=("dosbox")
 source=("git+https://github.com/dosbox-staging/dosbox-staging#tag=v${_pkgver}")
-sha256sums=('66f63e4a59c4f5e8bd4a457b930ae5ced6d277a36efc04e20e73b464f7f66daa')
+sha256sums=('3dad5d574f3a4e30ee4f0c1df4c5cd43c453a375d6b1b6273a2d695ad0ec398e')
 
 build() {
   cd "$srcdir/${pkgname}"
